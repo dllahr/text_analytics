@@ -22,3 +22,4 @@ putcLoader.jar
 Tools/bin/
 TextAnalytics/textAnalytics.jar
 TextAnalytics/bin/
+TextAnalytics/output/
