@@ -15,13 +15,13 @@ import orm.Article;
 import orm.Company;
 import orm.SessionManager;
 
-public class PredictFromArticles extends Thread {
+public class LoadAndScoreArticles extends Thread {
 
 	private File individualArticleDir;
 	
 	private Company company;
 	
-	public PredictFromArticles() {
+	public LoadAndScoreArticles() {
 		
 	}
 	
@@ -44,7 +44,7 @@ public class PredictFromArticles extends Thread {
 		this.company = company;
 	}
 
-	public void makePredictionsFromArticles() {
+	public void loadAndScore() {
 		List<ArticleFileDatePair> articleFileDatePairList = getArticleFilesWithDates(individualArticleDir);
 		if (articleFileDatePairList.size() > 0) {
 			try {

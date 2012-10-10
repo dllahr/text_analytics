@@ -21,12 +21,4 @@ putcLoader.jar
 .metadata
 Tools/bin/
 TextAnalytics/textAnalytics.jar
-
-TextAnalytics/bin/:
-controller
-gui
-main
-orm
-research
-resources
-djiResearch
+TextAnalytics/bin/

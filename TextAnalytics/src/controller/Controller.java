@@ -11,18 +11,18 @@ import controller.buildPredictionModel.BuildPredictonModel;
 import controller.buildPredictionModel.EigenvectorStats;
 import controller.buildPredictionModel.ReferenceStats;
 import controller.predictFromArticles.ExportPredictionData;
-import controller.predictFromArticles.PredictFromArticles;
+import controller.predictFromArticles.LoadAndScoreArticles;
 import controller.stockUpdate.StockUpdate;
 
 public class Controller {
 
 	private final StockUpdate stockUpdate;
 	
-	private final PredictFromArticles predictFromArticles;
+	private final LoadAndScoreArticles loadAndScoreArticles;
 	
 	public Controller() {
 		stockUpdate = new StockUpdate();
-		predictFromArticles = new PredictFromArticles();
+		loadAndScoreArticles = new LoadAndScoreArticles();
 	}
 	
 	public void updateStock() {
@@ -36,10 +36,10 @@ public class Controller {
 	}
 	
 	public void makePredictions(Company company, File indivArticleDir) {
-		predictFromArticles.setCompany(company);
-		predictFromArticles.setIndividualArticleDir(indivArticleDir);
-		predictFromArticles.makePredictionsFromArticles();
-		System.out.println("Controller makePredictions done");
+		loadAndScoreArticles.setCompany(company);
+		loadAndScoreArticles.setIndividualArticleDir(indivArticleDir);
+		loadAndScoreArticles.loadAndScore();
+		System.out.println("Controller loadAndScoreArticles done");
 	}
 	
 	public void calculateReferenceStatistics(Company company) {
