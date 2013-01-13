@@ -1,6 +1,8 @@
 package gui;
 
 
+import gui.regressionPrediction.RegressionPredictionPanel;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -41,6 +43,8 @@ public class FrameBuilder {
 		tabPane.add("Basic", stockPanel);
 		
 		tabPane.add("Prediction", new PredictionPanel(controller));
+		
+		tabPane.add("Regression", new RegressionPredictionPanel(controller));
 		
 		tabPane.add("Legacy", new LegacyPanel());
 		

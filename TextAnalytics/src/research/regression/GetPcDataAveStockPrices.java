@@ -24,7 +24,7 @@ import research.correlation.SumData;
 import controller.buildPredictionModel.FindNextStockPrices;
 import controller.util.Utilities;
 
-public class GetPcData {
+public class GetPcDataAveStockPrices {
 	private static final int companyId = 6;
 	
 	private static final int dayOffset = 40;
@@ -94,10 +94,12 @@ public class GetPcData {
 		System.out.println("end regression GetPcData");
 	}
 	
+	private static final int numDaysToAve = 3;
 	static Map<Integer, Double> calcStockFractionChange(List<Integer> articleDayIndexList, int dayOffset, 
 			Company company) {
+		
 
-		final int minDayIndex = Collections.min(articleDayIndexList);
+		final int minDayIndex = Collections.min(articleDayIndexList) - ((numDaysToAve/2)+3);
 		FindNextStockPrices findNextStockPrices = new FindNextStockPrices(minDayIndex, company);
 		
 		Map<Integer, StockData> articleDayStockDataMap = findNextStockPrices.find(articleDayIndexList);

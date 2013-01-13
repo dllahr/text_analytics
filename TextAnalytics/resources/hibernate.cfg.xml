@@ -47,6 +47,8 @@
 		<mapping class="orm.DjiFracChange"/>
 		<mapping class="orm.DjiCorr"/>
 		<mapping class="orm.Activity"/>
+		<mapping class="orm.RegressionModel"/>
+		<mapping class="orm.RegressionModelCoef"/>
 		
     </session-factory>
 </hibernate-configuration>

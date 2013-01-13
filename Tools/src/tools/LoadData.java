@@ -52,6 +52,12 @@ public class LoadData {
 		return new Data(buildDataArray(splitLinesList, maxCols), null);
 	}
 	
+	/**
+	 * uses any whitespace (regex \\s) as delimeter)
+	 * @param dataFile
+	 * @return
+	 * @throws IOException
+	 */
 	public Data loadText(File dataFile) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(dataFile));
 		
