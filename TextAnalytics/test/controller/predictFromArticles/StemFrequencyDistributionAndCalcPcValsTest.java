@@ -24,7 +24,9 @@ public class StemFrequencyDistributionAndCalcPcValsTest {
 	@Test
 	public void test() throws IOException, GateException {
 		final int numFiles = 2001;
+		//TODO rebuild the test/inputFiles directory and the files therein
 		final String basePath = "test/inputFiles/";
+		assertTrue("the test/inputFiles were accidently deleted so this test will not works - needs to be repaired", false);
 		
 		List<ArticleFileDatePair> articleFileDatePairs = new ArrayList<>(numFiles);
 		Date date = new Date();
