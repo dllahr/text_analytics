@@ -30,7 +30,7 @@ public class FindStockPricesTest {
 		
 		FindStockPrices findNextStockPrices = new FindStockPrices(dayIndex, companyList.get(0));
 		
-		Map<Integer, StockData> result = findNextStockPrices.find(dayIndexList);
+		Map<Integer, StockData> result = findNextStockPrices.findNext(dayIndexList);
 		assertTrue(result.keySet().size() > 0);
 		assertTrue(result.containsKey(dayIndex));
 		assertTrue(result.get(dayIndex).getDayIndex() == dayIndexResult);

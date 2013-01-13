@@ -49,7 +49,7 @@ public class CalculateStockStatistics {
 	 */
 	public List<StockPriceChange> doCalc(List<Integer> dayIndexList) {
 				
-		Map<Integer, StockData> dayIndexStockDataMap = findNextStockPrices.find(dayIndexList);
+		Map<Integer, StockData> dayIndexStockDataMap = findNextStockPrices.findNext(dayIndexList);
 		
 		List<StockPriceChange> stockPriceChangeList = new ArrayList<>(dayIndexList.size() * (int)(dayIndexOffsetMax / dayIndexOffsetIncrement));
 
@@ -62,7 +62,7 @@ public class CalculateStockStatistics {
 				dayIndexOffsetList.add(dayIndexOffset+dayIndex);
 			}
 			
-			Map<Integer, StockData> dayIndexOffsetMap = findNextStockPrices.find(dayIndexOffsetList);
+			Map<Integer, StockData> dayIndexOffsetMap = findNextStockPrices.findNext(dayIndexOffsetList);
 			
 			Histogram hist = new Histogram(numBins, lowerLimit, upperLimit);
 			

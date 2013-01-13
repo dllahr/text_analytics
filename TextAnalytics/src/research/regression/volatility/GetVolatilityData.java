@@ -64,7 +64,7 @@ public class GetVolatilityData {
 		final int minDayIndex = Collections.min(articleDayIndexList);
 		FindStockPrices findNextStockPrices = new FindStockPrices(minDayIndex, company);
 		
-		Map<Integer, StockData> articleDayStockDataMap = findNextStockPrices.find(articleDayIndexList);
+		Map<Integer, StockData> articleDayStockDataMap = findNextStockPrices.findNext(articleDayIndexList);
 		
 		Map<Integer, Double> result = new HashMap<>();
 		for (Integer articleDayIndex : articleDayIndexList) {
@@ -75,7 +75,7 @@ public class GetVolatilityData {
 					nextDayList.add(articleDayIndex + i);
 				}
 				
-				Map<Integer, StockData> stockDataMap = findNextStockPrices.find(nextDayList);
+				Map<Integer, StockData> stockDataMap = findNextStockPrices.findNext(nextDayList);
 				stockDataMap.put(articleDayIndex, initialData);
 				
 				int count = 0;

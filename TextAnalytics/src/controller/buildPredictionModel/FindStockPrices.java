@@ -37,7 +37,7 @@ public class FindStockPrices {
 	 * @param dayIndexList sorted list of day indexes to use to lookup StockData
 	 * @return
 	 */
-	public Map<Integer, StockData> find(List<Integer> dayIndexList) {
+	public Map<Integer, StockData> findNext(List<Integer> dayIndexList) {
 		Iterator<Integer> dayIndexIter = dayIndexList.iterator();
 		
 		final Map<Integer, StockData> result = new HashMap<>();

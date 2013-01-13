@@ -101,14 +101,14 @@ public class GetPcDataAveStockPrices {
 		final int minDayIndex = Collections.min(articleDayIndexList) - ((numDaysToAve/2)+3);
 		FindStockPrices findNextStockPrices = new FindStockPrices(minDayIndex, company);
 		
-		Map<Integer, StockData> articleDayStockDataMap = findNextStockPrices.find(articleDayIndexList);
+		Map<Integer, StockData> articleDayStockDataMap = findNextStockPrices.findNext(articleDayIndexList);
 		
 		List<Integer> articleDayIndexOffsetList = new ArrayList<>(articleDayIndexList.size());
 		for (Integer dayIndex : articleDayIndexList) {
 			articleDayIndexOffsetList.add(dayIndex + dayOffset);
 		}
 		
-		Map<Integer, StockData> articleDayIndexOffsetStockDataMap = findNextStockPrices.find(articleDayIndexOffsetList);
+		Map<Integer, StockData> articleDayIndexOffsetStockDataMap = findNextStockPrices.findNext(articleDayIndexOffsetList);
 		
 		Map<Integer, Double> result = new HashMap<>();
 		for (Integer articleDayIndex : articleDayIndexList) {
