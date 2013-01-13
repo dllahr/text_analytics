@@ -26,7 +26,7 @@ public class CalculateStockStatistics {
 	
 	private boolean doOutputHistogram;
 
-	private final FindNextStockPrices findNextStockPrices;
+	private final FindStockPrices findNextStockPrices;
 	
 	public CalculateStockStatistics(boolean doOutputHistogram, int minDayIndex, Company company) {
 		this.doOutputHistogram = doOutputHistogram;
@@ -38,7 +38,7 @@ public class CalculateStockStatistics {
 		this.lowerLimit = lowerLimitDefault;
 		this.upperLimit = upperLimitDefault;
 		
-		findNextStockPrices = new FindNextStockPrices(minDayIndex, company);
+		findNextStockPrices = new FindStockPrices(minDayIndex, company);
 	}
 
 	/**

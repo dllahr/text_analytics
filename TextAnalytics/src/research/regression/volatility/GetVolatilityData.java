@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import controller.buildPredictionModel.FindNextStockPrices;
+import controller.buildPredictionModel.FindStockPrices;
 
 import orm.Company;
 import orm.Eigenvalue;
@@ -62,7 +62,7 @@ public class GetVolatilityData {
 			Company company) {
 		
 		final int minDayIndex = Collections.min(articleDayIndexList);
-		FindNextStockPrices findNextStockPrices = new FindNextStockPrices(minDayIndex, company);
+		FindStockPrices findNextStockPrices = new FindStockPrices(minDayIndex, company);
 		
 		Map<Integer, StockData> articleDayStockDataMap = findNextStockPrices.find(articleDayIndexList);
 		

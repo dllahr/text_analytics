@@ -13,7 +13,7 @@ import orm.Company;
 import orm.SessionManager;
 import orm.StockData;
 
-public class FindNextStockPrices {
+public class FindStockPrices {
 	private static final String dayIndexParam = "dayIndex";
 	private static final String companyParam = "company";
 	
@@ -22,7 +22,7 @@ public class FindNextStockPrices {
 	
 	private final List<StockData> stockDataList;
 	
-	public FindNextStockPrices(int minDayIndex, Company company) {
+	public FindStockPrices(int minDayIndex, Company company) {
 		Query query = SessionManager.createQuery(queryStr);
 		query.setParameter(companyParam, company);
 		query.setParameter(dayIndexParam, minDayIndex);

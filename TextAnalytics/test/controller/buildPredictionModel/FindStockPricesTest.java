@@ -8,14 +8,14 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import controller.buildPredictionModel.FindNextStockPrices;
+import controller.buildPredictionModel.FindStockPrices;
 import controller.util.Utilities;
 
 import orm.Company;
 import orm.SessionManager;
 import orm.StockData;
 
-public class FindNextStockPricesTest {
+public class FindStockPricesTest {
 
 	private static final int dayIndex = 9004;
 	private static final int dayIndexResult = 9006;
@@ -28,7 +28,7 @@ public class FindNextStockPricesTest {
 		List<Integer> dayIndexList = new LinkedList<>();
 		dayIndexList.add(dayIndex);
 		
-		FindNextStockPrices findNextStockPrices = new FindNextStockPrices(dayIndex, companyList.get(0));
+		FindStockPrices findNextStockPrices = new FindStockPrices(dayIndex, companyList.get(0));
 		
 		Map<Integer, StockData> result = findNextStockPrices.find(dayIndexList);
 		assertTrue(result.keySet().size() > 0);

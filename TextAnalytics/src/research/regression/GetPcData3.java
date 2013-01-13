@@ -22,7 +22,7 @@ import orm.EigenvectorValue;
 import orm.SessionManager;
 import orm.StockData;
 import research.correlation.SumData;
-import controller.buildPredictionModel.FindNextStockPrices;
+import controller.buildPredictionModel.FindStockPrices;
 import controller.util.Utilities;
 
 /**
@@ -106,7 +106,7 @@ public class GetPcData3 {
 			Company company) {
 
 		final int minDayIndex = Collections.min(articleDayIndexList);
-		FindNextStockPrices findNextStockPrices = new FindNextStockPrices(minDayIndex, company);
+		FindStockPrices findNextStockPrices = new FindStockPrices(minDayIndex, company);
 		
 		Map<Integer, StockData> articleDayStockDataMap = findNextStockPrices.find(articleDayIndexList);
 		

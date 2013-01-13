@@ -21,7 +21,7 @@ import orm.EigenvectorValue;
 import orm.SessionManager;
 import orm.StockData;
 import research.correlation.SumData;
-import controller.buildPredictionModel.FindNextStockPrices;
+import controller.buildPredictionModel.FindStockPrices;
 import controller.util.Utilities;
 
 public class GetPcDataAveStockPrices {
@@ -97,10 +97,9 @@ public class GetPcDataAveStockPrices {
 	private static final int numDaysToAve = 3;
 	static Map<Integer, Double> calcStockFractionChange(List<Integer> articleDayIndexList, int dayOffset, 
 			Company company) {
-		
 
 		final int minDayIndex = Collections.min(articleDayIndexList) - ((numDaysToAve/2)+3);
-		FindNextStockPrices findNextStockPrices = new FindNextStockPrices(minDayIndex, company);
+		FindStockPrices findNextStockPrices = new FindStockPrices(minDayIndex, company);
 		
 		Map<Integer, StockData> articleDayStockDataMap = findNextStockPrices.find(articleDayIndexList);
 		
