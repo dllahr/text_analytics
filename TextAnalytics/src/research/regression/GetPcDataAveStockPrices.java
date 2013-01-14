@@ -19,15 +19,16 @@ import orm.Company;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
 import orm.SessionManager;
-import orm.StockData;
 import research.correlation.SumData;
 import controller.buildPredictionModel.FindStockPrices;
 import controller.util.Utilities;
 
 public class GetPcDataAveStockPrices {
-	private static final int companyId = 6;
+	private static final int companyId = 1;
 	
 	private static final int dayOffset = 40;
+	
+	private static final double[] weightsArray = {0.5, 1.0, 0.5};
 
 	public static void main(String[] args) throws IOException {
 		System.out.println("start regression GetPcData");
@@ -60,7 +61,8 @@ public class GetPcDataAveStockPrices {
 		});
 		
 		System.out.println("calculate stock price fraction change for offset");
-		Map<Integer, Double> articleDayIndexStockChangeMap = calcStockFractionChange(articleDayIndexList, dayOffset, company);
+		Map<Integer, Double> articleDayIndexStockChangeMap = calcStockFractionChange(articleDayIndexList, dayOffset, 
+				company, weightsArray);
 		
 		System.out.println("write to file");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
@@ -94,29 +96,30 @@ public class GetPcDataAveStockPrices {
 		System.out.println("end regression GetPcData");
 	}
 	
-	private static final int numDaysToAve = 3;
+	
 	static Map<Integer, Double> calcStockFractionChange(List<Integer> articleDayIndexList, int dayOffset, 
-			Company company) {
+			Company company, double[] weightsArray) {
 
-		final int minDayIndex = Collections.min(articleDayIndexList) - ((numDaysToAve/2)+3);
-		FindStockPrices findNextStockPrices = new FindStockPrices(minDayIndex, company);
+		//need to back the number of days on the side of of the average + an additional week to be safe
+		final int minDayIndex = Collections.min(articleDayIndexList) - (7 + weightsArray.length/2);
+		FindStockPrices findStockPrices = new FindStockPrices(minDayIndex, company);
 		
-		Map<Integer, StockData> articleDayStockDataMap = findNextStockPrices.findNext(articleDayIndexList);
+		Map<Integer, Double> dayAveMap = findStockPrices.findWeightedAverage(articleDayIndexList, weightsArray);
 		
 		List<Integer> articleDayIndexOffsetList = new ArrayList<>(articleDayIndexList.size());
 		for (Integer dayIndex : articleDayIndexList) {
 			articleDayIndexOffsetList.add(dayIndex + dayOffset);
 		}
 		
-		Map<Integer, StockData> articleDayIndexOffsetStockDataMap = findNextStockPrices.findNext(articleDayIndexOffsetList);
+		Map<Integer, Double> offsetAveMap = findStockPrices.findWeightedAverage(articleDayIndexOffsetList, weightsArray);
 		
 		Map<Integer, Double> result = new HashMap<>();
 		for (Integer articleDayIndex : articleDayIndexList) {
-			final StockData initialData = articleDayStockDataMap.get(articleDayIndex);
-			if (initialData != null) {
-				final StockData finalData = articleDayIndexOffsetStockDataMap.get(articleDayIndex + dayOffset);
-				if (finalData != null) {
-					result.put(articleDayIndex, finalData.getAdjustedClose() / initialData.getAdjustedClose());
+			final Double initialAve = dayAveMap.get(articleDayIndex);
+			if (initialAve != null) {
+				final Double finalAve = offsetAveMap.get(articleDayIndex + dayOffset);
+				if (finalAve != null) {
+					result.put(articleDayIndex, finalAve / initialAve);
 				}
 			}
 		}
