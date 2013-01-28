@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,36 +21,36 @@ import orm.Eigenvalue;
 import orm.EigenvectorValue;
 import orm.SessionManager;
 import research.correlation.SumData;
-import controller.buildPredictionModel.FindStockPrices;
 import controller.util.Utilities;
 
 public class GetPcDataAveStockPrices {
 	private static final int companyId = 1;
 	
-	private static final int dayOffset = 40;
+	private static final int dayOffset = 20;
 	
 	private static final double[] weightsArray = {0.5, 1.0, 0.5};
 
 	public static void main(String[] args) throws IOException {
-		System.out.println("start regression GetPcData");
+		final Date startDate = new Date();
+		System.out.println("start regression GetPcData " + startDate);
 		
 		Company company = lookupCompany(companyId);
 		System.out.println("for company " + company.getStockSymbol());
 		
-		String outputFilename = "regressionPcStockData_" + company.getStockSymbol() + ".csv";
+		String outputFilename = "regressionPcSmoothStockData_" + company.getStockSymbol() + ".csv";
 		File outputFile = new File(outputFilename);
 		if (outputFile.exists()) {
 			System.err.println("output file already exists, exiting:  " + outputFile.getAbsolutePath());
 			return;
 		}
 		
-		System.out.println("lookup eigenvector values");
+		System.out.println("lookup eigenvector values " + new Date());
 		List<EigenvectorValue> evvList = lookupEigenvectorValues(company);
 		
-		System.out.println("get article day indexes");
+		System.out.println("get article day indexes " + new Date());
 		List<Integer> articleDayIndexList = calculateUniqueArticleDays(evvList);
 		
-		System.out.println("aggregate eigenvector values by article day index");
+		System.out.println("aggregate eigenvector values by article day index " + new Date());
 		Map<Eigenvalue, Map<Integer, SumData>> eigDayIndexSumDataMap = calculateEigMap(evvList);
 		
 		List<Eigenvalue> eigList = new ArrayList<>(eigDayIndexSumDataMap.keySet());
@@ -60,11 +61,11 @@ public class GetPcDataAveStockPrices {
 			}
 		});
 		
-		System.out.println("calculate stock price fraction change for offset");
+		System.out.println("calculate smoothed stock price fraction change for offset " + new Date());
 		Map<Integer, Double> articleDayIndexStockChangeMap = calcStockFractionChange(articleDayIndexList, dayOffset, 
 				company, weightsArray);
 		
-		System.out.println("write to file");
+		System.out.println("write to file " + new Date());
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 		writer.write("dayIndex,");
 		for (Eigenvalue eig : eigList) {
@@ -93,7 +94,9 @@ public class GetPcDataAveStockPrices {
 		
 		writer.close();
 		SessionManager.closeAll();
-		System.out.println("end regression GetPcData");
+		Date endDate = new Date();
+		final double durationMinutes = ((double)(endDate.getTime() - startDate.getTime())) / 60000.0;
+		System.out.println("end regression GetPcData " + endDate + " duration[min]:  " + durationMinutes);
 	}
 	
 	
@@ -102,22 +105,18 @@ public class GetPcDataAveStockPrices {
 
 		//need to back the number of days on the side of of the average + an additional week to be safe
 		final int minDayIndex = Collections.min(articleDayIndexList) - (7 + weightsArray.length/2);
-		FindStockPrices findStockPrices = new FindStockPrices(minDayIndex, company);
-		
-		Map<Integer, Double> dayAveMap = findStockPrices.findWeightedAverage(articleDayIndexList, weightsArray);
+		SmoothedStockPrices findSmoothedStockPrices = new SmoothedStockPrices(minDayIndex, company, weightsArray);
 		
 		List<Integer> articleDayIndexOffsetList = new ArrayList<>(articleDayIndexList.size());
 		for (Integer dayIndex : articleDayIndexList) {
 			articleDayIndexOffsetList.add(dayIndex + dayOffset);
 		}
 		
-		Map<Integer, Double> offsetAveMap = findStockPrices.findWeightedAverage(articleDayIndexOffsetList, weightsArray);
-		
 		Map<Integer, Double> result = new HashMap<>();
 		for (Integer articleDayIndex : articleDayIndexList) {
-			final Double initialAve = dayAveMap.get(articleDayIndex);
+			final Double initialAve = findSmoothedStockPrices.getSmoothedPriceClosestAfterDayIndex(articleDayIndex);
 			if (initialAve != null) {
-				final Double finalAve = offsetAveMap.get(articleDayIndex + dayOffset);
+				final Double finalAve = findSmoothedStockPrices.getSmoothedPriceClosestAfterDayIndex(articleDayIndex + dayOffset);
 				if (finalAve != null) {
 					result.put(articleDayIndex, finalAve / initialAve);
 				}
