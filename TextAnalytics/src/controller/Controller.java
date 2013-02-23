@@ -48,6 +48,13 @@ public class Controller {
 		System.out.println("Controller loadAndScoreArticles done");
 	}
 	
+	public void loadArticlesWithoutDates(Company company, File indivArticleDir) {
+		loadAndScoreArticles.setCompany(company);
+		loadAndScoreArticles.setIndividualArticleDir(indivArticleDir);
+		loadAndScoreArticles.loadWithoutDate();
+		System.out.println("Controller loadArticlesWithoutDates done");
+	}
+	
 	public void calculateReferenceStatistics(Company company) {
 		ReferenceStats.calcStats(company);
 	}

@@ -138,8 +138,12 @@ public class StemFrequencyDistribution {
 		article.setId(Utilities.getMaxId("Article")+1);
 		article.setCompany(company);
 		article.setFilename(inputFileWithDate.getFile().getAbsolutePath());
-		article.setPublishDate(inputFileWithDate.getDate());
-		article.setDayIndex((int)(inputFileWithDate.getDate().getTime() / millisPerDay));
+		
+		if (inputFileWithDate.getDate() != null) {
+			article.setPublishDate(inputFileWithDate.getDate());
+			article.setDayIndex((int)(inputFileWithDate.getDate().getTime() / millisPerDay));
+		}
+		
 		SessionManager.persist(article);
 		
 		int firstNewStemId = Utilities.getMaxId("Stem") + 1;

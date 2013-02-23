@@ -55,6 +55,14 @@ class PredictionPanel extends JPanel {
 		});
 		bottomPanel.add(button);
 		
+		button = new JButton("Load Articles without Date");
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controller.loadArticlesWithoutDates((Company)companyCombobox.getSelectedItem(), fileArea.getCurrentFile());
+			}
+		});
+		bottomPanel.add(button);
 		
 		add(Box.createVerticalStrut(15));
 		JPanel results = new JPanel();
