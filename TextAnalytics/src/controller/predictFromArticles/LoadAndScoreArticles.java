@@ -78,6 +78,9 @@ public class LoadAndScoreArticles extends Thread {
 	
 
 	public void loadWithoutDate() {
+		Date startDate = new Date();
+		System.out.println("loadWithoutDate start " + startDate);
+		
 		List<ArticleFileDatePair> articleFileDatePairList = getArticleFilesWithoutDate(individualArticleDir);
 		if (articleFileDatePairList.size() > 0) {
 			try {
@@ -88,6 +91,10 @@ public class LoadAndScoreArticles extends Thread {
 				e.printStackTrace();
 			}
 		}
+		
+		Date endDate = new Date();
+		double duration = (double)(endDate.getTime() - startDate.getTime()) / 60000.0;
+		System.out.println("loadWithoutDate end " + endDate + " duration[min] " + duration);
 	}
 	
 	private static List<ArticleFileDatePair> getArticleFilesWithoutDate(File individualArticleDir) {

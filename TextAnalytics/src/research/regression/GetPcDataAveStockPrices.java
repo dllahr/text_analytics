@@ -24,9 +24,9 @@ import research.correlation.SumData;
 import controller.util.Utilities;
 
 public class GetPcDataAveStockPrices {
-	private static final int companyId = 1;
+	private static final int companyId = 8;
 	
-	private static final int dayOffset = 20;
+	private static final int dayOffset = 40;
 	
 	private static final double[] weightsArray = {0.5, 1.0, 0.5};
 
