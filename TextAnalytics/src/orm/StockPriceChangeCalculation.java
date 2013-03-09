@@ -13,7 +13,7 @@ public class StockPriceChangeCalculation {
 	private Integer id;
 	
 	@ManyToOne
-	private Company company;
+	private ScoringModel company;
 	
 	@Column(name="LOWER_STOCK_DAY_IND")
 	private Integer lowerStockDayIndex;
@@ -51,11 +51,11 @@ public class StockPriceChangeCalculation {
 		this.id = id;
 	}
 
-	public Company getCompany() {
+	public ScoringModel getCompany() {
 		return company;
 	}
 
-	public void setCompany(Company company) {
+	public void setCompany(ScoringModel company) {
 		this.company = company;
 	}
 

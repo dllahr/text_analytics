@@ -11,7 +11,7 @@ public class Eigenvalue {
 	private Integer id;
 	
 	@ManyToOne
-	private Company company;
+	private ScoringModel scoringModel;
 	
 	@Column(name="SORT_INDEX")
 	private Integer sortIndex;
@@ -30,12 +30,12 @@ public class Eigenvalue {
 		this.id = id;
 	}
 
-	public Company getCompany() {
-		return company;
+	public ScoringModel getScoringModel() {
+		return scoringModel;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setScoringModel(ScoringModel scoringModel) {
+		this.scoringModel = scoringModel;
 	}
 
 	public Integer getSortIndex() {

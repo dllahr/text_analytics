@@ -11,8 +11,8 @@ public class Stem {
 	private Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name="COMPANY_ID")
-	private Company company;
+	@JoinColumn(name="SCORING_MODEL_ID")
+	private ScoringModel scoringModel;
 	
 	private String text;
 	
@@ -28,12 +28,12 @@ public class Stem {
 		this.id = id;
 	}
 
-	public Company getCompany() {
-		return company;
+	public ScoringModel getScoringModel() {
+		return scoringModel;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setScoringModel(ScoringModel scoringModel) {
+		this.scoringModel = scoringModel;
 	}
 
 	public String getText() {

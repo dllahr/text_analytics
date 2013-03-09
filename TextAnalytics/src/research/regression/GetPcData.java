@@ -15,7 +15,7 @@ import java.util.Set;
 
 import org.hibernate.Query;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
 import orm.SessionManager;
@@ -24,18 +24,24 @@ import research.correlation.SumData;
 import controller.buildPredictionModel.FindStockPrices;
 import controller.util.Utilities;
 
+/**
+ * NOT VALIDATED for scoringModel changes
+ * 
+ * @author dlahr
+ *
+ */
 public class GetPcData {
-	private static final int companyId = 6;
+	private static final int scoringModelId = 6;
 	
 	private static final int dayOffset = 40;
 
 	public static void main(String[] args) throws IOException {
 		System.out.println("start regression GetPcData");
 		
-		Company company = lookupCompany(companyId);
-		System.out.println("for company " + company.getStockSymbol());
+		ScoringModel scoringModel = lookupScoringModel(scoringModelId);
+		System.out.println("for scoringModel " + scoringModel.getId());
 		
-		String outputFilename = "regressionPcStockData_" + company.getStockSymbol() + ".csv";
+		String outputFilename = "regressionPcStockData_" + scoringModel.getId() + ".csv";
 		File outputFile = new File(outputFilename);
 		if (outputFile.exists()) {
 			System.err.println("output file already exists, exiting:  " + outputFile.getAbsolutePath());
@@ -43,7 +49,7 @@ public class GetPcData {
 		}
 		
 		System.out.println("lookup eigenvector values");
-		List<EigenvectorValue> evvList = lookupEigenvectorValues(company);
+		List<EigenvectorValue> evvList = lookupEigenvectorValues(scoringModel);
 		
 		System.out.println("get article day indexes");
 		List<Integer> articleDayIndexList = calculateUniqueArticleDays(evvList);
@@ -60,7 +66,7 @@ public class GetPcData {
 		});
 		
 		System.out.println("calculate stock price fraction change for offset");
-		Map<Integer, Double> articleDayIndexStockChangeMap = calcStockFractionChange(articleDayIndexList, dayOffset, company);
+		Map<Integer, Double> articleDayIndexStockChangeMap = calcStockFractionChange(articleDayIndexList, dayOffset, scoringModel);
 		
 		System.out.println("write to file");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
@@ -95,7 +101,7 @@ public class GetPcData {
 	}
 	
 	static Map<Integer, Double> calcStockFractionChange(List<Integer> articleDayIndexList, int dayOffset, 
-			Company company) {
+			ScoringModel company) {
 
 		final int minDayIndex = Collections.min(articleDayIndexList);
 		FindStockPrices findNextStockPrices = new FindStockPrices(minDayIndex, company);
@@ -166,7 +172,7 @@ public class GetPcData {
 		return articleDayIndexList;
 	}
 
-	public static List<EigenvectorValue> lookupEigenvectorValues(Company company) {
+	public static List<EigenvectorValue> lookupEigenvectorValues(ScoringModel company) {
 		final String companyParam = "companyParam";
 		Query query = SessionManager.createQuery("from EigenvectorValue where eigenvalue.company = :" + companyParam 
 				+ " order by article.dayIndex asc, eigenvalue.id");
@@ -175,11 +181,11 @@ public class GetPcData {
 		return Utilities.convertGenericList(query.list());
 	}
 
-	public static Company lookupCompany(int companyId) {
-		final String companyIdParam = "companyId";	
-		Query query = SessionManager.createQuery("from Company where id = :" + companyIdParam);
-		query.setParameter(companyIdParam, companyId);
+	public static ScoringModel lookupScoringModel(int scoringModelId) {
+		final String scoringModelIdParam = "scoringModelId";	
+		Query query = SessionManager.createQuery("from ScoringModel where id = :" + scoringModelIdParam);
+		query.setParameter(scoringModelIdParam, scoringModelId);
 		
-		return (Company)query.uniqueResult();
+		return (ScoringModel)query.uniqueResult();
 	}
 }

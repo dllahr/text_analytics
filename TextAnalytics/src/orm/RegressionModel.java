@@ -15,8 +15,8 @@ public class RegressionModel {
 	private Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name="COMPANY_ID")
-	private Company company;
+	@JoinColumn(name="SCORING_MODEL_ID")
+	private ScoringModel scoringModel;
 	
 	@Column(name="DAY_OFFSET")
 	private Integer dayOffset;
@@ -35,12 +35,12 @@ public class RegressionModel {
 		this.id = id;
 	}
 
-	public Company getCompany() {
-		return company;
+	public ScoringModel getScoringModel() {
+		return scoringModel;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setScoringModel(ScoringModel scoringModel) {
+		this.scoringModel = scoringModel;
 	}
 
 	public Integer getDayOffset() {
@@ -61,7 +61,7 @@ public class RegressionModel {
 
 	@Override
 	public String toString() {
-		return company.getStockSymbol() + " " + id + " " + " " + dayOffset + " " + rExpression.substring(0, 10);
+		return id + " " + scoringModel.getId() + " " + dayOffset + " " + rExpression.substring(0, 10);
 	}
 	
 	

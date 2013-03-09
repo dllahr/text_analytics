@@ -1,11 +1,16 @@
 package orm;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 @Entity
-public class Company  {
+public class Company {
 
 	@Id
 	private Integer id;
@@ -14,7 +19,12 @@ public class Company  {
 	
 	@Column(name="STOCK_SYMBOL")
 	private String stockSymbol;
-		
+	
+	@ManyToMany
+	@JoinTable(name="COMPANY_SCORING_MODEL", joinColumns={@JoinColumn(name="COMPANY_ID")}, 
+	inverseJoinColumns={@JoinColumn(name="SCORING_MODEL_ID")})
+	private Set<ScoringModel> scoringModelSet;
+
 	public Company() {
 		
 	}
@@ -47,6 +57,12 @@ public class Company  {
 	public String toString() {
 		return id + " " + name + " " + stockSymbol;
 	}
-	
-	
+
+	public Set<ScoringModel> getScoringModelSet() {
+		return scoringModelSet;
+	}
+
+	public void setScoringModelSet(Set<ScoringModel> scoringModelSet) {
+		this.scoringModelSet = scoringModelSet;
+	}
 }

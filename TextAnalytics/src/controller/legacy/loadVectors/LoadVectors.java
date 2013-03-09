@@ -14,7 +14,7 @@ import controller.util.Utilities;
 
 import orm.Article;
 import orm.ArticleStemCount;
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 import orm.Stem;
 
@@ -27,17 +27,17 @@ public class LoadVectors {
 	
 	private static final int progressIncrement = 100;
 	
-	public static void loadSparseVectors(final String filePrefix, File vectorsDir, Company company) {
+	public static void loadSparseVectors(final String filePrefix, File vectorsDir, ScoringModel company) {
 		VectorFileReader vectorFileReader = new SparseVectorReader();
 		loadVectors(filePrefix, vectorsDir, company, vectorFileReader);
 	}
 	
-	public static void loadRegularVectors(final String filePrefix, File vectorsDir, Company company) {
+	public static void loadRegularVectors(final String filePrefix, File vectorsDir, ScoringModel company) {
 		VectorFileReader vectorFileReader = new RegularVectorReader();
 		loadVectors(filePrefix, vectorsDir, company, vectorFileReader);
 	}
 	
-	public static void loadVectors(final String filePrefix, File vectorsDir, Company company, 
+	public static void loadVectors(final String filePrefix, File vectorsDir, ScoringModel company, 
 			VectorFileReader vectorFileReader) {
 		
 		final Map<Integer, Stem> idStemMap = getStems(company);
@@ -97,7 +97,7 @@ public class LoadVectors {
 	}
 
 
-	private static Map<String, Article> getArticles(Company company) {
+	private static Map<String, Article> getArticles(ScoringModel company) {
 		Query query = SessionManager.createQuery(articleQuery);
 		query.setParameter(companyParam, company);
 		List<Article> articleList = Utilities.convertGenericList(query.list());
@@ -112,7 +112,7 @@ public class LoadVectors {
 		return fileArticleMap;
 	}
 	
-	private static Map<Integer, Stem> getStems(Company company) {
+	private static Map<Integer, Stem> getStems(ScoringModel company) {
 		Query query = SessionManager.createQuery(stemQuery);
 		query.setParameter(companyParam, company);
 		List<Stem> stemList = Utilities.convertGenericList(query.list());

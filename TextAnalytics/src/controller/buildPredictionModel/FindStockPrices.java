@@ -9,7 +9,7 @@ import org.hibernate.Query;
 
 import controller.util.Utilities;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 import orm.StockData;
 
@@ -26,14 +26,14 @@ public class FindStockPrices {
 		this.stockDataList = stockDataList;
 	}
 	
-	public FindStockPrices(int minDayIndex, Company company) {
+	public FindStockPrices(int minDayIndex, ScoringModel company) {
 		System.out.println("FindNextStockPrices constructor looking up stock data");
 		stockDataList = lookupStockData(minDayIndex, company);
 		System.out.println("FindNextStockPrices constructor stock data lookup done");
 	}
 
 
-	public static List<StockData> lookupStockData(int minDayIndex, Company company) {
+	public static List<StockData> lookupStockData(int minDayIndex, ScoringModel company) {
 		Query query = SessionManager.createQuery(queryStr);
 		query.setParameter(companyParam, company);
 		query.setParameter(dayIndexParam, minDayIndex);

@@ -8,7 +8,7 @@ import org.hibernate.Query;
 
 import controller.util.Utilities;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 import orm.StockPriceChange;
 import orm.StockPriceChangeCalculation;
@@ -26,7 +26,7 @@ public class ReferenceStats {
 	
 	
 	
-	public static void calcStats(Company company) {
+	public static void calcStats(ScoringModel company) {
 		Query query = SessionManager.createQuery(minMaxDayIndexQueryStr);
 		query.setParameter(companyParam, company);
 

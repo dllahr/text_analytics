@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import orm.Company;
+import orm.ScoringModel;
 
 import controller.Controller;
 
@@ -42,7 +42,7 @@ public class PredictionModelPanel extends JPanel {
 		calcRefStatsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controller.calculateReferenceStatistics((Company)companyComboBox.getSelectedItem());
+				controller.calculateReferenceStatistics((ScoringModel)companyComboBox.getSelectedItem());
 			}
 		});
 		calcRefStatsPanel.add(calcRefStatsButton);
@@ -57,7 +57,7 @@ public class PredictionModelPanel extends JPanel {
 		calcStatsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controller.calculateArticleStockStatistics((Company)companyComboBox.getSelectedItem());
+				controller.calculateArticleStockStatistics((ScoringModel)companyComboBox.getSelectedItem());
 			}
 		});
 		calcStatsPanel.add(calcStatsButton);
@@ -72,7 +72,7 @@ public class PredictionModelPanel extends JPanel {
 		createPredModelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controller.createPredictionModel((Company)companyComboBox.getSelectedItem());
+				controller.createPredictionModel((ScoringModel)companyComboBox.getSelectedItem());
 			}
 		});
 		createPredictionModelPanel.add(createPredModelButton);

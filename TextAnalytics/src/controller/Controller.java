@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.RegressionModel;
 
 import controller.activity.LoadActivityData;
@@ -41,30 +41,30 @@ public class Controller {
 		System.out.println("done");
 	}
 	
-	public void makePredictions(Company company, File indivArticleDir) {
-		loadAndScoreArticles.setCompany(company);
+	public void makePredictions(ScoringModel company, File indivArticleDir) {
+		loadAndScoreArticles.setScoringModel(company);
 		loadAndScoreArticles.setIndividualArticleDir(indivArticleDir);
 		loadAndScoreArticles.loadAndScore();
 		System.out.println("Controller loadAndScoreArticles done");
 	}
 	
-	public void loadArticlesWithoutDates(Company company, File indivArticleDir) {
-		loadAndScoreArticles.setCompany(company);
+	public void loadArticlesWithoutDates(ScoringModel company, File indivArticleDir) {
+		loadAndScoreArticles.setScoringModel(company);
 		loadAndScoreArticles.setIndividualArticleDir(indivArticleDir);
 		loadAndScoreArticles.loadWithoutDate();
 		System.out.println("Controller loadArticlesWithoutDates done");
 	}
 	
-	public void calculateReferenceStatistics(Company company) {
+	public void calculateReferenceStatistics(ScoringModel company) {
 		ReferenceStats.calcStats(company);
 	}
 	
-	public void calculateArticleStockStatistics(Company company) {
+	public void calculateArticleStockStatistics(ScoringModel company) {
 		EigenvectorStats eigStats = new EigenvectorStats();
 		eigStats.doCalc(company);
 	}
 
-	public void createPredictionModel(Company company) {
+	public void createPredictionModel(ScoringModel company) {
 		BuildPredictonModel build = new BuildPredictonModel();
 		build.build(company);
 	}

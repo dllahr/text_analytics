@@ -12,14 +12,14 @@ import controller.dateExtractionConversion.ArticleFileDatePair;
 import controller.dateExtractionConversion.ReadDateFromArticle;
 
 import orm.Article;
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 
 public class LoadAndScoreArticles extends Thread {
 
 	private File individualArticleDir;
 	
-	private Company company;
+	private ScoringModel scoringModel;
 	
 	public LoadAndScoreArticles() {
 		
@@ -35,20 +35,20 @@ public class LoadAndScoreArticles extends Thread {
 	}
 
 
-	public Company getCompany() {
-		return company;
+	public ScoringModel getScoringModel() {
+		return scoringModel;
 	}
 
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setScoringModel(ScoringModel company) {
+		this.scoringModel = company;
 	}
 
 	public void loadAndScore() {
 		List<ArticleFileDatePair> articleFileDatePairList = getArticleFilesWithDates(individualArticleDir);
 		if (articleFileDatePairList.size() > 0) {
 			try {
-				List<Article> articleList = StemFrequencyDistribution.calculateAndSaveArticleStems(articleFileDatePairList, company);
+				List<Article> articleList = StemFrequencyDistribution.calculateAndSaveArticleStems(articleFileDatePairList, scoringModel);
 //				CalcPrincipalComponentValues.calcPrincipalComponentValuesForArticles(articleList);
 				GeneratePredictions.generatePredictions(articleList);
 				SessionManager.commit();
@@ -84,7 +84,7 @@ public class LoadAndScoreArticles extends Thread {
 		List<ArticleFileDatePair> articleFileDatePairList = getArticleFilesWithoutDate(individualArticleDir);
 		if (articleFileDatePairList.size() > 0) {
 			try {
-				StemFrequencyDistribution.calculateAndSaveArticleStems(articleFileDatePairList, company);
+				StemFrequencyDistribution.calculateAndSaveArticleStems(articleFileDatePairList, scoringModel);
 				SessionManager.commit();
 			} catch (GateException | IOException e) {
 				System.err.println("PredictFromArticles start() GateException");

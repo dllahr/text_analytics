@@ -16,7 +16,7 @@ import java.util.Set;
 
 import org.hibernate.Query;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
 import orm.SessionManager;
@@ -26,6 +26,7 @@ import controller.buildPredictionModel.FindStockPrices;
 import controller.util.Utilities;
 
 /**
+ * NOT VALIDATED for scoring model change
  * uses thresholds (fractionThreshold constant)
  * uses selected eigenvectors (eigIdArray)
  * 
@@ -33,7 +34,7 @@ import controller.util.Utilities;
  *
  */
 public class GetPcData3 {
-	private static final int companyId = 1;
+	private static final int scoringModelId = 1;
 	
 	private static final int dayOffset = 40;
 	
@@ -46,11 +47,11 @@ public class GetPcData3 {
 	public static void main(String[] args) throws IOException {
 		System.out.println("start regression GetPcData");
 		
-		Company company = lookupCompany(companyId);
-		System.out.println("for company " + company.getStockSymbol());
+		ScoringModel scoringModel = lookupScoringModel(scoringModelId);
+		System.out.println("for company " + scoringModel.getId());
 		
 		System.out.println("lookup eigenvector values");
-		List<EigenvectorValue> evvList = lookupEigenvectorValues(company);
+		List<EigenvectorValue> evvList = lookupEigenvectorValues(scoringModel);
 		
 		System.out.println("get article day indexes");
 		List<Integer> articleDayIndexList = calculateUniqueArticleDays(evvList);
@@ -67,10 +68,10 @@ public class GetPcData3 {
 		});
 		
 		System.out.println("calculate stock price fraction change for offset");
-		Map<Integer, Double> articleDayIndexStockChangeMap = calcStockFractionChange(articleDayIndexList, dayOffset, company);
+		Map<Integer, Double> articleDayIndexStockChangeMap = calcStockFractionChange(articleDayIndexList, dayOffset, scoringModel);
 		
 		System.out.println("write to file");
-		BufferedWriter writer = new BufferedWriter(new FileWriter("regressionPcStockData_" + company.getStockSymbol() 
+		BufferedWriter writer = new BufferedWriter(new FileWriter("regressionPcStockData_" + scoringModel.getId() 
 				+ "_" + filenameIndex +  ".csv"));
 		writer.write("dayIndex,");
 		for (Eigenvalue eig : eigList) {
@@ -103,7 +104,7 @@ public class GetPcData3 {
 	}
 	
 	static Map<Integer, Double> calcStockFractionChange(List<Integer> articleDayIndexList, int dayOffset, 
-			Company company) {
+			ScoringModel company) {
 
 		final int minDayIndex = Collections.min(articleDayIndexList);
 		FindStockPrices findNextStockPrices = new FindStockPrices(minDayIndex, company);
@@ -199,7 +200,7 @@ public class GetPcData3 {
 		return articleDayIndexList;
 	}
 
-	private static List<EigenvectorValue> lookupEigenvectorValues(Company company) {
+	private static List<EigenvectorValue> lookupEigenvectorValues(ScoringModel company) {
 		final String eigvalParam = "eigvalParam";
 		Query query = SessionManager.createQuery("from EigenvectorValue where eigenvalue.id in (:" + eigvalParam 
 				+ ") order by article.dayIndex asc, eigenvalue.id");
@@ -226,7 +227,7 @@ public class GetPcData3 {
 		return result;
 	}
 	
-	private static Map<Eigenvalue, Thresholds> lookupThresholds(Company company) {
+	private static Map<Eigenvalue, Thresholds> lookupThresholds(ScoringModel company) {
 		final String companyParam = "companyParam";
 		Query query = SessionManager.createQuery("select count(*) from EigenvectorValue where eigenvalue.company=:" + companyParam
 				+ " group by eigenvalue");
@@ -275,12 +276,12 @@ public class GetPcData3 {
 		return resultMap;
 	}
 
-	private static Company lookupCompany(int companyId) {
-		final String companyIdParam = "companyId";	
-		Query query = SessionManager.createQuery("from Company where id = :" + companyIdParam);
-		query.setParameter(companyIdParam, companyId);
+	private static ScoringModel lookupScoringModel(int scoringModelId) {
+		final String scoringModelParam = "scoringModelId";	
+		Query query = SessionManager.createQuery("from ScoringModel where id = :" + scoringModelParam);
+		query.setParameter(scoringModelParam, scoringModelId);
 		
-		return (Company)query.uniqueResult();
+		return (ScoringModel)query.uniqueResult();
 	}
 	
 	

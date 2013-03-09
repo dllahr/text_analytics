@@ -16,15 +16,21 @@ import java.util.Set;
 
 import org.hibernate.Query;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
 import orm.SessionManager;
 import research.correlation.SumData;
 import controller.util.Utilities;
 
+
+/**
+ * NOT VALIDATED for scoriongModel changes
+ * @author dlahr
+ *
+ */
 public class GetPcDataAveStockPrices {
-	private static final int companyId = 8;
+	private static final int scoringModelId = 8;
 	
 	private static final int dayOffset = 40;
 	
@@ -34,10 +40,10 @@ public class GetPcDataAveStockPrices {
 		final Date startDate = new Date();
 		System.out.println("start regression GetPcData " + startDate);
 		
-		Company company = lookupCompany(companyId);
-		System.out.println("for company " + company.getStockSymbol());
+		ScoringModel scoringModel = lookupScoringModel(scoringModelId);
+		System.out.println("for scoringModel " + scoringModel.getId());
 		
-		String outputFilename = "regressionPcSmoothStockData_" + company.getStockSymbol() + ".csv";
+		String outputFilename = "regressionPcSmoothStockData_" + scoringModel.getId() + ".csv";
 		File outputFile = new File(outputFilename);
 		if (outputFile.exists()) {
 			System.err.println("output file already exists, exiting:  " + outputFile.getAbsolutePath());
@@ -45,7 +51,7 @@ public class GetPcDataAveStockPrices {
 		}
 		
 		System.out.println("lookup eigenvector values " + new Date());
-		List<EigenvectorValue> evvList = lookupEigenvectorValues(company);
+		List<EigenvectorValue> evvList = lookupEigenvectorValues(scoringModel);
 		
 		System.out.println("get article day indexes " + new Date());
 		List<Integer> articleDayIndexList = calculateUniqueArticleDays(evvList);
@@ -63,7 +69,7 @@ public class GetPcDataAveStockPrices {
 		
 		System.out.println("calculate smoothed stock price fraction change for offset " + new Date());
 		Map<Integer, Double> articleDayIndexStockChangeMap = calcStockFractionChange(articleDayIndexList, dayOffset, 
-				company, weightsArray);
+				scoringModel, weightsArray);
 		
 		System.out.println("write to file " + new Date());
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
@@ -101,7 +107,7 @@ public class GetPcDataAveStockPrices {
 	
 	
 	static Map<Integer, Double> calcStockFractionChange(List<Integer> articleDayIndexList, int dayOffset, 
-			Company company, double[] weightsArray) {
+			ScoringModel company, double[] weightsArray) {
 
 		//need to back the number of days on the side of of the average + an additional week to be safe
 		final int minDayIndex = Collections.min(articleDayIndexList) - (7 + weightsArray.length/2);
@@ -169,20 +175,20 @@ public class GetPcDataAveStockPrices {
 		return articleDayIndexList;
 	}
 
-	public static List<EigenvectorValue> lookupEigenvectorValues(Company company) {
-		final String companyParam = "companyParam";
-		Query query = SessionManager.createQuery("from EigenvectorValue where eigenvalue.company = :" + companyParam 
+	public static List<EigenvectorValue> lookupEigenvectorValues(ScoringModel scoringModel) {
+		final String scoringModelParam = "scoringModelParam";
+		Query query = SessionManager.createQuery("from EigenvectorValue where eigenvalue.scoringModel = :" + scoringModelParam 
 				+ " order by article.dayIndex asc, eigenvalue.id");
-		query.setParameter(companyParam, company);
+		query.setParameter(scoringModelParam, scoringModel);
 		
 		return Utilities.convertGenericList(query.list());
 	}
 
-	public static Company lookupCompany(int companyId) {
-		final String companyIdParam = "companyId";	
-		Query query = SessionManager.createQuery("from Company where id = :" + companyIdParam);
-		query.setParameter(companyIdParam, companyId);
+	public static ScoringModel lookupScoringModel(int companyId) {
+		final String scoringModelIdParam = "scoringModelId";	
+		Query query = SessionManager.createQuery("from ScoringModel where id = :" + scoringModelIdParam);
+		query.setParameter(scoringModelIdParam, companyId);
 		
-		return (Company)query.uniqueResult();
+		return (ScoringModel)query.uniqueResult();
 	}
 }

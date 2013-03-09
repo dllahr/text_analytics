@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import orm.Article;
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 
 import controller.dateExtractionConversion.ArticleFileDatePair;
@@ -24,7 +24,7 @@ public class LoadArticles {
 	
 	private static final int progressIncrement = 1000;
 	
-	public static void load(File articleDir, String articlePrefix, File articleOrderFile, Company company) {
+	public static void load(File articleDir, String articlePrefix, File articleOrderFile, ScoringModel company) {
 		final List<String> articleFilenameOrderList;
 		try {
 			 articleFilenameOrderList = loadArticleOrder(articleOrderFile);

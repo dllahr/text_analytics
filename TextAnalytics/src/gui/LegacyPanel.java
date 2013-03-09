@@ -20,7 +20,7 @@ import controller.legacy.LoadArticles;
 import controller.legacy.LoadDistributionCalc;
 import controller.legacy.loadVectors.LoadVectors;
 
-import orm.Company;
+import orm.ScoringModel;
 
 public class LegacyPanel extends JPanel {
 
@@ -30,7 +30,7 @@ public class LegacyPanel extends JPanel {
 	
 	final private JTextArea messageArea;
 	
-	final private JComboBox<Company> comboBox;
+	final private JComboBox<ScoringModel> comboBox;
 	
 	public LegacyPanel() {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -90,7 +90,7 @@ public class LegacyPanel extends JPanel {
 				
 				if (articleDir != null && articleOrderFile != null) {
 					LoadArticles.load(articleDir, articlePrefixField.getText(),
-							articleOrderFile, (Company)comboBox.getSelectedItem());
+							articleOrderFile, (ScoringModel)comboBox.getSelectedItem());
 				}
 			}
 		});
@@ -118,9 +118,9 @@ public class LegacyPanel extends JPanel {
 				File dataFile = fileArea.getCurrentFile();
 				if (dataFile != null) {
 					if (checkBox.isSelected()) {
-						LoadVectors.loadSparseVectors(prefix.getText().trim(), dataFile, (Company)comboBox.getSelectedItem());
+						LoadVectors.loadSparseVectors(prefix.getText().trim(), dataFile, (ScoringModel)comboBox.getSelectedItem());
 					} else {
-						LoadVectors.loadRegularVectors(prefix.getText().trim(), dataFile, (Company)comboBox.getSelectedItem());
+						LoadVectors.loadRegularVectors(prefix.getText().trim(), dataFile, (ScoringModel)comboBox.getSelectedItem());
 					}
 				}
 			}
@@ -137,7 +137,7 @@ public class LegacyPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				File dataFile = fileArea.getCurrentFile();
 				if (dataFile != null) {
-					LoadDistributionCalc.loadDistributionCalc(dataFile, (Company)comboBox.getSelectedItem());
+					LoadDistributionCalc.loadDistributionCalc(dataFile, (ScoringModel)comboBox.getSelectedItem());
 				}
 			}
 		});

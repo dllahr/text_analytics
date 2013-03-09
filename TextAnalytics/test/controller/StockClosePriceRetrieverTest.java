@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 import orm.UtilitiesForTesting;
 
@@ -18,7 +18,7 @@ public class StockClosePriceRetrieverTest  {
 	@Test
 	public void test() {
 		SessionManager.setUseForTest(true);
-		List<Company> companyList = UtilitiesForTesting.getFirst10Entities("Company");
+		List<ScoringModel> companyList = UtilitiesForTesting.getFirst10Entities("Company");
 		
 		StockClosePriceRetriever retriever = new StockClosePriceRetriever(companyList.get(0));
 	

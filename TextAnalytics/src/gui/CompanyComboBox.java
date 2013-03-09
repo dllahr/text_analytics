@@ -6,9 +6,9 @@ import javax.swing.JComboBox;
 
 import controller.util.GetBasicInfo;
 
-import orm.Company;
+import orm.ScoringModel;
 
-public class CompanyComboBox extends JComboBox<Company> {
+public class CompanyComboBox extends JComboBox<ScoringModel> {
 
 	private static final long serialVersionUID = 1L;
 	

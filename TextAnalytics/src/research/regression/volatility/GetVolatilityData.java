@@ -9,7 +9,7 @@ import java.util.Map;
 
 import controller.buildPredictionModel.FindStockPrices;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
 import orm.SessionManager;
@@ -17,19 +17,26 @@ import orm.StockData;
 import research.correlation.SumData;
 import research.regression.GetPcData;
 
+
+/**
+ * NOT VALIDATED for scoringModel changes
+ * 
+ * @author dlahr
+ *
+ */
 public class GetVolatilityData {
 	
-	private static final int companyId = 1; //CAT
+	private static final int scoringModelId = 1; //CAT
 	private static final int dayOffset = 40;
 
 	public static void main(String[] args) {
 		System.out.println("GetVolatilityData start");
 		
-		Company company = GetPcData.lookupCompany(companyId);
-		System.out.println("Company: " + company.getStockSymbol());
+		ScoringModel scoringModel = GetPcData.lookupScoringModel(scoringModelId);
+		System.out.println("Company: " + scoringModel.getId());
 		
 		System.out.println("lookup eigenvector values");
-		List<EigenvectorValue> evvList = GetPcData.lookupEigenvectorValues(company);
+		List<EigenvectorValue> evvList = GetPcData.lookupEigenvectorValues(scoringModel);
 		
 		System.out.println("get article day indexes");
 		List<Integer> articleDayIndexList = GetPcData.calculateUniqueArticleDays(evvList);
@@ -46,7 +53,7 @@ public class GetVolatilityData {
 		});
 		
 		System.out.println("calculate stock price fraction change for offset");
-		Map<Integer, Double> articleDayIndexStockVolatilityMap = calcStockVolatility(articleDayIndexList, dayOffset, company);
+		Map<Integer, Double> articleDayIndexStockVolatilityMap = calcStockVolatility(articleDayIndexList, dayOffset, scoringModel);
 
 		List<Integer> newDayIndexList = new ArrayList<>(articleDayIndexStockVolatilityMap.keySet());
 		Collections.sort(newDayIndexList);
@@ -59,7 +66,7 @@ public class GetVolatilityData {
 	}
 	
 	static Map<Integer, Double> calcStockVolatility(List<Integer> articleDayIndexList, int dayOffset, 
-			Company company) {
+			ScoringModel company) {
 		
 		final int minDayIndex = Collections.min(articleDayIndexList);
 		FindStockPrices findNextStockPrices = new FindStockPrices(minDayIndex, company);

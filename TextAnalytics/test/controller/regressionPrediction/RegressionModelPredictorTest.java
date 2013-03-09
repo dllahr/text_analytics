@@ -16,7 +16,7 @@ import controller.util.Utilities;
 
 import orm.Article;
 import orm.ArticlePcValue;
-import orm.Company;
+import orm.ScoringModel;
 import orm.Eigenvalue;
 import orm.SessionManager;
 
@@ -26,7 +26,7 @@ public class RegressionModelPredictorTest {
 	public void testGetArticlePcValueList() {
 		RegressionModelPredictor rmp = new RegressionModelPredictor();
 		
-		final Company company = (Company)SessionManager.createQuery("from Company where id=3").list().get(0);
+		final ScoringModel company = (ScoringModel)SessionManager.createQuery("from Company where id=3").list().get(0);
 		
 		final List<Eigenvalue> eigList = Utilities.convertGenericList(SessionManager.createQuery("from Eigenvalue where company.id=3").list());
 		final int currentDayIndex = (int)((new Date()).getTime() / (24*60*60*1000));

@@ -28,7 +28,7 @@ import controller.util.Utilities;
 
 import orm.Article;
 import orm.ArticleStemCount;
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 import orm.Stem;
 
@@ -58,7 +58,7 @@ public class StemFrequencyDistribution {
 	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Article> calculateAndSaveArticleStems(final List<ArticleFileDatePair> articlesWithDatesList, final Company company) 
+	public static List<Article> calculateAndSaveArticleStems(final List<ArticleFileDatePair> articlesWithDatesList, final ScoringModel company) 
 			throws GateException, IOException {
 		
 		final List<Article> articleList = new LinkedList<>();
@@ -133,7 +133,7 @@ public class StemFrequencyDistribution {
 		return stemCount;
 	}
 	
-	private static Article saveStemCountToDatabase(Map<String, Counter> stemCount, ArticleFileDatePair inputFileWithDate, Company company) {
+	private static Article saveStemCountToDatabase(Map<String, Counter> stemCount, ArticleFileDatePair inputFileWithDate, ScoringModel company) {
 		Article article = new Article();
 		article.setId(Utilities.getMaxId("Article")+1);
 		article.setCompany(company);
@@ -160,7 +160,7 @@ public class StemFrequencyDistribution {
 				stem = new Stem();
 				stem.setId(nextStemId);
 				nextStemId++;
-				stem.setCompany(company);
+				stem.setScoringModel(company);
 				stem.setText(stemText);
 				SessionManager.persist(stem);
 			}
@@ -180,7 +180,7 @@ public class StemFrequencyDistribution {
 	}
 	
 	private static final int batchSize = 1000;
-	private static Map<String, Stem> loadTextStemMap(Company company, Collection<String> stemTextCollection) {
+	private static Map<String, Stem> loadTextStemMap(ScoringModel company, Collection<String> stemTextCollection) {
 		List<Stem> stemList = new ArrayList<>(stemTextCollection.size());
 
 		Query query = SessionManager.createQuery(stemQueryString);

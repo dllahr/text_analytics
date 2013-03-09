@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import controller.util.Utilities;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 import orm.StockPriceChange;
 
@@ -18,8 +18,8 @@ public class CalculateStockStatisticsTest {
 	@Test
 	public void test() {
 		SessionManager.setUseForTest(true);
-		List<Company> companyList = Utilities.convertGenericList(SessionManager.createQuery("from Company where id=1").list());
-		Company company = companyList.get(0);
+		List<ScoringModel> companyList = Utilities.convertGenericList(SessionManager.createQuery("from Company where id=1").list());
+		ScoringModel company = companyList.get(0);
 
 		List<Integer> dayIndexList = new ArrayList<>(1);
 		dayIndexList.add(5);

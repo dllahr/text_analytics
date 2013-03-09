@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.hibernate.Query;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 
 public class StockClosePriceRetriever {
@@ -17,7 +17,7 @@ public class StockClosePriceRetriever {
 	protected static final String stockPriceQueryStr = "select adjustedClose from StockData " +
 			"where company = (:company) and dayIndex >= (:dayIndex) order by dayIndex asc";
 	
-	public StockClosePriceRetriever(final Company company) {
+	public StockClosePriceRetriever(final ScoringModel company) {
 		dayIndexStockPriceMap = new HashMap<Integer, Double>();
 		query = SessionManager.createQuery(stockPriceQueryStr);
 		query.setParameter("company", company);

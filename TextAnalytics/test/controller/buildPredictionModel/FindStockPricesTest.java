@@ -11,7 +11,7 @@ import org.junit.Test;
 import controller.buildPredictionModel.FindStockPrices;
 import controller.util.Utilities;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 import orm.StockData;
 
@@ -22,7 +22,7 @@ public class FindStockPricesTest {
 	
 	@Test
 	public void testFindNext() {
-		List<Company> companyList = Utilities.convertGenericList(SessionManager.createQuery("from Company where id=2").list());
+		List<ScoringModel> companyList = Utilities.convertGenericList(SessionManager.createQuery("from Company where id=2").list());
 		assertTrue(companyList.size() > 0);
 		
 		List<Integer> dayIndexList = new LinkedList<>();

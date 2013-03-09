@@ -14,7 +14,7 @@ import java.util.List;
 import org.junit.Test;
 
 import orm.Article;
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 
 import controller.dateExtractionConversion.ArticleFileDatePair;
@@ -41,7 +41,7 @@ public class StemFrequencyDistributionAndCalcPcValsTest {
 			articleFileDatePairs.add(new ArticleFileDatePair(file, date));
 		}
 		
-		Company company = (Company) SessionManager.createQuery("from Company").list().get(0);
+		ScoringModel company = (ScoringModel) SessionManager.createQuery("from Company").list().get(0);
 		List<Article> articleList = StemFrequencyDistribution.calculateAndSaveArticleStems(articleFileDatePairs, company);
 		
 		CalcPrincipalComponentValues.calcPrincipalComponentValuesForArticles(articleList);

@@ -10,7 +10,7 @@ import java.util.Map;
 import org.hibernate.Query;
 import org.junit.Test;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.SessionManager;
 import orm.StockData;
 
@@ -20,7 +20,7 @@ public class SmoothedStockPricesTest {
 	public void testIntegration() {
 		SessionManager.setUseForTest(false);
 		Query query = SessionManager.createQuery("from Company where stockSymbol='CAT'");
-		Company company = (Company)(query.list().get(0));
+		ScoringModel company = (ScoringModel)(query.list().get(0));
 		double[] weights = {0.5, 1.0, 0.5};
 		final int minDayIndex = 5877;
 		SmoothedStockPrices findSmoothedStockPrices = new SmoothedStockPrices(minDayIndex, company, weights);

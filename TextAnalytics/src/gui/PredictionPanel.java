@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.BevelBorder;
 
-import orm.Company;
+import orm.ScoringModel;
 
 import controller.Controller;
 
@@ -50,7 +50,7 @@ class PredictionPanel extends JPanel {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controller.makePredictions((Company) companyCombobox.getSelectedItem(), fileArea.getCurrentFile());
+				controller.makePredictions((ScoringModel) companyCombobox.getSelectedItem(), fileArea.getCurrentFile());
 			}
 		});
 		bottomPanel.add(button);
@@ -59,7 +59,7 @@ class PredictionPanel extends JPanel {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controller.loadArticlesWithoutDates((Company)companyCombobox.getSelectedItem(), fileArea.getCurrentFile());
+				controller.loadArticlesWithoutDates((ScoringModel)companyCombobox.getSelectedItem(), fileArea.getCurrentFile());
 			}
 		});
 		bottomPanel.add(button);

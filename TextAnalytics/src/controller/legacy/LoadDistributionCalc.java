@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import controller.util.Utilities;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.Eigenvalue;
 import orm.SessionManager;
 import orm.StockPriceChange;
@@ -16,7 +16,7 @@ import orm.StockPriceChangeCalculation;
 public class LoadDistributionCalc {
 	private static final String delimeter = ",";
 	
-	public static void loadDistributionCalc(File dataFile, Company company) {
+	public static void loadDistributionCalc(File dataFile, ScoringModel company) {
 		try {
 			doWork(dataFile, company);
 		} catch (IOException e) {
@@ -25,7 +25,7 @@ public class LoadDistributionCalc {
 		}
 	}
 
-	private static void doWork(File dataFile, final Company company) throws IOException {
+	private static void doWork(File dataFile, final ScoringModel company) throws IOException {
 		StockPriceChangeCalculation calc = createNewStockPriceChangeCalculation(company);
 
 		Integer id = Utilities.getMaxId("StockPriceChange");
@@ -58,7 +58,7 @@ public class LoadDistributionCalc {
 			if (null == eigenvalue || eigenvalue.getSortIndex() != eigSortIndex) {
 				eigenvalue = new Eigenvalue();
 				eigenvalue.setId(eigValId);
-				eigenvalue.setCompany(company);
+				eigenvalue.setScoringModel(company);
 				eigenvalue.setSortIndex(eigSortIndex);
 				SessionManager.persist(eigenvalue);
 				eigValId++;
@@ -76,7 +76,7 @@ public class LoadDistributionCalc {
 		SessionManager.commit();
 	}
 	
-	private static StockPriceChangeCalculation createNewStockPriceChangeCalculation(Company company) {
+	private static StockPriceChangeCalculation createNewStockPriceChangeCalculation(ScoringModel company) {
 		Integer id = Utilities.getMaxId("StockPriceChangeCalculation");
 		if (null == id) {
 			id = 1;

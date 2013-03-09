@@ -49,6 +49,7 @@
 		<mapping class="orm.Activity"/>
 		<mapping class="orm.RegressionModel"/>
 		<mapping class="orm.RegressionModelCoef"/>
+		<mapping class="orm.ScoringModel"/>
 		
     </session-factory>
 </hibernate-configuration>

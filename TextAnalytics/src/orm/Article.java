@@ -15,7 +15,7 @@ public class Article {
 	
 	@ManyToOne
 	@JoinColumn(name="COMPANY_ID")
-	private Company company;
+	private ScoringModel company;
 	
 	private String filename;
 	
@@ -37,11 +37,11 @@ public class Article {
 		this.id = id;
 	}
 
-	public Company getCompany() {
+	public ScoringModel getCompany() {
 		return company;
 	}
 
-	public void setCompany(Company company) {
+	public void setCompany(ScoringModel company) {
 		this.company = company;
 	}
 

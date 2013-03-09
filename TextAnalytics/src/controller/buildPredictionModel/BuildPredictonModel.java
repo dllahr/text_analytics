@@ -8,7 +8,7 @@ import org.hibernate.Query;
 
 import controller.util.Utilities;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.Eigenvalue;
 import orm.PredictionModel;
 import orm.SessionManager;
@@ -26,7 +26,7 @@ public class BuildPredictonModel {
 	private static final String eigvectValQueryStr = "select value from EigenvectorValue where eigenvalue=:" + eigenvalueParam
 			+ " order by value asc";
 
-	public void build(Company company) {
+	public void build(ScoringModel company) {
 
 		List<StockPriceChange> spcList = getStockPriceChangeList(company);
 		
@@ -54,7 +54,7 @@ public class BuildPredictonModel {
 		SessionManager.commit();
 	}
 	
-	private Map<StockPriceChangeCalculation, Map<Eigenvalue, ThresholdPair>> calcThresholds(Company company, 
+	private Map<StockPriceChangeCalculation, Map<Eigenvalue, ThresholdPair>> calcThresholds(ScoringModel company, 
 			List<StockPriceChange> spcList) {
 		
 		final long eigenvectorLength = EigenvectorStats.lookupEigenvectorLength(company);
@@ -97,7 +97,7 @@ public class BuildPredictonModel {
 		return result;
 	}
 	
-	private List<StockPriceChange> getStockPriceChangeList(Company company) {
+	private List<StockPriceChange> getStockPriceChangeList(ScoringModel company) {
 		Query query = SessionManager.createQuery(spcQueryStr);
 		query.setParameter(companyParam, company);
 		

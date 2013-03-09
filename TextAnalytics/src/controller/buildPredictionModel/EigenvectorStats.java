@@ -11,41 +11,47 @@ import org.hibernate.Query;
 
 import controller.util.Utilities;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.Eigenvalue;
 import orm.SessionManager;
 import orm.StockPriceChange;
 import orm.StockPriceChangeCalculation;
 
+/**
+ * WARNING attempted to update this code has not been tested
+ * @author dlahr
+ *
+ */
 public class EigenvectorStats {
 
-	private static final String companyParam = "company";
+	private static final String scoringModelParam = "scoringModel";
 	private static final String eigenvectorLengthSqlQuery = "SELECT count(*) FROM eigenvector_value evv JOIN eigenvalue ev ON ev.id=evv.eigenvalue_id"
-			+ " WHERE ev.company_id=:" + companyParam + " AND ev.id=" 
-			+ "(SELECT id FROM eigenvalue WHERE company_id=:" + companyParam + " and rownum=1)";
+			+ " WHERE ev.scoring_model_id=:" + scoringModelParam + " AND ev.id=" 
+			+ "(SELECT id FROM eigenvalue WHERE scoring_model_id=:" + scoringModelParam + " and rownum=1)";
 
-	private static final String minDayIndexQuery = "SELECT min(dayIndex) FROM Article WHERE company=:" + companyParam;
+	private static final String companyParam = "company";
+	private static final String minDayIndexQuery = "SELECT min(dayIndex) FROM Article WHERE company in (" + companyParam + ")";
 	
 	private static final double upperThresholdFraction = 0.90;
 	private static final double lowerThresholdFraction = 0.00;
 	private static final double numArticlesFraction = 0.10;
 	
-	private static final String eigenvalueQuery = "FROM Eigenvalue WHERE company=:" + companyParam;
+	private static final String eigenvalueQuery = "FROM Eigenvalue WHERE scoringModel=:" + scoringModelParam;
 
 	private static final String eigenvalueParam = "eigenvalue";
 
 	private static final String dayIndexQuery = "SELECT article.dayIndex FROM EigenvectorValue WHERE eigenvalue=:"
 			+ eigenvalueParam + " ORDER BY value";
 	
-	public void doCalc(Company company) {
-		final Long numArticlesTotal = lookupEigenvectorLength(company);
+	public void doCalc(ScoringModel scoringModel) {
+		final Long numArticlesTotal = lookupEigenvectorLength(scoringModel);
 		if (null == numArticlesTotal) {
 			System.err.println("EigenvectorStats - no calculation performed because no articles found in database for company "
-					+ company.getId() + " " + company.getStockSymbol());
+					+ scoringModel.getId() + " " + scoringModel.getNotes());
 			return;
 		}
 		
-		final Integer minDayIndex = lookupMinDayIndex(company);
+		final Integer minDayIndex = lookupMinDayIndex(scoringModel);
 		
 		final int[] queryFirstResultArray = new int[2];
 		queryFirstResultArray[0] = (int)(upperThresholdFraction*((double)numArticlesTotal));
@@ -56,10 +62,10 @@ public class EigenvectorStats {
 		final Double[][] spccThresholdInfo = {{upperThresholdFraction, null}, {null, numArticlesFraction}};
 		
 		Query query = SessionManager.createQuery(eigenvalueQuery);
-		query.setParameter(companyParam, company);
+		query.setParameter(scoringModelParam, scoringModel);
 		List<Eigenvalue> eigenvalueList = Utilities.convertGenericList(query.list());
 		
-		CalculateStockStatistics calcStockStats = new CalculateStockStatistics(false, minDayIndex, company);
+		CalculateStockStatistics calcStockStats = new CalculateStockStatistics(false, minDayIndex, scoringModel);
 
 		int spcCalcId = Utilities.getMaxId("StockPriceChangeCalculation") + 1;
 		int spcId = Utilities.getMaxId("StockPriceChange") + 1;
@@ -74,7 +80,7 @@ public class EigenvectorStats {
 			spcc.setId(spcCalcId);
 			spcCalcId++;
 
-			spcc.setCompany(company);
+			spcc.setCompany(scoringModel);
 			spcc.setHistogramRangeLower(calcStockStats.getLowerLimit());
 			spcc.setHistogramRangeUpper(calcStockStats.getUpperLimit());
 			spcc.setNumBins(calcStockStats.getNumBins());
@@ -112,9 +118,10 @@ public class EigenvectorStats {
 		SessionManager.commit();
 	}
 	
-	private Integer lookupMinDayIndex(Company company) {
+
+	private Integer lookupMinDayIndex(ScoringModel scoringModel) {
 		Query query = SessionManager.createQuery(minDayIndexQuery);
-		query.setParameter(companyParam, company);
+		query.setParameterList(companyParam, scoringModel.getCompanySet());
 		
 		@SuppressWarnings("rawtypes")
 		List minList = query.list();
@@ -126,9 +133,9 @@ public class EigenvectorStats {
 		}
 	}
 
-	protected static Long lookupEigenvectorLength(Company company) {
+	protected static Long lookupEigenvectorLength(ScoringModel company) {
 		Query query = SessionManager.createSqlQuery(eigenvectorLengthSqlQuery);
-		query.setParameter(companyParam, company.getId());
+		query.setParameter(scoringModelParam, company.getId());
 		
 		@SuppressWarnings("rawtypes")
 		List numList = query.list();

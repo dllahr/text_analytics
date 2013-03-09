@@ -16,7 +16,7 @@ import org.hibernate.Query;
 import controller.util.Utilities;
 
 import orm.ArticlePcValue;
-import orm.Company;
+import orm.ScoringModel;
 import orm.RegressionModel;
 import orm.RegressionModelCoef;
 import orm.SessionManager;
@@ -49,12 +49,12 @@ public class RegressionModelPredictor {
 	}
 	
 	private Map<Integer, Map<Integer, SumCountPair>> loadAndCalculateAveragePcVal(RegressionModel rm) {
-		List<ArticlePcValue> pcValList = getArticlePcValueList(rm.getCompany(), rm.getDayOffset());
+		List<ArticlePcValue> pcValList = getArticlePcValueList(rm.getScoringModel(), rm.getDayOffset());
 		
 		return calculateAveragePcVal(pcValList);
 	}
 	
-	List<ArticlePcValue> getArticlePcValueList(Company company, int dayOffset) {
+	List<ArticlePcValue> getArticlePcValueList(ScoringModel company, int dayOffset) {
 		final int curDayIndex = (int)((new Date()).getTime() / millisPerDay);
 		final int startDayIndex = curDayIndex - dayOffset;
 		

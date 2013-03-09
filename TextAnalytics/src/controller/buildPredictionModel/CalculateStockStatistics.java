@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import orm.Company;
+import orm.ScoringModel;
 import orm.StockData;
 import orm.StockPriceChange;
 
@@ -28,7 +28,7 @@ public class CalculateStockStatistics {
 
 	private final FindStockPrices findNextStockPrices;
 	
-	public CalculateStockStatistics(boolean doOutputHistogram, int minDayIndex, Company company) {
+	public CalculateStockStatistics(boolean doOutputHistogram, int minDayIndex, ScoringModel company) {
 		this.doOutputHistogram = doOutputHistogram;
 		
 		this.dayIndexOffsetIncrement = dayIndexOffsetIncrementDefault;
