@@ -54,7 +54,7 @@ public class GeneratePredictions {
 			result.addAll(curResult);
 		}
 
-		StockClosePriceRetriever retriever = new StockClosePriceRetriever(articleList.get(0).getCompany());
+		StockClosePriceRetriever retriever = new StockClosePriceRetriever(articleList.get(0).getScoringModel());
 
 		for (Object[] row : result) {
 			Article article = (Article)row[articleColumnIndex];

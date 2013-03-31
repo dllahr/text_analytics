@@ -136,7 +136,7 @@ public class StemFrequencyDistribution {
 	private static Article saveStemCountToDatabase(Map<String, Counter> stemCount, ArticleFileDatePair inputFileWithDate, ScoringModel company) {
 		Article article = new Article();
 		article.setId(Utilities.getMaxId("Article")+1);
-		article.setCompany(company);
+		article.setScoringModel(company);
 		article.setFilename(inputFileWithDate.getFile().getAbsolutePath());
 		
 		if (inputFileWithDate.getDate() != null) {

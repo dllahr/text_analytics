@@ -43,7 +43,7 @@ public class LoadArticles {
 			article.setId(articleId);
 			articleId++;
 			
-			article.setCompany(company);
+			article.setScoringModel(company);
 			
 			ArticleFileDatePair pair = articleDateMap.get(articleFileName);
 			article.setFilename(pair.getFile().getAbsolutePath());

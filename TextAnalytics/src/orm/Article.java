@@ -14,8 +14,8 @@ public class Article {
 	private Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name="COMPANY_ID")
-	private ScoringModel company;
+	@JoinColumn(name="SCORING_MODEL_ID")
+	private ScoringModel scoringModel;
 	
 	private String filename;
 	
@@ -37,12 +37,12 @@ public class Article {
 		this.id = id;
 	}
 
-	public ScoringModel getCompany() {
-		return company;
+	public ScoringModel getScoringModel() {
+		return scoringModel;
 	}
 
-	public void setCompany(ScoringModel company) {
-		this.company = company;
+	public void setScoringModel(ScoringModel scoringModel) {
+		this.scoringModel = scoringModel;
 	}
 
 	public String getFilename() {
