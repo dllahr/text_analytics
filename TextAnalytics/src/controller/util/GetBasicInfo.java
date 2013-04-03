@@ -9,8 +9,8 @@ import orm.ScoringModel;
 import orm.SessionManager;
 
 public class GetBasicInfo {
-	public static List<ScoringModel> getAllCompanies() {
-		Query query = SessionManager.createQuery("from Company order by stockSymbol");
+	public static List<ScoringModel> getAllScoringModels() {
+		Query query = SessionManager.createQuery("from ScoringModel order by id");
 		return Utilities.convertGenericList(query.list());
 	}
 }

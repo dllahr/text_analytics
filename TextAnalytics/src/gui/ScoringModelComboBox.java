@@ -8,12 +8,12 @@ import controller.util.GetBasicInfo;
 
 import orm.ScoringModel;
 
-public class CompanyComboBox extends JComboBox<ScoringModel> {
+public class ScoringModelComboBox extends JComboBox<ScoringModel> {
 
 	private static final long serialVersionUID = 1L;
 	
-	public CompanyComboBox() {
-		super(new Vector<>(GetBasicInfo.getAllCompanies()));
+	public ScoringModelComboBox() {
+		super(new Vector<>(GetBasicInfo.getAllScoringModels()));
 	}
 
 }

@@ -43,10 +43,10 @@ public class StemFrequencyDistribution {
 	private static final long millisPerDay = 24*60*60*1000;
 			//"C:\\no_backup\\personal\\projects\\text_analytics\\gate\\stemmer";
 	
-	private static final String companyParam = "company";
+	private static final String scoringModelParam = "scoringModel";
 	private static final String textParam = "text";
-	private static final String stemQueryString = "from Stem where company=:" 
-			+ companyParam + " and text in (:" + textParam + ")";
+	private static final String stemQueryString = "from Stem where scoringModel=:" 
+			+ scoringModelParam + " and text in (:" + textParam + ")";
 	/**
 	 * each file in the inputDir directory is assumed to contain an individual article.  
 	 * For each, identify the stems and get the count of
@@ -58,8 +58,8 @@ public class StemFrequencyDistribution {
 	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Article> calculateAndSaveArticleStems(final List<ArticleFileDatePair> articlesWithDatesList, final ScoringModel company) 
-			throws GateException, IOException {
+	public static List<Article> calculateAndSaveArticleStems(final List<ArticleFileDatePair> articlesWithDatesList, 
+			final ScoringModel scoringModel) throws GateException, IOException {
 		
 		final List<Article> articleList = new LinkedList<>();
 
@@ -97,7 +97,7 @@ public class StemFrequencyDistribution {
 
 			final HashMap<String, Counter> stemCount = calculateStemCount(document);
 
-			Article article = saveStemCountToDatabase(stemCount, articleFileDatePair, company);
+			Article article = saveStemCountToDatabase(stemCount, articleFileDatePair, scoringModel);
 			articleList.add(article);
 
 			corpus.remove(document);
@@ -133,10 +133,10 @@ public class StemFrequencyDistribution {
 		return stemCount;
 	}
 	
-	private static Article saveStemCountToDatabase(Map<String, Counter> stemCount, ArticleFileDatePair inputFileWithDate, ScoringModel company) {
+	private static Article saveStemCountToDatabase(Map<String, Counter> stemCount, ArticleFileDatePair inputFileWithDate, ScoringModel scoringModel) {
 		Article article = new Article();
 		article.setId(Utilities.getMaxId("Article")+1);
-		article.setScoringModel(company);
+		article.setScoringModel(scoringModel);
 		article.setFilename(inputFileWithDate.getFile().getAbsolutePath());
 		
 		if (inputFileWithDate.getDate() != null) {
@@ -149,7 +149,7 @@ public class StemFrequencyDistribution {
 		int firstNewStemId = Utilities.getMaxId("Stem") + 1;
 		int nextStemId = firstNewStemId;
 		
-		Map<String, Stem> textStemMap = loadTextStemMap(company, stemCount.keySet());
+		Map<String, Stem> textStemMap = loadTextStemMap(scoringModel, stemCount.keySet());
 		
 		for (String stemText : stemCount.keySet()) {
 			
@@ -160,7 +160,7 @@ public class StemFrequencyDistribution {
 				stem = new Stem();
 				stem.setId(nextStemId);
 				nextStemId++;
-				stem.setScoringModel(company);
+				stem.setScoringModel(scoringModel);
 				stem.setText(stemText);
 				SessionManager.persist(stem);
 			}
@@ -180,11 +180,11 @@ public class StemFrequencyDistribution {
 	}
 	
 	private static final int batchSize = 1000;
-	private static Map<String, Stem> loadTextStemMap(ScoringModel company, Collection<String> stemTextCollection) {
+	private static Map<String, Stem> loadTextStemMap(ScoringModel scoringModel, Collection<String> stemTextCollection) {
 		List<Stem> stemList = new ArrayList<>(stemTextCollection.size());
 
 		Query query = SessionManager.createQuery(stemQueryString);
-		query.setParameter(companyParam, company);
+		query.setParameter(scoringModelParam, scoringModel);
 
 		Iterator<String> stemTextIter = stemTextCollection.iterator();
 		while (stemTextIter.hasNext()) {

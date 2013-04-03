@@ -16,7 +16,7 @@ public class PredictionModelPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final CompanyComboBox companyComboBox;
+	private final ScoringModelComboBox companyComboBox;
 	
 	private static final String refStatsExplanation = "1. Articles for the company that referenced by eigenvectors are loaded into database with day_index set.\n" +
 			"2. Stock data is loaded for the company for the date range specified by the dates of the articles.";
@@ -30,7 +30,7 @@ public class PredictionModelPanel extends JPanel {
 	public PredictionModelPanel(final Controller controller) {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
-		companyComboBox = new CompanyComboBox();
+		companyComboBox = new ScoringModelComboBox();
 		add(companyComboBox);
 		
 		JPanel calcRefStatsPanel = new JPanel();

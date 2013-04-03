@@ -35,7 +35,7 @@ public class LegacyPanel extends JPanel {
 	public LegacyPanel() {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
  
-		comboBox = new CompanyComboBox();
+		comboBox = new ScoringModelComboBox();
 		add(comboBox);
 		
 		fileArea = new FileAutoCompleteTextArea();

@@ -43,14 +43,14 @@ class PredictionPanel extends JPanel {
 		JPanel bottomPanel = new JPanel();
 		add(bottomPanel);
 		
-		final CompanyComboBox companyCombobox = new CompanyComboBox();
-		bottomPanel.add(companyCombobox);
+		final ScoringModelComboBox scoringModelCombobox = new ScoringModelComboBox();
+		bottomPanel.add(scoringModelCombobox);
 		
 		JButton button = new JButton("Load Articles (formerly Make Prediction)");
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controller.makePredictions((ScoringModel) companyCombobox.getSelectedItem(), fileArea.getCurrentFile());
+				controller.makePredictions((ScoringModel) scoringModelCombobox.getSelectedItem(), fileArea.getCurrentFile());
 			}
 		});
 		bottomPanel.add(button);
@@ -59,7 +59,7 @@ class PredictionPanel extends JPanel {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				controller.loadArticlesWithoutDates((ScoringModel)companyCombobox.getSelectedItem(), fileArea.getCurrentFile());
+				controller.loadArticlesWithoutDates((ScoringModel)scoringModelCombobox.getSelectedItem(), fileArea.getCurrentFile());
 			}
 		});
 		bottomPanel.add(button);
