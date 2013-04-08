@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Article {
+	private static final long millisPerDay = 24*60*60*1000;
+	
 	@Id
 	private Integer id;
 	
@@ -60,6 +62,10 @@ public class Article {
 	public void setDayIndex(Integer dayIndex) {
 		this.dayIndex = dayIndex;
 	}
+	
+	public void setDayIndex(Date date) {
+		this.dayIndex = calculateDayIndex(date);
+	}
 
 	public Date getPublishDate() {
 		return publishDate;
@@ -67,5 +73,9 @@ public class Article {
 
 	public void setPublishDate(Date publishDate) {
 		this.publishDate = publishDate;
+	}
+	
+	public static int calculateDayIndex(Date date) {
+		return (int) (date.getTime() / millisPerDay);
 	}
 }

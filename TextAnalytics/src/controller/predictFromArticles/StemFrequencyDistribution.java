@@ -39,9 +39,6 @@ public class StemFrequencyDistribution {
 	private static final String gateHome = "C:\\no_backup\\bin\\gate";
 
 	private static final String stemmerFileUrl = "resources/stemmer";
-
-	private static final long millisPerDay = 24*60*60*1000;
-			//"C:\\no_backup\\personal\\projects\\text_analytics\\gate\\stemmer";
 	
 	private static final String scoringModelParam = "scoringModel";
 	private static final String textParam = "text";
@@ -141,7 +138,7 @@ public class StemFrequencyDistribution {
 		
 		if (inputFileWithDate.getDate() != null) {
 			article.setPublishDate(inputFileWithDate.getDate());
-			article.setDayIndex((int)(inputFileWithDate.getDate().getTime() / millisPerDay));
+			article.setDayIndex(inputFileWithDate.getDate());
 		}
 		
 		SessionManager.persist(article);

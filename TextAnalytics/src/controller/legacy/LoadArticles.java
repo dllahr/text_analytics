@@ -20,8 +20,6 @@ import controller.dateExtractionConversion.ReadDateFromArticle;
 import controller.util.Utilities;
 
 public class LoadArticles {
-	private static final long millisPerDay = 24*60*60*1000;
-	
 	private static final int progressIncrement = 1000;
 	
 	public static void load(File articleDir, String articlePrefix, File articleOrderFile, ScoringModel company) {
@@ -50,7 +48,7 @@ public class LoadArticles {
 			
 			if (pair.getDate() != null) {
 				article.setPublishDate(pair.getDate());
-				article.setDayIndex((int)(pair.getDate().getTime() / millisPerDay));
+				article.setDayIndex(pair.getDate());
 			}
 			
 			SessionManager.persist(article);
