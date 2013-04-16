@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 import database.DbConn;;
 
-public class ImportEigenToOracleXe {
+public class ImportEigen {
 	private static final String delimeter = " ";
 	private static final String maxEigenvalueIdQuery = "select max(id) from eigenvalue";
 	private static final String eigenValueInsert = "insert into eigenvalue (id, scoring_model_id, sort_index, value) " +
