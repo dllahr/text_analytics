@@ -8,9 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-import database.DbConn;
+import database.DbConn;;
 
-public class Main {
+public class ImportEigenToOracleXe {
 	private static final String delimeter = " ";
 	private static final String maxEigenvalueIdQuery = "select max(id) from eigenvalue";
 	private static final String eigenValueInsert = "insert into eigenvalue (id, scoring_model_id, sort_index, value) " +
