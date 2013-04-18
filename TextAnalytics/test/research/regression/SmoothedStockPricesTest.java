@@ -20,10 +20,11 @@ public class SmoothedStockPricesTest {
 	public void testIntegration() {
 		SessionManager.setUseForTest(false);
 		Query query = SessionManager.createQuery("from Company where stockSymbol='CAT'");
-		ScoringModel company = (ScoringModel)(query.list().get(0));
+		ScoringModel scoringModel = (ScoringModel)(query.list().get(0));
 		double[] weights = {0.5, 1.0, 0.5};
 		final int minDayIndex = 5877;
-		SmoothedStockPrices findSmoothedStockPrices = new SmoothedStockPrices(minDayIndex, company, weights);
+		SmoothedStockPrices findSmoothedStockPrices = new SmoothedStockPrices(minDayIndex, 
+				scoringModel.getCompanySet().iterator().next(), weights);
 		
 		for (int i = 1; i <= 14; i++) {
 			final int dayIndex = i + minDayIndex;

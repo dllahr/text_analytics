@@ -28,7 +28,7 @@ public class CalculateStockStatistics {
 
 	private final FindStockPrices findNextStockPrices;
 	
-	public CalculateStockStatistics(boolean doOutputHistogram, int minDayIndex, ScoringModel company) {
+	public CalculateStockStatistics(boolean doOutputHistogram, int minDayIndex, ScoringModel scoringModel) {
 		this.doOutputHistogram = doOutputHistogram;
 		
 		this.dayIndexOffsetIncrement = dayIndexOffsetIncrementDefault;
@@ -38,7 +38,7 @@ public class CalculateStockStatistics {
 		this.lowerLimit = lowerLimitDefault;
 		this.upperLimit = upperLimitDefault;
 		
-		findNextStockPrices = new FindStockPrices(minDayIndex, company);
+		findNextStockPrices = new FindStockPrices(minDayIndex, scoringModel.getCompanySet().iterator().next());
 	}
 
 	/**

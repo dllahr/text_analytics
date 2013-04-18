@@ -15,6 +15,7 @@ import java.util.Set;
 
 import org.hibernate.Query;
 
+import orm.Company;
 import orm.ScoringModel;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
@@ -26,6 +27,7 @@ import controller.util.Utilities;
 
 public class GetPcData2 {
 	private static final int scoringModelId = 1;
+	private static final int companyId = 1;
 	
 	private static final int dayOffset = 40;
 	
@@ -38,6 +40,14 @@ public class GetPcData2 {
 		
 		ScoringModel scoringModel = lookupScoringModel(scoringModelId);
 		System.out.println("for scoringModel " + scoringModel.getId());
+		
+		Company company = scoringModel.getCompanyById(companyId);
+		if (null == company) {
+			System.err.println("could not find company with ID " + companyId + " associated with scoring model");
+			return;
+		} else {
+			System.out.println("for company " + company);
+		}
 		
 		System.out.println("lookup eigenvector values");
 		List<EigenvectorValue> evvList = lookupEigenvectorValues(scoringModel);
@@ -57,7 +67,7 @@ public class GetPcData2 {
 		});
 		
 		System.out.println("calculate stock price fraction change for offset");
-		Map<Integer, Double> articleDayIndexStockChangeMap = calcStockFractionChange(articleDayIndexList, dayOffset, scoringModel);
+		Map<Integer, Double> articleDayIndexStockChangeMap = calcStockFractionChange(articleDayIndexList, dayOffset, company);
 		
 		System.out.println("write to file");
 		BufferedWriter writer = new BufferedWriter(new FileWriter("regressionPcStockData_" + scoringModel.getId() 
@@ -93,7 +103,7 @@ public class GetPcData2 {
 	}
 	
 	static Map<Integer, Double> calcStockFractionChange(List<Integer> articleDayIndexList, int dayOffset, 
-			ScoringModel company) {
+			Company company) {
 
 		final int minDayIndex = Collections.min(articleDayIndexList);
 		FindStockPrices findNextStockPrices = new FindStockPrices(minDayIndex, company);

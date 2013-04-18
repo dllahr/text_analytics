@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import orm.Company;
 import orm.ScoringModel;
 import orm.StockData;
 import controller.buildPredictionModel.FindStockPrices;
@@ -22,7 +23,7 @@ public class SmoothedStockPrices {
 	 * @param company
 	 * @param weights
 	 */
-	public SmoothedStockPrices(int minDayIndex, ScoringModel company, double[] weights) {
+	public SmoothedStockPrices(int minDayIndex, Company company, double[] weights) {
 		final List<StockData> stockDataList = FindStockPrices.lookupStockData(minDayIndex, company);
 		
 		Map<Integer, Double> rawDayIndexSmoothedPriceMap = calculateSmoothedPrices(stockDataList, weights);

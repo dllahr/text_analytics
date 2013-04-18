@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.hibernate.Query;
 
+import orm.Company;
 import orm.ScoringModel;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
@@ -31,6 +32,7 @@ import controller.util.Utilities;
  */
 public class GetPcDataAveStockPrices {
 	private static final int scoringModelId = 8;
+	private static final int companyId = 6;
 	
 	private static final int dayOffset = 40;
 	
@@ -42,6 +44,14 @@ public class GetPcDataAveStockPrices {
 		
 		ScoringModel scoringModel = lookupScoringModel(scoringModelId);
 		System.out.println("for scoringModel " + scoringModel.getId());
+		
+		Company company = scoringModel.getCompanyById(companyId);
+		if (null == company) {
+			System.err.println("could not find company with ID " + companyId + " associated with scoring model");
+			return;
+		} else {
+			System.out.println("for company " + company);
+		}
 		
 		String outputFilename = "regressionPcSmoothStockData_" + scoringModel.getId() + ".csv";
 		File outputFile = new File(outputFilename);
@@ -69,7 +79,7 @@ public class GetPcDataAveStockPrices {
 		
 		System.out.println("calculate smoothed stock price fraction change for offset " + new Date());
 		Map<Integer, Double> articleDayIndexStockChangeMap = calcStockFractionChange(articleDayIndexList, dayOffset, 
-				scoringModel, weightsArray);
+				company, weightsArray);
 		
 		System.out.println("write to file " + new Date());
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
@@ -107,7 +117,7 @@ public class GetPcDataAveStockPrices {
 	
 	
 	static Map<Integer, Double> calcStockFractionChange(List<Integer> articleDayIndexList, int dayOffset, 
-			ScoringModel company, double[] weightsArray) {
+			Company company, double[] weightsArray) {
 
 		//need to back the number of days on the side of of the average + an additional week to be safe
 		final int minDayIndex = Collections.min(articleDayIndexList) - (7 + weightsArray.length/2);

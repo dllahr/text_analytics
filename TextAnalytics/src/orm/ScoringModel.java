@@ -62,4 +62,17 @@ public class ScoringModel  {
 	public void setCompanySet(Set<Company> companySet) {
 		this.companySet = companySet;
 	}
+	
+	public Company getCompanyById(int companyId) {
+		Company result = null;
+		
+		for (Company company : companySet) {
+			if (companyId == company.getId()) {
+				result = company;
+				break;
+			}
+		}
+		
+		return result;
+	}
 }

@@ -22,13 +22,13 @@ public class FindStockPricesTest {
 	
 	@Test
 	public void testFindNext() {
-		List<ScoringModel> companyList = Utilities.convertGenericList(SessionManager.createQuery("from Company where id=2").list());
-		assertTrue(companyList.size() > 0);
+		List<ScoringModel> scoringModelList = Utilities.convertGenericList(SessionManager.createQuery("from Company where id=2").list());
+		assertTrue(scoringModelList.size() > 0);
 		
 		List<Integer> dayIndexList = new LinkedList<>();
 		dayIndexList.add(dayIndex);
 		
-		FindStockPrices findNextStockPrices = new FindStockPrices(dayIndex, companyList.get(0));
+		FindStockPrices findNextStockPrices = new FindStockPrices(dayIndex, scoringModelList.get(0).getCompanySet().iterator().next());
 		
 		Map<Integer, StockData> result = findNextStockPrices.findNext(dayIndexList);
 		assertTrue(result.keySet().size() > 0);

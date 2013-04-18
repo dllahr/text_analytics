@@ -9,6 +9,7 @@ import java.util.Map;
 
 import controller.buildPredictionModel.FindStockPrices;
 
+import orm.Company;
 import orm.ScoringModel;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
@@ -27,6 +28,8 @@ import research.regression.GetPcData;
 public class GetVolatilityData {
 	
 	private static final int scoringModelId = 1; //CAT
+	private static final int companyId = 1;
+	
 	private static final int dayOffset = 40;
 
 	public static void main(String[] args) {
@@ -34,6 +37,14 @@ public class GetVolatilityData {
 		
 		ScoringModel scoringModel = GetPcData.lookupScoringModel(scoringModelId);
 		System.out.println("Company: " + scoringModel.getId());
+		
+		Company company = scoringModel.getCompanyById(companyId);
+		if (null == company) {
+			System.err.println("could not find company with ID " + companyId + " associated with scoring model");
+			return;
+		} else {
+			System.out.println("for company " + company);
+		}
 		
 		System.out.println("lookup eigenvector values");
 		List<EigenvectorValue> evvList = GetPcData.lookupEigenvectorValues(scoringModel);
@@ -53,7 +64,7 @@ public class GetVolatilityData {
 		});
 		
 		System.out.println("calculate stock price fraction change for offset");
-		Map<Integer, Double> articleDayIndexStockVolatilityMap = calcStockVolatility(articleDayIndexList, dayOffset, scoringModel);
+		Map<Integer, Double> articleDayIndexStockVolatilityMap = calcStockVolatility(articleDayIndexList, dayOffset, company);
 
 		List<Integer> newDayIndexList = new ArrayList<>(articleDayIndexStockVolatilityMap.keySet());
 		Collections.sort(newDayIndexList);
@@ -66,7 +77,7 @@ public class GetVolatilityData {
 	}
 	
 	static Map<Integer, Double> calcStockVolatility(List<Integer> articleDayIndexList, int dayOffset, 
-			ScoringModel company) {
+			Company company) {
 		
 		final int minDayIndex = Collections.min(articleDayIndexList);
 		FindStockPrices findNextStockPrices = new FindStockPrices(minDayIndex, company);
