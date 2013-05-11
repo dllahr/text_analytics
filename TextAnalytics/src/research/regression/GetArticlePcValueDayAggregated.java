@@ -17,7 +17,7 @@ import orm.SessionManager;
 
 public class GetArticlePcValueDayAggregated {
 
-	private static final long[] articleIdRange = {132420, 132766};
+	private static final long[] articleIdRange = {132420, 132958};
 	
 	private static final String outputFilePath = "oos_articlePcValueAggregated_8.csv";
 
