@@ -1,4 +1,4 @@
-package controller.readAndSplitRawFile;
+package controller.integration.readAndSplitRawFile;
 
 import static org.junit.Assert.*;
 
@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import controller.readAndSplitRawFile.MultiplelArticleSplitter;
-import controller.readAndSplitRawFile.RawArticle;
+import controller.integration.readAndSplitRawFile.MultiplelArticleSplitter;
+import controller.integration.readAndSplitRawFile.RawArticle;
 
 public class MultipleArticleSplitterTest {
 
@@ -17,7 +17,7 @@ public class MultipleArticleSplitterTest {
 	public void test() throws IOException {
 		MultiplelArticleSplitter parser = new MultiplelArticleSplitter();
 		
-		File inputFile = new File("test/controller/readAndSplitRawFile/mdlz-2013-05-10.txt");
+		File inputFile = new File("test/controller/integration/readAndSplitRawFile/mdlz-2013-05-10.txt");
 		
 		List<RawArticle> articles = parser.readAndParse(inputFile);
 

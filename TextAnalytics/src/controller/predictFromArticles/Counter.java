@@ -1,6 +1,6 @@
 package controller.predictFromArticles;
 
-class Counter {
+public class Counter {
 	private int count;
 	
 	public Counter() {

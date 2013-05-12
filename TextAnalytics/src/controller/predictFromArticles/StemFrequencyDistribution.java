@@ -36,9 +36,9 @@ import tools.TextFileReader;
 
 public class StemFrequencyDistribution {
 	
-	private static final String gateHome = "C:\\no_backup\\bin\\gate";
+	static final String gateHome = "C:\\no_backup\\bin\\gate";
 
-	private static final String stemmerFileUrl = "resources/stemmer";
+	static final String stemmerFileUrl = "resources/stemmer";
 	
 	private static final String scoringModelParam = "scoringModel";
 	private static final String textParam = "text";
@@ -106,7 +106,7 @@ public class StemFrequencyDistribution {
 	}
 	
 	
-	private static HashMap<String, Counter> calculateStemCount(Document document) {
+	static HashMap<String, Counter> calculateStemCount(Document document) {
 		HashMap<String, Counter> stemCount = new HashMap<String, Counter>();
 		for (Annotation curAnnot : document.getAnnotations()) {
 			FeatureMap curFeatureMap = curAnnot.getFeatures();

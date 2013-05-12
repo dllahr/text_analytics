@@ -1,4 +1,4 @@
-package controller.readAndSplitRawFile;
+package controller.integration.readAndSplitRawFile;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,7 +11,7 @@ public class MultiplelArticleSplitter {
 
 	private static final String documentDelimeter = "Document [0-9]+ of [0-9]+";
 
-	List<RawArticle> readAndParse(File inputFile) throws IOException {
+	public List<RawArticle> readAndParse(File inputFile) throws IOException {
 		List<RawArticle> result = new LinkedList<>();
 
 		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
