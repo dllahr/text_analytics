@@ -1,4 +1,4 @@
-package controller.readRawFile;
+package controller.readAndSplitRawFile;
 
 import static org.junit.Assert.*;
 
@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+
+import controller.readAndSplitRawFile.ArticleSectionSplitter;
+import controller.readAndSplitRawFile.RawArticle;
+import controller.readAndSplitRawFile.SplitArticle;
 
 public class ArticleSectionSplitterTest {
 

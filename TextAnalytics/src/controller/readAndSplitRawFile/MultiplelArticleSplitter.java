@@ -1,4 +1,4 @@
-package controller.readRawFile;
+package controller.readAndSplitRawFile;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,4 +1,4 @@
-package controller.readRawFile;
+package controller.readAndSplitRawFile;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.junit.Test;
+
+import controller.readAndSplitRawFile.BuildMetaDataMap;
 
 public class BuildMetaDataMapTest {
 

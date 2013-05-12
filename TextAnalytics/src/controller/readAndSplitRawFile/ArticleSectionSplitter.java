@@ -1,4 +1,4 @@
-package controller.readRawFile;
+package controller.readAndSplitRawFile;
 
 
 import java.util.Collections;
