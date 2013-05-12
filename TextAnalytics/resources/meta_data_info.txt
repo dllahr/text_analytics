@@ -1,0 +1,29 @@
+#comments prefixed with #	
+#headers:	
+#label	is_body
+Document	FALSE
+Publication info:	FALSE
+Abstract:	FALSE
+Links:	FALSE
+Full text:	TRUE
+Subject:	FALSE
+Title:	FALSE
+Publication title:	FALSE
+Publication year:	FALSE
+Publication date:	FALSE
+Year:	FALSE
+Dateline:	FALSE
+Publisher:	FALSE
+Place of publication:	FALSE
+Country of publication:	FALSE
+Publication subject:	FALSE
+Source type:	FALSE
+Language of publication:	FALSE
+Document type:	FALSE
+ProQuest document ID:	FALSE
+Document URL:	FALSE
+Copyright:	FALSE
+Last updated:	FALSE
+Database:	FALSE
+Credit:	FALSE
+Company / organization:	FALSE
