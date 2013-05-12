@@ -22,7 +22,7 @@ import controller.util.Utilities;
 public class LoadArticles {
 	private static final int progressIncrement = 1000;
 	
-	public static void load(File articleDir, String articlePrefix, File articleOrderFile, ScoringModel company) {
+	public static void load(File articleDir, String articlePrefix, File articleOrderFile, ScoringModel company) throws IOException {
 		final List<String> articleFilenameOrderList;
 		try {
 			 articleFilenameOrderList = loadArticleOrder(articleOrderFile);
@@ -58,7 +58,7 @@ public class LoadArticles {
 	}
 
 	
-	private static Map<String, ArticleFileDatePair> loadAndConvertArticleDates(File articleDir, final String articlePrefix) {
+	private static Map<String, ArticleFileDatePair> loadAndConvertArticleDates(File articleDir, final String articlePrefix) throws IOException {
 		FileFilter fileFilter = new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {

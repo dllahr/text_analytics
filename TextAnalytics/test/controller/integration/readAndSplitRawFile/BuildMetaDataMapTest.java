@@ -8,7 +8,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import controller.integration.CountStemsAndReadDateTest;
 import controller.integration.readAndSplitRawFile.BuildMetaDataMap;
+import controller.predictFromArticles.StemCounterTest;
 
 public class BuildMetaDataMapTest {
 
@@ -17,9 +19,7 @@ public class BuildMetaDataMapTest {
 		BuildMetaDataMap buildMetaDataMap = new BuildMetaDataMap();
 		Map<String, Boolean> result = buildMetaDataMap.build(new File("resources/meta_data_info.txt"));
 		
-		for (String label : result.keySet()) {
-			System.out.println(label + " " + result.get(label));
-		}
+		StemCounterTest.printMap(result);
 	}
 
 }

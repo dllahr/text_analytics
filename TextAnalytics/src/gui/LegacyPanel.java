@@ -5,6 +5,7 @@ import gui.autoComplete.file.FileAutoCompleteTextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -89,8 +90,13 @@ public class LegacyPanel extends JPanel {
 				File articleOrderFile = articleOrderFileArea.getCurrentFile();
 				
 				if (articleDir != null && articleOrderFile != null) {
-					LoadArticles.load(articleDir, articlePrefixField.getText(),
-							articleOrderFile, (ScoringModel)comboBox.getSelectedItem());
+					try {
+						LoadArticles.load(articleDir, articlePrefixField.getText(),
+								articleOrderFile, (ScoringModel)comboBox.getSelectedItem());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		});

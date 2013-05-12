@@ -45,21 +45,21 @@ public class LoadAndScoreArticles extends Thread {
 	}
 
 	public void loadAndScore() {
-		List<ArticleFileDatePair> articleFileDatePairList = getArticleFilesWithDates(individualArticleDir);
-		if (articleFileDatePairList.size() > 0) {
-			try {
+		try {
+			List<ArticleFileDatePair> articleFileDatePairList = getArticleFilesWithDates(individualArticleDir);
+			if (articleFileDatePairList.size() > 0) {
 				List<Article> articleList = StemFrequencyDistribution.calculateAndSaveArticleStems(articleFileDatePairList, scoringModel);
-//				CalcPrincipalComponentValues.calcPrincipalComponentValuesForArticles(articleList);
+				//				CalcPrincipalComponentValues.calcPrincipalComponentValuesForArticles(articleList);
 				GeneratePredictions.generatePredictions(articleList);
 				SessionManager.commit();
-			} catch (GateException | IOException e) {
-				System.err.println("PredictFromArticles start() GateException");
-				e.printStackTrace();
 			}
+		} catch (GateException | IOException e) {
+			System.err.println("PredictFromArticles start() GateException");
+			e.printStackTrace();
 		}
 	}
 	
-	private static List<ArticleFileDatePair> getArticleFilesWithDates(File individualArticleDir) {
+	private static List<ArticleFileDatePair> getArticleFilesWithDates(File individualArticleDir) throws IOException {
 		File[] articleFileArray = individualArticleDir.listFiles();
 		List<ArticleFileDatePair> result = new ArrayList<>(articleFileArray.length);
 		for (File curFile : articleFileArray) {

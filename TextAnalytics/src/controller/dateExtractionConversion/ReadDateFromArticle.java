@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ReadDateFromArticle {
 	public enum DateLineStyle {
@@ -19,7 +22,26 @@ public class ReadDateFromArticle {
 	
 	private static boolean shouldDisplayProgress = true;
 	
-	public static Date readDate(File articleFile, DateLineStyle dateLineStyle) {
+	public static Date readDate(File articleFile, DateLineStyle dateLineStyle) throws IOException {
+		if (shouldDisplayProgress) {
+			System.out.println("Attempting to parse date from file " + articleFile.getAbsolutePath());
+		}
+		
+		List<String> lineList = new LinkedList<>();
+		
+		BufferedReader reader = new BufferedReader(new FileReader(articleFile));
+		
+		String curLine;
+		while ((curLine = reader.readLine()) != null) {
+			lineList.add(curLine);
+		}
+		
+		reader.close();
+		
+		return readDate(lineList, dateLineStyle);
+	}
+
+	public static Date readDate(List<String> lineList, DateLineStyle dateLineStyle) {
 		final String dateLineMarker, nextLineMarkersArray[];
 		if (DateLineStyle.original == dateLineStyle) {
 			dateLineMarker = dateLineMarkerOriginal;
@@ -28,14 +50,11 @@ public class ReadDateFromArticle {
 			dateLineMarker = dateLineMarkerNewStyle;
 			nextLineMarkersArray = nextLineMarkersArrayNewStyle;
 		}
-		
-		if (shouldDisplayProgress) {
-			System.out.println("Attempting to parse date from file " + articleFile.getAbsolutePath());
-		}
+
 		
 		final String dateLine;
 		try {
-			dateLine = readDateLineFromFile(articleFile, dateLineMarker, nextLineMarkersArray);
+			dateLine = readDateLineFromFile(lineList, dateLineMarker, nextLineMarkersArray);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -47,20 +66,30 @@ public class ReadDateFromArticle {
 		return dateLine != null ? ConvertArticleDateLine.convertToDate(dateLine) : null;
 	}
 	
-	protected static String readDateLineFromFile(File articleFile, String dateLineMarker, String[] nextLineMarkersArray) throws IOException {
+	
+	
+	protected static String readDateLineFromFile(List<String> lineList, String dateLineMarker, 
+			String[] nextLineMarkersArray) throws IOException {
 		String result = null;
 		
-		BufferedReader reader = new BufferedReader(new FileReader(articleFile));
+		Iterator<String> lineIterator = lineList.iterator();
 
-		String curLine;
-		while ((curLine = reader.readLine()) != null && ! curLine.startsWith(dateLineMarker)) { }
-
+		String curLine = null;
+		boolean doContinue = lineIterator.hasNext();
+		while (doContinue) { 
+			curLine = lineIterator.next();
+			
+			doContinue = lineIterator.hasNext() && ! curLine.startsWith(dateLineMarker);
+		}
+		
 		if (curLine != null && curLine.startsWith(dateLineMarker)) {
 			StringBuilder builder = new StringBuilder();
 			builder.append(curLine);
 
-			boolean doContinue = true;
-			while (nextLineMarkersArray != null && doContinue && (curLine = reader.readLine()) != null) {
+			doContinue = true;
+			while (nextLineMarkersArray != null && doContinue && lineIterator.hasNext()) {
+				curLine = lineIterator.next();
+
 				for (String nextLineMarker : nextLineMarkersArray) {
 					if (curLine.startsWith(nextLineMarker)) {
 						doContinue = false;
@@ -73,8 +102,6 @@ public class ReadDateFromArticle {
 			}
 			result = builder.toString();
 		}
-		
-		reader.close();
 		
 		return result;
 	}

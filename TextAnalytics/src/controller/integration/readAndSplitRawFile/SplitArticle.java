@@ -1,6 +1,7 @@
 package controller.integration.readAndSplitRawFile;
 
 import java.io.File;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ public class SplitArticle {
 	public final String lineDelimeter;
 	
 	public Map<String, Integer> stemCountMap;
+	
+	public Date articleDate;
 	
 	public SplitArticle(File file, String lineDelimeter) {
 		this.file = file;

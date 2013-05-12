@@ -17,7 +17,7 @@ public class MultipleArticleSplitterTest {
 	public void test() throws IOException {
 		MultiplelArticleSplitter parser = new MultiplelArticleSplitter();
 		
-		File inputFile = new File("test/controller/integration/readAndSplitRawFile/mdlz-2013-05-10.txt");
+		File inputFile = new File("test/resources/mdlz-2013-05-10.txt");
 		
 		List<RawArticle> articles = parser.readAndParse(inputFile);
 

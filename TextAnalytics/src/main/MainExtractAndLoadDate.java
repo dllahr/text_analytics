@@ -1,6 +1,7 @@
 package main;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -28,8 +29,9 @@ public class MainExtractAndLoadDate {
 
 	/**
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		final int scoringModelId = Integer.valueOf(args[0]);
 		final String articleDirPath = args[1];
 		

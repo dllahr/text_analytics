@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -43,12 +44,15 @@ public class StemCounterTest {
 			assertEquals(expectedStems[i], expectedCounts[i], count);
 		}
 		
-		
-//		for (String stem : splitArticle.stemCountMap.keySet()) {
-//			final int count = splitArticle.stemCountMap.get(stem);
-//			
-//			System.out.println(stem + " " + count);
-//		}
+//		printMap(splitArticle.stemCountMap);
+	}
+	
+	
+	public static <K, V> void printMap(Map<K, V> map) {
+		for (Object key : map.keySet()) {
+			Object value = map.get(key);
+			System.out.println(key + " " + value);
+		}
 	}
 
 }

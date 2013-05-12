@@ -17,17 +17,18 @@ public class ArticleSectionSplitter {
 	
 	public ArticleSectionSplitter(Map<String, Boolean> metaDataLabelIsBodyMap) {
 
+		Set<String> buildNonBodyLabelSet = new HashSet<>();
 		Set<String> buildBodyLabelSet = new HashSet<>();
 		for (String label : metaDataLabelIsBodyMap.keySet()) {
 			if (metaDataLabelIsBodyMap.get(label)) {
 				buildBodyLabelSet.add(label.trim().toLowerCase());
+			} else {
+				buildNonBodyLabelSet.add(label.trim().toLowerCase());
 			}
 		}
 		
 		bodyLabelSet = Collections.unmodifiableSet(buildBodyLabelSet);
-		
-		Set<String> buildNonBodyLabelSet = new HashSet<>(metaDataLabelIsBodyMap.keySet());
-		buildNonBodyLabelSet.removeAll(bodyLabelSet);
+
 		nonBodyLabelSet = Collections.unmodifiableSet(buildNonBodyLabelSet);
 	}
 
