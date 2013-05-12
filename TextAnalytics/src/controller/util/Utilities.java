@@ -15,13 +15,9 @@ public class Utilities {
 		return result;
 	}
 	
-	public static Integer getMaxId(String className) {
-		@SuppressWarnings("rawtypes")
-		List objList = SessionManager.createQuery("select max(id) from " + className).list();
-		if (objList.size() > 0) {
-			return (Integer)objList.get(0);
-		} else {
-			return null;
-		}
+	public static int getMaxId(String className) {
+		Object maxIdObj = SessionManager.createQuery("select max(id) from " + className).list().get(0);
+		
+		return maxIdObj != null ? (int)maxIdObj : 0;
 	}
 }

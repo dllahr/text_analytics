@@ -28,12 +28,7 @@ public class LoadDistributionCalc {
 	private static void doWork(File dataFile, final ScoringModel company) throws IOException {
 		StockPriceChangeCalculation calc = createNewStockPriceChangeCalculation(company);
 
-		Integer id = Utilities.getMaxId("StockPriceChange");
-		if (null == id) {
-			id = 1;
-		} else {
-			id++;
-		}
+		int id = Utilities.getMaxId("StockPriceChange");
 		
 		Integer eigValId = Utilities.getMaxId("Eigenvalue");
 		if (null == eigValId) {
@@ -77,12 +72,7 @@ public class LoadDistributionCalc {
 	}
 	
 	private static StockPriceChangeCalculation createNewStockPriceChangeCalculation(ScoringModel company) {
-		Integer id = Utilities.getMaxId("StockPriceChangeCalculation");
-		if (null == id) {
-			id = 1;
-		} else {
-			id++;
-		}
+		int id = Utilities.getMaxId("StockPriceChangeCalculation");
 		
 		StockPriceChangeCalculation result = new StockPriceChangeCalculation();
 		result.setId(id);
