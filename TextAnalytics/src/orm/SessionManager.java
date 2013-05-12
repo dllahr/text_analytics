@@ -101,7 +101,7 @@ public class SessionManager {
 		config.configure(cfgFile);
 		if (useForTest) {
 			config.setProperty("hibernate.connection.username", "tester");
-			config.setProperty("hibernate.connection.password", "ckeYnQO9ckeYnQO9");
+			config.setProperty("hibernate.connection.password", "u3pSVrMs79xG7mnJ");
 		}
 		
 		return config.buildSessionFactory();
