@@ -75,7 +75,7 @@ public class StemCounter {
 		}
 	}
 	
-	private static Map<String, Integer> convertCounterMap(Map<String, Counter> stringCounterMap) {
+	static Map<String, Integer> convertCounterMap(Map<String, Counter> stringCounterMap) {
 		Map<String, Integer> result = new HashMap<String, Integer>();
 		
 		for (String string : stringCounterMap.keySet()) {

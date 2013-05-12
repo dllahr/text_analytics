@@ -92,8 +92,8 @@ public class StemFrequencyDistribution {
 
 			controller.execute();
 
-			final HashMap<String, Counter> stemCount = calculateStemCount(document);
-
+			final Map<String, Integer> stemCount = StemCounter.convertCounterMap(calculateStemCount(document));
+			
 			Article article = saveStemCountToDatabase(stemCount, articleFileDatePair, scoringModel);
 			articleList.add(article);
 
@@ -129,8 +129,9 @@ public class StemFrequencyDistribution {
 		
 		return stemCount;
 	}
+
 	
-	private static Article saveStemCountToDatabase(Map<String, Counter> stemCount, ArticleFileDatePair inputFileWithDate, ScoringModel scoringModel) {
+	public static Article saveStemCountToDatabase(Map<String, Integer> stemCount, ArticleFileDatePair inputFileWithDate, ScoringModel scoringModel) {
 		Article article = new Article();
 		article.setId(Utilities.getMaxId("Article")+1);
 		article.setScoringModel(scoringModel);
@@ -165,12 +166,12 @@ public class StemFrequencyDistribution {
 			ArticleStemCount articleStemCount = new ArticleStemCount();
 			articleStemCount.setArticle(article);
 			articleStemCount.setStem(stem);
-			articleStemCount.setCount(stemCount.get(stemText).getCount());
+			articleStemCount.setCount(stemCount.get(stemText));
 			SessionManager.persist(articleStemCount);
 		}
 		
 		if (nextStemId != firstNewStemId) {
-			System.out.print(" new stems: " + (nextStemId - firstNewStemId-1) + " ");
+			System.out.print(" new stems: " + (nextStemId - firstNewStemId) + " ");
 		}
 		
 		return article;
