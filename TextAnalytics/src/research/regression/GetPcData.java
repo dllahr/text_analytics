@@ -22,7 +22,7 @@ import orm.EigenvectorValue;
 import orm.SessionManager;
 import orm.StockData;
 import research.correlation.SumData;
-import controller.buildPredictionModel.FindStockPrices;
+import controller.stockPrices.FindStockPrices;
 import controller.util.Utilities;
 
 /**

@@ -1,4 +1,4 @@
-package controller.predictFromArticles;
+package controller.stemCountArticles;
 
 public class Counter {
 	private int count;

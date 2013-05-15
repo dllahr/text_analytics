@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import controller.buildPredictionModel.FindStockPrices;
+import controller.stockPrices.FindStockPrices;
 
 import orm.Company;
 import orm.ScoringModel;

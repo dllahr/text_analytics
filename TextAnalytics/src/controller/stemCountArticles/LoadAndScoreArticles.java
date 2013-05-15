@@ -1,4 +1,4 @@
-package controller.predictFromArticles;
+package controller.stemCountArticles;
 
 import gate.util.GateException;
 
@@ -9,9 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import controller.dateExtractionConversion.ArticleFileDatePair;
-import controller.dateExtractionConversion.ReadDateFromArticle;
 
-import orm.Article;
 import orm.ScoringModel;
 import orm.SessionManager;
 
@@ -44,37 +42,6 @@ public class LoadAndScoreArticles extends Thread {
 		this.scoringModel = company;
 	}
 
-	public void loadAndScore() {
-		try {
-			List<ArticleFileDatePair> articleFileDatePairList = getArticleFilesWithDates(individualArticleDir);
-			if (articleFileDatePairList.size() > 0) {
-				List<Article> articleList = StemFrequencyDistribution.calculateAndSaveArticleStems(articleFileDatePairList, scoringModel);
-				//				CalcPrincipalComponentValues.calcPrincipalComponentValuesForArticles(articleList);
-				GeneratePredictions.generatePredictions(articleList);
-				SessionManager.commit();
-			}
-		} catch (GateException | IOException e) {
-			System.err.println("PredictFromArticles start() GateException");
-			e.printStackTrace();
-		}
-	}
-	
-	private static List<ArticleFileDatePair> getArticleFilesWithDates(File individualArticleDir) throws IOException {
-		File[] articleFileArray = individualArticleDir.listFiles();
-		List<ArticleFileDatePair> result = new ArrayList<>(articleFileArray.length);
-		for (File curFile : articleFileArray) {
-			if (! curFile.isDirectory()) {
-				Date date = ReadDateFromArticle.readDate(curFile, ReadDateFromArticle.DateLineStyle.newStyle);
-				if (date != null) {
-					result.add(new ArticleFileDatePair(curFile, date));
-				} else {
-					System.err.println("Unable to read date from " + curFile.getAbsolutePath());
-				}
-			}
-		}
-		
-		return result;
-	}
 	
 
 	public void loadWithoutDate() {

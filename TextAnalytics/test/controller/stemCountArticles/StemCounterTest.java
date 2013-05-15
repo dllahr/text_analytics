@@ -1,4 +1,4 @@
-package controller.predictFromArticles;
+package controller.stemCountArticles;
 
 import static org.junit.Assert.*;
 import gate.util.GateException;
@@ -12,6 +12,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import controller.integration.readAndSplitRawFile.SplitArticle;
+import controller.stemCountArticles.StemCounter;
 
 public class StemCounterTest {
 

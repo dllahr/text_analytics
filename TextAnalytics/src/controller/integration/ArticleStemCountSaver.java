@@ -6,7 +6,7 @@ import orm.ScoringModel;
 
 import controller.dateExtractionConversion.ArticleFileDatePair;
 import controller.integration.readAndSplitRawFile.SplitArticle;
-import controller.predictFromArticles.StemFrequencyDistribution;
+import controller.stemCountArticles.StemFrequencyDistribution;
 
 public class ArticleStemCountSaver {
 

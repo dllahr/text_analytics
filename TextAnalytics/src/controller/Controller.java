@@ -9,13 +9,9 @@ import orm.ScoringModel;
 import orm.RegressionModel;
 
 import controller.activity.LoadActivityData;
-import controller.buildPredictionModel.BuildPredictonModel;
-import controller.buildPredictionModel.EigenvectorStats;
-import controller.buildPredictionModel.ReferenceStats;
-import controller.predictFromArticles.ExportPredictionData;
-import controller.predictFromArticles.LoadAndScoreArticles;
 import controller.regressionPrediction.RegressionModelPredictor;
 import controller.regressionPrediction.RegressionPredictionData;
+import controller.stemCountArticles.LoadAndScoreArticles;
 import controller.stockUpdate.StockUpdate;
 
 public class Controller {
@@ -41,12 +37,6 @@ public class Controller {
 		System.out.println("done");
 	}
 	
-	public void makePredictions(ScoringModel company, File indivArticleDir) {
-		loadAndScoreArticles.setScoringModel(company);
-		loadAndScoreArticles.setIndividualArticleDir(indivArticleDir);
-		loadAndScoreArticles.loadAndScore();
-		System.out.println("Controller loadAndScoreArticles done");
-	}
 	
 	public void loadArticlesWithoutDates(ScoringModel company, File indivArticleDir) {
 		loadAndScoreArticles.setScoringModel(company);
@@ -54,25 +44,7 @@ public class Controller {
 		loadAndScoreArticles.loadWithoutDate();
 		System.out.println("Controller loadArticlesWithoutDates done");
 	}
-	
-	public void calculateReferenceStatistics(ScoringModel company) {
-		ReferenceStats.calcStats(company);
-	}
-	
-	public void calculateArticleStockStatistics(ScoringModel company) {
-		EigenvectorStats eigStats = new EigenvectorStats();
-		eigStats.doCalc(company);
-	}
 
-	public void createPredictionModel(ScoringModel company) {
-		BuildPredictonModel build = new BuildPredictonModel();
-		build.build(company);
-	}
-
-	public void savePredictions(File exportFile) {
-		ExportPredictionData exporter = new ExportPredictionData();
-		exporter.export(exportFile);
-	}
 	
 	public void loadActivity(File activityFile) {
 		LoadActivityData loadActivityData = new LoadActivityData();

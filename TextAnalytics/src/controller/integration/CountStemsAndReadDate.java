@@ -18,7 +18,7 @@ import controller.integration.readAndSplitRawFile.ArticleSectionSplitter;
 import controller.integration.readAndSplitRawFile.MultiplelArticleSplitter;
 import controller.integration.readAndSplitRawFile.RawArticle;
 import controller.integration.readAndSplitRawFile.SplitArticle;
-import controller.predictFromArticles.StemCounter;
+import controller.stemCountArticles.StemCounter;
 
 public class CountStemsAndReadDate {
 	

@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import orm.Company;
-import orm.ScoringModel;
 import orm.StockData;
-import controller.buildPredictionModel.FindStockPrices;
+import controller.stockPrices.FindStockPrices;
 
 public class SmoothedStockPrices {
 	

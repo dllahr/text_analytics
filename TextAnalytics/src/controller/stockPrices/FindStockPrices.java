@@ -1,4 +1,4 @@
-package controller.buildPredictionModel;
+package controller.stockPrices;
 
 import java.util.HashMap;
 import java.util.Iterator;

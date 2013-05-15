@@ -1,4 +1,4 @@
-package controller.predictFromArticles;
+package controller.stemCountArticles;
 
 import gate.Annotation;
 import gate.Corpus;

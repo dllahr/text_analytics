@@ -42,13 +42,7 @@ public class FrameBuilder {
 		stockPanel.add(button);
 		tabPane.add("Basic", stockPanel);
 		
-		tabPane.add("Prediction", new PredictionPanel(controller));
-		
 		tabPane.add("Regression", new RegressionPredictionPanel(controller));
-		
-		tabPane.add("Legacy", new LegacyPanel());
-		
-		tabPane.add("Prediction Model", new PredictionModelPanel(controller));
 		
 		tabPane.add("Activity", new ActivityPanel(controller));
 		

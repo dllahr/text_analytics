@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import controller.integration.readAndSplitRawFile.BuildMetaDataMap;
 import controller.integration.readAndSplitRawFile.SplitArticle;
-import controller.predictFromArticles.StemCounterTest;
+import controller.stemCountArticles.StemCounterTest;
 
 public class CountStemsAndReadDateTest {
 

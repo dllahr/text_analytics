@@ -1,4 +1,4 @@
-package controller.predictFromArticles;
+package controller.stemCountArticles;
 
 import java.io.File;
 import java.io.IOException;
