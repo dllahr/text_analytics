@@ -10,9 +10,11 @@ import java.util.Map;
 
 import controller.integration.readAndSplitRawFile.SplitArticle;
 
+import gate.Annotation;
 import gate.Corpus;
 import gate.CorpusController;
 import gate.Document;
+import gate.FeatureMap;
 import gate.corpora.CorpusImpl;
 import gate.corpora.DocumentContentImpl;
 import gate.corpora.DocumentImpl;
@@ -21,22 +23,26 @@ import gate.util.GateException;
 import gate.util.persistence.PersistenceManager;
 
 public class StemCounter {
+	private static final String gateHome = "C:\\no_backup\\bin\\gate";
+
+	private static final String stemmerFileUrl = "resources/stemmer";
+	
 	private final Corpus corpus;
 	
 	private final CorpusController controller;
 	
 	public StemCounter() throws GateException, IOException {
-		System.out.println("gate installation directory: " + StemFrequencyDistribution.gateHome);
+		System.out.println("gate installation directory: " + gateHome);
 		if (gate.Gate.getGateHome() == null) {
-			gate.Gate.setGateHome(new File(StemFrequencyDistribution.gateHome));
+			gate.Gate.setGateHome(new File(gateHome));
 		}
 		if (! gate.Gate.isInitialised()) {
 			gate.Gate.init();
 		}
 		
-		System.out.println("gate stemmer (JAPE):  " + StemFrequencyDistribution.stemmerFileUrl);
+		System.out.println("gate stemmer (JAPE):  " + stemmerFileUrl);
 		controller = 
-			(CorpusController)PersistenceManager.loadObjectFromFile(new File(StemFrequencyDistribution.stemmerFileUrl));
+			(CorpusController)PersistenceManager.loadObjectFromFile(new File(stemmerFileUrl));
 
 		corpus = new CorpusImpl();
 		
@@ -71,7 +77,7 @@ public class StemCounter {
 		controller.execute();
 		
 		for (DocumentSplitArticlePair pair : docArtList) {
-			pair.splitArticle.stemCountMap = convertCounterMap(StemFrequencyDistribution.calculateStemCount(pair.document));
+			pair.splitArticle.stemCountMap = convertCounterMap(calculateStemCount(pair.document));
 		}
 	}
 	
@@ -87,6 +93,29 @@ public class StemCounter {
 		return result;
 	}
 	
+	private static HashMap<String, Counter> calculateStemCount(Document document) {
+		HashMap<String, Counter> stemCount = new HashMap<String, Counter>();
+		for (Annotation curAnnot : document.getAnnotations()) {
+			FeatureMap curFeatureMap = curAnnot.getFeatures();
+			if (curFeatureMap != null) {
+				Object kind = curFeatureMap.get("kind");
+				if (kind != null && kind.toString().equalsIgnoreCase("word")) {
+					Object stem = curFeatureMap.get("stem");
+					
+					if (stem != null) {
+						Counter curCount = stemCount.get(stem.toString());
+						if (null == curCount) {
+							curCount = new Counter();
+							stemCount.put(stem.toString(), curCount);
+						}
+						curCount.increaseCount();
+					}	
+				}
+			}
+		}
+		
+		return stemCount;
+	}
 	
 	private class DocumentSplitArticlePair {
 		final public Document document;

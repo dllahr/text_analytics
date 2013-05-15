@@ -5,16 +5,16 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
-import controller.integration.readAndSplitRawFile.SplitArticle;
+import controller.dateExtractionConversion.ArticleFileDatePair;
+import controller.stemCountArticles.ArticleStemCountSaver;
 import controller.util.Utilities;
 
 import orm.ArticleStemCount;
-import orm.Company;
 import orm.ScoringModel;
 import orm.SessionManager;
 import orm.Stem;
@@ -35,18 +35,13 @@ public class ArticleStemCountSaverTest {
 		stem.setScoringModel(sm);
 		SessionManager.persist(stem);
 		
-		SplitArticle sa = new SplitArticle(new File("fake file"));
-		sa.articleDate = new Date();
-		sa.stemCountMap = new HashMap<String, Integer>();
-		sa.stemCountMap.put(stem.getText(), 2);
-		sa.stemCountMap.put("two", 3);
+		ArticleFileDatePair articleFileDatePair = new ArticleFileDatePair(new File("fake file"), new Date());
 		
-		List<SplitArticle> list = new LinkedList<>();
-		list.add(sa);
+		Map<String, Integer> stemCountMap = new HashMap<String, Integer>();
+		stemCountMap.put(stem.getText(), 2);
+		stemCountMap.put("two", 3);
 		
-		ArticleStemCountSaver saver = new ArticleStemCountSaver();
-		
-		saver.save(list, sm);
+		ArticleStemCountSaver.saveStemCountToDatabase(stemCountMap, articleFileDatePair, sm);
 		
 //		SessionManager.commit();
 		

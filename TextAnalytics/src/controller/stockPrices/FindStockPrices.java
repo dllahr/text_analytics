@@ -10,7 +10,6 @@ import org.hibernate.Query;
 import controller.util.Utilities;
 
 import orm.Company;
-import orm.ScoringModel;
 import orm.SessionManager;
 import orm.StockData;
 
