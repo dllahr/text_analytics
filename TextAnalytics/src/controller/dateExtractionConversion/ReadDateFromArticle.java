@@ -20,9 +20,17 @@ public class ReadDateFromArticle {
 	private static final String dateLineMarkerOriginal = "Publication title:";
 	private static final String[] nextLineMarkersArrayOriginal = {"Source type:", "ProQuest document", "Text Word Count"};
 	
-	private static boolean shouldDisplayProgress = true;
+	private final boolean shouldDisplayProgress;
 	
-	public static Date readDate(File articleFile, DateLineStyle dateLineStyle) throws IOException {
+	private final ConvertArticleDateLine convertArticleDateLine;
+	
+	public ReadDateFromArticle(boolean shouldDisplayProgress) {
+		this.shouldDisplayProgress = shouldDisplayProgress;
+		
+		convertArticleDateLine = new ConvertArticleDateLine(shouldDisplayProgress);
+	}
+
+	public Date readDate(File articleFile, DateLineStyle dateLineStyle) throws IOException {
 		if (shouldDisplayProgress) {
 			System.out.println("Attempting to parse date from file " + articleFile.getAbsolutePath());
 		}
@@ -41,7 +49,7 @@ public class ReadDateFromArticle {
 		return readDate(lineList, dateLineStyle);
 	}
 
-	public static Date readDate(List<String> lineList, DateLineStyle dateLineStyle) {
+	public Date readDate(List<String> lineList, DateLineStyle dateLineStyle) {
 		final String dateLineMarker, nextLineMarkersArray[];
 		if (DateLineStyle.original == dateLineStyle) {
 			dateLineMarker = dateLineMarkerOriginal;
@@ -63,7 +71,7 @@ public class ReadDateFromArticle {
 			System.out.println(dateLine);
 		}
 		
-		return dateLine != null ? ConvertArticleDateLine.convertToDate(dateLine) : null;
+		return dateLine != null ? convertArticleDateLine.convertToDate(dateLine) : null;
 	}
 	
 	
@@ -104,10 +112,5 @@ public class ReadDateFromArticle {
 		}
 		
 		return result;
-	}
-	
-	public static void setShouldDisplayProgress(boolean shouldDisplayProgress) {
-		ReadDateFromArticle.shouldDisplayProgress = shouldDisplayProgress;
-		ConvertArticleDateLine.setShouldDisplayProgress(shouldDisplayProgress);
 	}
 }

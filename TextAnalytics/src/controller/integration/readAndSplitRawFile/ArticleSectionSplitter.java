@@ -41,13 +41,13 @@ public class ArticleSectionSplitter {
 		LinesAndFoundNext beforeBody = readLinesToNextLabel(lineIter, bodyLabelSet);
 		
 		if (! beforeBody.foundNext) {
-			System.err.println("ArticleSectionSplitter split did not find body of article.  file:  " 
+			System.out.println("ArticleSectionSplitter split did not find body of article.  file:  " 
 					+ rawArticle.file.getAbsolutePath() + " first line: " + rawArticle.lines.get(0));
 		} else {
 			LinesAndFoundNext body = readLinesToNextLabel(lineIter, nonBodyLabelSet);
 			
 			if (! body.foundNext) {
-				System.err.println("ArticleSectionSplitter split did not find field labels after body of article.  file:  " 
+				System.out.println("ArticleSectionSplitter split did not find field labels after body of article.  file:  " 
 						+ rawArticle.file.getAbsolutePath() + " first line: " + rawArticle.lines.get(0));
 			} else {
 				result.linesBeforeBody.addAll(beforeBody.lineList.subList(0, beforeBody.lineList.size() - 1));

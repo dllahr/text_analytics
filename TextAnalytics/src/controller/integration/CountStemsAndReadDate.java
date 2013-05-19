@@ -68,7 +68,7 @@ public class CountStemsAndReadDate {
 			splitArticle.articleDate = dateExtractor.extract(splitArticle.linesAfterBody);
 			
 			if (null == splitArticle.articleDate) {
-				System.err.println("warning: failed to parse date from article " + splitArticle.file.getName() + " " + splitArticle.linesBeforeBody.get(0));
+				System.out.println("warning: failed to parse date from article " + splitArticle.file.getName() + " " + splitArticle.linesBeforeBody.get(0));
 			}
 		}
 		

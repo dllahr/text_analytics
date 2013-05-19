@@ -18,12 +18,18 @@ import controller.dateExtractionConversion.ReadDateFromArticle.DateLineStyle;
 public class ReadDateFromArticleTest {
 	private static final String[] fileUrlArray = {"test/resources/doc01_8.txt", "test/resources/doc01_9.txt"};
 	
+	private final ReadDateFromArticle readDateFromArticle;
+	
+	public ReadDateFromArticleTest() {
+		readDateFromArticle = new ReadDateFromArticle(true);
+	}
+	
 	@Test
 	public void testFile() throws IOException {
 		System.out.println("ReadDateFromArticleTest testFile");
-		
+
 		for (String fileUrl : fileUrlArray) {
-			Date result = ReadDateFromArticle.readDate(new File(fileUrl), ReadDateFromArticle.DateLineStyle.original);
+			Date result = readDateFromArticle.readDate(new File(fileUrl), ReadDateFromArticle.DateLineStyle.original);
 			assertNotNull(result);
 		}
 		
@@ -42,7 +48,7 @@ public class ReadDateFromArticleTest {
 		lineList.add("");
 		lineList.add("Year: 2013");
 		
-		Date result = ReadDateFromArticle.readDate(lineList, DateLineStyle.newStyle);
+		Date result = readDateFromArticle.readDate(lineList, DateLineStyle.newStyle);
 		
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		

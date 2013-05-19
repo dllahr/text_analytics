@@ -8,9 +8,13 @@ import java.util.Date;
 public class ConvertArticleDateLine {
 	private static final String[] dateFormatStringArray = {"MMM d, yyyy.", "MMM d, yyyy"};
 	
-	private static boolean shouldDisplayProgress = true;
+	private final boolean shouldDisplayProgress;
 	
-	public static Date convertToDate(String dateLine) {
+	public ConvertArticleDateLine(boolean shouldDisplayProgress) {
+		this.shouldDisplayProgress = shouldDisplayProgress;
+	}
+
+	public Date convertToDate(String dateLine) {
 		Date result = null;
 		boolean doContinue = true;
 		for (int i = 0; doContinue && i < dateFormatStringArray.length; i++) {
@@ -38,9 +42,5 @@ public class ConvertArticleDateLine {
 		}
 
 		return result;
-	}
-	
-	public static void setShouldDisplayProgress(boolean shouldDisplayProcess) {
-		ConvertArticleDateLine.shouldDisplayProgress = shouldDisplayProcess;
 	}
 }

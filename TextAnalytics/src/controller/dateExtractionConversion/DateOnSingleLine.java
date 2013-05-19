@@ -32,8 +32,11 @@ public class DateOnSingleLine implements DateExtractor {
 						return result;
 					}
 				}
+				
+				System.out.println("key for date information found but could not parse date:  "  + line.substring(keyIndex));
 			}
 		}
+
 		return null;
 	}
 
