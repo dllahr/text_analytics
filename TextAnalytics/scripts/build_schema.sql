@@ -706,3 +706,14 @@ END time_diff;
 
 /
 
+create or replace procedure reset_all_sequences(article_id_start integer, 
+  stem_id_start integer)
+is
+begin
+  execute immediate 'drop sequence article_id_seq';
+  execute immediate 'create sequence article_id_seq start with ' || article_id_start;
+  
+  execute immediate 'drop sequence stem_id_seq';
+  execute immediate 'create sequence stem_id_seq start with ' || stem_id_start;
+end;
+/
