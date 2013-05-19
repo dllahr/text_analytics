@@ -23,6 +23,8 @@ import gate.util.GateException;
 import gate.util.persistence.PersistenceManager;
 
 public class StemCounter {
+	private final int batchSize;
+	
 	private static final String gateHome = "C:\\no_backup\\bin\\gate";
 
 	private static final String stemmerFileUrl = "resources/stemmer";
@@ -31,7 +33,9 @@ public class StemCounter {
 	
 	private final CorpusController controller;
 	
-	public StemCounter() throws GateException, IOException {
+	public StemCounter(int batchSize) throws GateException, IOException {
+		this.batchSize = batchSize;
+
 		System.out.println("gate installation directory: " + gateHome);
 		if (gate.Gate.getGateHome() == null) {
 			gate.Gate.setGateHome(new File(gateHome));
@@ -56,8 +60,8 @@ public class StemCounter {
 	 */
 	@SuppressWarnings("unchecked")
 	public void count(Collection<SplitArticle> splitArticleColl) throws ExecutionException {
-		List<DocumentSplitArticlePair> docArtList = new ArrayList<>(splitArticleColl.size());
-		
+		List<DocumentSplitArticlePair> docArtList = new ArrayList<>(batchSize);
+
 		int i = 0;
 		for (SplitArticle splitArticle : splitArticleColl) {
 			final Document document = new DocumentImpl();
@@ -70,10 +74,26 @@ public class StemCounter {
 			DocumentContentImpl docContent = new DocumentContentImpl(content);
 			document.setContent(docContent);
 			corpus.add(document);
-
+			
 			i++;
+			
+			if (i%batchSize == 0) {
+				processBatch(docArtList);
+				
+				docArtList.clear();
+				corpus.clear();
+
+				System.out.println("stems calculated for:  " + i);
+			}
 		}
 		
+		if (i%batchSize != 0) {
+			processBatch(docArtList);
+			System.out.println("stems calculated for:  " + i);
+		}
+	}
+	
+	private void processBatch(List<DocumentSplitArticlePair> docArtList) throws ExecutionException {
 		controller.execute();
 		
 		for (DocumentSplitArticlePair pair : docArtList) {

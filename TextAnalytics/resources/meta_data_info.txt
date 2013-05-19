@@ -27,3 +27,10 @@ Last updated:	FALSE
 Database:	FALSE
 Credit:	FALSE
 Company / organization:	FALSE
+#
+#for older MDLZ (KFT)
+#
+LINK TO DOCUMENT IN PROQUEST	FALSE
+ABSTRACT	FALSE
+FULL TEXT	TRUE
+INDEX FIELDS	FALSE

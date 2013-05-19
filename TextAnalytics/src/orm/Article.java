@@ -4,14 +4,19 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Article {
 	private static final long millisPerDay = 24*60*60*1000;
 	
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "articleIdSeq")
+	@SequenceGenerator(name = "articleIdSeq", sequenceName = "article_id_seq", allocationSize = 1)
 	@Id
 	private Integer id;
 	
@@ -26,6 +31,12 @@ public class Article {
 	
 	@Column(name="DAY_INDEX")
 	private Integer dayIndex;
+	
+	@Column(name="START_LINE_NUM")
+	private Integer startLineNum;
+	
+	@Column(name="ADDITIONAL_IDENTIFIER")
+	private String additionalIdentifier;
 	
 	public Article() {
 		
@@ -77,5 +88,21 @@ public class Article {
 	
 	public static int calculateDayIndex(Date date) {
 		return (int) (date.getTime() / millisPerDay);
+	}
+
+	public Integer getStartLineNum() {
+		return startLineNum;
+	}
+
+	public void setStartLineNum(Integer startLineNum) {
+		this.startLineNum = startLineNum;
+	}
+
+	public String getAdditionalIdentifier() {
+		return additionalIdentifier;
+	}
+
+	public void setAdditionalIdentifier(String additionalIdentifier) {
+		this.additionalIdentifier = additionalIdentifier;
 	}
 }

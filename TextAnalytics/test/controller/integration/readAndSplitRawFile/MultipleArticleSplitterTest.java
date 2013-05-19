@@ -23,15 +23,22 @@ public class MultipleArticleSplitterTest {
 
 		assertEquals(13, articles.size());
 		
+		RawArticle rawArticle = articles.get(0);
+		
 		System.out.println("first article");
-		for (String line : articles.get(0).lines) {
+		assertEquals(3, rawArticle.startLineNumber);
+		
+		for (String line : rawArticle.lines) {
 			System.out.println(line);
 		}
+
+
+		rawArticle = articles.get(12);
+		assertEquals(7830, rawArticle.startLineNumber);
 		
 		System.out.println("last article");
-		for (String line : articles.get(12).lines) {
+		for (String line : rawArticle.lines) {
 			System.out.println(line);
 		}
-		
 	}
 }

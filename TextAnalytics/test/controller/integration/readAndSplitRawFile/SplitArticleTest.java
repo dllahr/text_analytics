@@ -12,7 +12,7 @@ public class SplitArticleTest {
 
 	@Test
 	public void testConvertToSingleString() {
-		SplitArticle splitArticle = new SplitArticle(new File("fake file"));
+		SplitArticle splitArticle = new SplitArticle(new File("fake file"), 0);
 
 		splitArticle.bodyLines.add("a");
 		splitArticle.bodyLines.add("b");

@@ -27,7 +27,7 @@ public class ArticleSectionSplitterTest {
 		
 		ArticleSectionSplitter articleSectionSplitter = new ArticleSectionSplitter(metaDataLabelIsBodyMap);
 		
-		RawArticle rawArticle = new RawArticle(new File("fake test file"));
+		RawArticle rawArticle = new RawArticle(new File("fake test file"), 0);
 		
 		final int linesPerSection = 5;
 		

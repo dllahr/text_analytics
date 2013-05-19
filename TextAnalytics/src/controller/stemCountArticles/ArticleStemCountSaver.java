@@ -10,7 +10,7 @@ import java.util.Map;
 
 import org.hibernate.Query;
 
-import controller.dateExtractionConversion.ArticleFileDatePair;
+import controller.integration.readAndSplitRawFile.SplitArticle;
 import controller.util.Utilities;
 
 import orm.Article;
@@ -29,49 +29,46 @@ public class ArticleStemCountSaver {
 	private static final String stemQueryString = "from Stem where scoringModel=:" 
 			+ scoringModelParam + " and text in (:" + textParam + ")";
 	
-	public static Article saveStemCountToDatabase(Map<String, Integer> stemCount, ArticleFileDatePair articleFileDatePair,
-			ScoringModel scoringModel) {
+	public static Article saveStemCountToDatabase(SplitArticle splitArticle, ScoringModel scoringModel) {
 
 		Article article = new Article();
-		article.setId(Utilities.getMaxId("Article")+1);
 		article.setScoringModel(scoringModel);
-		article.setFilename(articleFileDatePair.getFile().getAbsolutePath());
+		article.setFilename(splitArticle.file.getAbsolutePath());
+		article.setStartLineNum(splitArticle.startLineNumber);
+		article.setAdditionalIdentifier(splitArticle.linesBeforeBody.get(0));
 		
-		if (articleFileDatePair.getDate() != null) {
-			article.setPublishDate(articleFileDatePair.getDate());
-			article.setDayIndex(articleFileDatePair.getDate());
-		}
-		
+		if (splitArticle.articleDate != null) {
+			article.setPublishDate(splitArticle.articleDate);
+			article.setDayIndex(splitArticle.articleDate);
+		}		
 		SessionManager.persist(article);
+
+		Map<String, Stem> textStemMap = loadTextStemMap(scoringModel, splitArticle.stemCountMap.keySet());
+		int newStemCount = 0;
 		
-		int firstNewStemId = Utilities.getMaxId("Stem") + 1;
-		int nextStemId = firstNewStemId;
-		
-		Map<String, Stem> textStemMap = loadTextStemMap(scoringModel, stemCount.keySet());
-		
-		for (String stemText : stemCount.keySet()) {
+		for (String stemText : splitArticle.stemCountMap.keySet()) {
 			
 			final Stem stem;
 			if (textStemMap.containsKey(stemText)) {
 				stem = textStemMap.get(stemText);
 			} else {
 				stem = new Stem();
-				stem.setId(nextStemId);
-				nextStemId++;
 				stem.setScoringModel(scoringModel);
 				stem.setText(stemText);
 				SessionManager.persist(stem);
+				
+				newStemCount++;
 			}
 			
 			ArticleStemCount articleStemCount = new ArticleStemCount();
 			articleStemCount.setArticle(article);
 			articleStemCount.setStem(stem);
-			articleStemCount.setCount(stemCount.get(stemText));
+			articleStemCount.setCount(splitArticle.stemCountMap.get(stemText));
 			SessionManager.persist(articleStemCount);
 		}
 		
-		if (nextStemId != firstNewStemId) {
-			System.out.print(" new stems: " + (nextStemId - firstNewStemId) + " ");
+		if (newStemCount > 0) {
+			System.out.println(" new stems: " + newStemCount);
 		}
 		
 		return article;

@@ -2,25 +2,18 @@ package orm;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-
-import org.hibernate.Query;
 import org.junit.Test;
 
 public class StemTest {
 
 	@Test
 	public void test() {
-		SessionManager.setUseForTest(true);
+		Stem stem = new Stem();
+		SessionManager.persist(stem);
 		
-		Query query = SessionManager.createQuery("from Stem");
-		query.setFirstResult(0);
-		query.setMaxResults(10);
+		assertNotNull(stem.getId());
 		
-		@SuppressWarnings("rawtypes")
-		List result = query.list();
-		assertNotNull(result);
-		assertTrue(result.size() > 0);
+		System.out.println(stem.getId());
 	}
 
 }

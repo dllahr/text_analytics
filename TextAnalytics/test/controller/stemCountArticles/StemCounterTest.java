@@ -19,15 +19,15 @@ public class StemCounterTest {
 	@Test
 	public void testStemCounter() throws GateException, IOException {
 		@SuppressWarnings("unused")
-		StemCounter a = new StemCounter();
+		StemCounter a = new StemCounter(30);
 		
 		@SuppressWarnings("unused")
-		StemCounter b = new StemCounter();
+		StemCounter b = new StemCounter(30);
 	}
 
 	@Test
 	public void testCount() throws GateException, IOException {
-		SplitArticle splitArticle = new SplitArticle(new File("fake file"), "\r\n");
+		SplitArticle splitArticle = new SplitArticle(new File("fake file"), "\r\n", 0);
 		splitArticle.bodyLines.add("The dog jumped over");
 		splitArticle.bodyLines.add("the moon.");
 		
@@ -37,7 +37,7 @@ public class StemCounterTest {
 		List<SplitArticle> list = new LinkedList<>();
 		list.add(splitArticle);
 		
-		StemCounter stemCounter = new StemCounter();
+		StemCounter stemCounter = new StemCounter(30);
 		stemCounter.count(list);
 		
 		for (int i = 0; i < expectedStems.length; i++) {

@@ -34,31 +34,31 @@ public class ArticleSectionSplitter {
 
 
 	public SplitArticle split(RawArticle rawArticle) {
-		SplitArticle result = new SplitArticle(rawArticle.file);
+		SplitArticle result = new SplitArticle(rawArticle.file, rawArticle.startLineNumber);
 		
 		Iterator<String> lineIter = rawArticle.lines.iterator();
 		
 		LinesAndFoundNext beforeBody = readLinesToNextLabel(lineIter, bodyLabelSet);
 		
 		if (! beforeBody.foundNext) {
-			throw new RuntimeException("ArticleSectionSplitter split did not find body of article.  file:  " 
+			System.err.println("ArticleSectionSplitter split did not find body of article.  file:  " 
 					+ rawArticle.file.getAbsolutePath() + " first line: " + rawArticle.lines.get(0));
-		}
-		
-		LinesAndFoundNext body = readLinesToNextLabel(lineIter, nonBodyLabelSet);
-		
-		if (! body.foundNext) {
-			throw new RuntimeException("ArticleSectionSplitter split did not find field labels after body of article.  file:  " 
-					+ rawArticle.file.getAbsolutePath() + " first line: " + rawArticle.lines.get(0));
-		}
-		
-		result.linesBeforeBody.addAll(beforeBody.lineList.subList(0, beforeBody.lineList.size() - 1));
-		result.bodyLines.add(beforeBody.lineList.get(beforeBody.lineList.size() - 1));
-		result.bodyLines.addAll(body.lineList.subList(0, body.lineList.size() - 1));
-		result.linesAfterBody.add(body.lineList.get(body.lineList.size() -1 ));
-		
-		while (lineIter.hasNext()) {
-			result.linesAfterBody.add(lineIter.next());
+		} else {
+			LinesAndFoundNext body = readLinesToNextLabel(lineIter, nonBodyLabelSet);
+			
+			if (! body.foundNext) {
+				System.err.println("ArticleSectionSplitter split did not find field labels after body of article.  file:  " 
+						+ rawArticle.file.getAbsolutePath() + " first line: " + rawArticle.lines.get(0));
+			} else {
+				result.linesBeforeBody.addAll(beforeBody.lineList.subList(0, beforeBody.lineList.size() - 1));
+				result.bodyLines.add(beforeBody.lineList.get(beforeBody.lineList.size() - 1));
+				result.bodyLines.addAll(body.lineList.subList(0, body.lineList.size() - 1));
+				result.linesAfterBody.add(body.lineList.get(body.lineList.size() -1 ));
+				
+				while (lineIter.hasNext()) {
+					result.linesAfterBody.add(lineIter.next());
+				}
+			}
 		}
 
 		return result;
@@ -73,6 +73,9 @@ public class ArticleSectionSplitter {
 
 			result.add(curLine);
 			
+			if (curLine != null) {
+				
+			}
 			foundNextLabel = doesLineStartWithLabel(curLine, labelSet);
 		}
 		

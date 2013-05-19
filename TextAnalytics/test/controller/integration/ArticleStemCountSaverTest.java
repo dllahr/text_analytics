@@ -6,11 +6,10 @@ import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 
-import controller.dateExtractionConversion.ArticleFileDatePair;
+import controller.integration.readAndSplitRawFile.SplitArticle;
 import controller.stemCountArticles.ArticleStemCountSaver;
 import controller.util.Utilities;
 
@@ -35,13 +34,13 @@ public class ArticleStemCountSaverTest {
 		stem.setScoringModel(sm);
 		SessionManager.persist(stem);
 		
-		ArticleFileDatePair articleFileDatePair = new ArticleFileDatePair(new File("fake file"), new Date());
+		SplitArticle splitArticle = new SplitArticle(new File("fake file"), 0);
+		splitArticle.articleDate = new Date();
+		splitArticle.stemCountMap = new HashMap<String, Integer>();
+		splitArticle.stemCountMap.put(stem.getText(), 2);
+		splitArticle.stemCountMap.put("two", 3);
 		
-		Map<String, Integer> stemCountMap = new HashMap<String, Integer>();
-		stemCountMap.put(stem.getText(), 2);
-		stemCountMap.put("two", 3);
-		
-		ArticleStemCountSaver.saveStemCountToDatabase(stemCountMap, articleFileDatePair, sm);
+		ArticleStemCountSaver.saveStemCountToDatabase(splitArticle, sm);
 		
 //		SessionManager.commit();
 		

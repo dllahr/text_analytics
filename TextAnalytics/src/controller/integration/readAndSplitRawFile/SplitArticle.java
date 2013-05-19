@@ -15,22 +15,24 @@ public class SplitArticle {
 
 	public final File file;
 	public final String lineDelimeter;
+	public final int startLineNumber;
 	
 	public Map<String, Integer> stemCountMap;
 	
 	public Date articleDate;
 	
-	public SplitArticle(File file, String lineDelimeter) {
+	public SplitArticle(File file, String lineDelimeter, int startLineNumber) {
 		this.file = file;
 		this.lineDelimeter = lineDelimeter;
+		this.startLineNumber = startLineNumber;
 
 		this.linesBeforeBody = new LinkedList<>();
 		this.bodyLines = new LinkedList<>();
 		this.linesAfterBody = new LinkedList<>();
 	}
 	
-	public SplitArticle(File file) {
-		this(file, defaultDelimeter);
+	public SplitArticle(File file, int startLineNumber) {
+		this(file, defaultDelimeter, startLineNumber);
 	}
 	
 	public String convertBodyLinesToString() {

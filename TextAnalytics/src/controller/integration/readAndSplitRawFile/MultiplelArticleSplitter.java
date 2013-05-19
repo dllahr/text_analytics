@@ -15,16 +15,21 @@ public class MultiplelArticleSplitter {
 		List<RawArticle> result = new LinkedList<>();
 
 		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+
+		LineAndIncrementPair startPair = advanceToFirstArticle(reader);
+		int curLineNumber = startPair.lineIncrementNumber;
 		
-		RawArticle currentArticle = new RawArticle(inputFile);
+		RawArticle currentArticle = new RawArticle(inputFile, curLineNumber);
 		result.add(currentArticle);
-		currentArticle.lines.add(advanceToFirstArticle(reader));
+		currentArticle.lines.add(startPair.line);
 		
 		String curLine;
 
 		while ((curLine = reader.readLine()) != null) {
+			curLineNumber++;
+			
 			if (curLine.matches(documentDelimeter)) {
-				currentArticle = new RawArticle(inputFile);
+				currentArticle = new RawArticle(inputFile, curLineNumber);
 				result.add(currentArticle);
 			}
 			
@@ -36,16 +41,30 @@ public class MultiplelArticleSplitter {
 		return result;
 	}
 	
-	private static final String advanceToFirstArticle(BufferedReader reader) throws IOException {
-
+	private static LineAndIncrementPair advanceToFirstArticle(BufferedReader reader) throws IOException {
+		int increment = 0;
+		
 		String curLine;
+		
 		while ((curLine = reader.readLine()) != null) {
+			increment++;
+			
 			if (curLine.matches(documentDelimeter)) {
-				return curLine;
+				return new LineAndIncrementPair(curLine, increment);
 			}
 		}
 
 		return null;
+	}
+	
+	private static class LineAndIncrementPair {
+		public final String line;
+		public final int lineIncrementNumber;
+
+		public LineAndIncrementPair(String line, int lineIncrementNumber) {
+			this.line = line;
+			this.lineIncrementNumber = lineIncrementNumber;
+		}
 	}
 	
 }
