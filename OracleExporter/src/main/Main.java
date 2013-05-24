@@ -5,12 +5,12 @@ import java.sql.SQLException;
 import java.util.Date;
 
 public class Main {
-//	private static final String username = "personal";
-//	private static final String password = "JzRNIno7U9jCf3LK";
-//	private static final String connectionUrl = "jdbc:oracle:thin:@localhost:1521:XE";
-	private static final String username = "data_mig";
-	private static final String password = "H6iwlFd5QqQS";
-	private static final String connectionUrl = "jdbc:oracle:thin:@vmbarddev:1521:barddev";
+	private static final String username = "personal";
+	private static final String password = "JzRNIno7U9jCf3LK";
+	private static final String connectionUrl = "jdbc:oracle:thin:@localhost:1521:XE";
+//	private static final String username = "data_mig";
+//	private static final String password = "H6iwlFd5QqQS";
+//	private static final String connectionUrl = "jdbc:oracle:thin:@vmbarddev:1521:barddev";
 
 	private static final String delimeter = ",";
 	private static final long lineBatch = 50000;
