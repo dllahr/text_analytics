@@ -23,4 +23,23 @@ public class EigenvalueTest {
 //		assertTrue(objList.size() > 0);
 	}
 
+	@Test
+	public void testCreate() {
+		Eigenvalue e = new Eigenvalue();
+		
+		ScoringModel sm = new ScoringModel();
+		sm.setId(100);
+		SessionManager.persist(sm);
+		
+		e.setScoringModel(sm);
+		e.setSortIndex(0);
+		e.setValue(11.1);
+		
+		SessionManager.persist(e);
+		
+		assertNotNull(e.getId());
+		System.out.println(e.getId());
+		
+		
+	}
 }
