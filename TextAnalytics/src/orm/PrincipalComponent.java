@@ -27,7 +27,12 @@ public class PrincipalComponent implements Serializable {
 	private Double value;
 	
 	public PrincipalComponent() {
-		
+	}
+
+	public PrincipalComponent(Eigenvalue eigenvalue, Stem stem, Double value) {
+		this.eigenvalue = eigenvalue;
+		this.stem = stem;
+		this.value = value;
 	}
 
 	public Eigenvalue getEigenvalue() {

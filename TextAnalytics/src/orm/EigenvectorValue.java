@@ -29,6 +29,12 @@ public class EigenvectorValue implements Serializable {
 	public EigenvectorValue() {
 	}
 
+	public EigenvectorValue(Eigenvalue eigenvalue, Article article, Double value) {
+		this.eigenvalue = eigenvalue;
+		this.article = article;
+		this.value = value;
+	}
+
 	public Eigenvalue getEigenvalue() {
 		return eigenvalue;
 	}

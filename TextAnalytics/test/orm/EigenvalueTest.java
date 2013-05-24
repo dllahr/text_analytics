@@ -40,6 +40,6 @@ public class EigenvalueTest {
 		assertNotNull(e.getId());
 		System.out.println(e.getId());
 		
-		
+		SessionManager.commit();
 	}
 }
