@@ -76,30 +76,24 @@ create sequence article_id_seq start with 1;
 --  DDL for Table COMPANY_SCORING_MODEL
 --------------------------------------------------------
 
-  CREATE TABLE "COMPANY_SCORING_MODEL" 
+  CREATE TABLE COMPANY_SCORING_MODEL
    (	"COMPANY_ID" NUMBER(*,0), 
 	"SCORING_MODEL_ID" NUMBER(*,0)
-   ) SEGMENT CREATION IMMEDIATE 
-  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "USERS" ;
+   ) ;
 --------------------------------------------------------
 --  DDL for Table EIGENVALUE
 --------------------------------------------------------
 
-  CREATE TABLE "EIGENVALUE" 
+  CREATE TABLE EIGENVALUE 
    (	"ID" NUMBER(*,0), 
 	"SCORING_MODEL_ID" NUMBER(*,0), 
 	"SORT_INDEX" NUMBER(*,0), 
 	"VALUE" BINARY_FLOAT
-   ) SEGMENT CREATION IMMEDIATE 
-  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "USERS" ;
+   )  ;
 
-   COMMENT ON COLUMN "EIGENVALUE"."SORT_INDEX" IS 'relative index of an eigenvalue within the set present for a company_id when sorting (ascending) by value';
+   COMMENT ON COLUMN "EIGENVALUE"."SORT_INDEX" IS 'relative index of an eigenvalue within the set present for a company_id when sorting by value';
+   
+   create sequence eigenvalue_id_seq start with 1;
 --------------------------------------------------------
 --  DDL for Table EIGENVECTOR_VALUE
 --------------------------------------------------------

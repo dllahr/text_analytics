@@ -2,11 +2,16 @@ package orm;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Eigenvalue {
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "eigenvalueIdSeq")
+	@SequenceGenerator(name = "eigenvalueIdSeq", sequenceName = "eigenvalue_id_seq", allocationSize = 1)
 	@Id
 	private Integer id;
 	
