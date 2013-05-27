@@ -5,7 +5,10 @@ import gate.util.GateException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +28,7 @@ public class CountStemsAndReadDate {
 	
 	private final StemCounter stemCounter;
 	
-	private final DateExtractor dateExtractor;
+	private final List<DateExtractor> dateExtractorList;
 	
 	/**
 	 * @param labelIsBodyMap map indicating which of the labels which the file indicate the body of the article
@@ -34,7 +37,7 @@ public class CountStemsAndReadDate {
 	 * @throws GateException
 	 * @throws IOException
 	 */
-	public CountStemsAndReadDate(Map<String, Boolean> labelIsBodyMap, DateExtractor dateExtractor, 
+	public CountStemsAndReadDate(Map<String, Boolean> labelIsBodyMap, List<DateExtractor> dateExtractorList, 
 			int articleStemmingBatchSize) throws GateException, IOException {
 		
 		multiplelArticleSplitter = new MultiplelArticleSplitter();
@@ -43,7 +46,7 @@ public class CountStemsAndReadDate {
 		
 		stemCounter = new StemCounter(articleStemmingBatchSize);
 		
-		this.dateExtractor = dateExtractor;
+		this.dateExtractorList = Collections.unmodifiableList(new ArrayList<>(dateExtractorList));
 	}
 	
 	public List<SplitArticle> doAll(Collection<File> fileColl) throws IOException, ExecutionException {
@@ -65,7 +68,14 @@ public class CountStemsAndReadDate {
 
 		System.out.println("reading date from articles");
 		for (SplitArticle splitArticle : splitArticleList) {
-			splitArticle.articleDate = dateExtractor.extract(splitArticle.linesAfterBody);
+			
+			splitArticle.articleDate = null;
+			Iterator<DateExtractor> dateExtractorIterator = dateExtractorList.iterator();
+			while (null == splitArticle.articleDate && dateExtractorIterator.hasNext()) {
+				DateExtractor dateExtractor = dateExtractorIterator.next();
+				
+				splitArticle.articleDate = dateExtractor.extract(splitArticle.linesAfterBody);
+			}
 			
 			if (null == splitArticle.articleDate) {
 				System.out.println("warning: failed to parse date from article " + splitArticle.file.getName() + " " + splitArticle.linesBeforeBody.get(0));

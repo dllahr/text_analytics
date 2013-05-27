@@ -6,11 +6,13 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Query;
 
+import controller.dateExtractionConversion.DateExtractor;
 import controller.dateExtractionConversion.DateOnSingleLine;
 import controller.integration.CountStemsAndReadDate;
 import controller.integration.readAndSplitRawFile.BuildMetaDataMap;
@@ -33,7 +35,11 @@ public class MainLoadArticles {
 		
 		Map<String, Boolean> metaDataMap = getMetaDataMap();
 		
-		CountStemsAndReadDate countStemsAndReadDate = new CountStemsAndReadDate(metaDataMap, new DateOnSingleLine(),
+		
+		List<DateExtractor> dateExtractorList = new LinkedList<>();
+		dateExtractorList.add(new DateOnSingleLine());
+		
+		CountStemsAndReadDate countStemsAndReadDate = new CountStemsAndReadDate(metaDataMap, dateExtractorList,
 				stemBatchSize);
 		
 		List<File> fileList = Arrays.asList(inputDir.listFiles(new FilenameFilter() {

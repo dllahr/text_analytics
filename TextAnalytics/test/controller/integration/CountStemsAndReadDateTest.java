@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import controller.dateExtractionConversion.DateExtractor;
 import controller.dateExtractionConversion.DateOnSingleLine;
 import controller.integration.readAndSplitRawFile.BuildMetaDataMap;
 import controller.integration.readAndSplitRawFile.SplitArticle;
@@ -24,7 +25,10 @@ public class CountStemsAndReadDateTest {
 		BuildMetaDataMap buildMetaDataMap = new BuildMetaDataMap();
 		Map<String, Boolean> isLabelMap = buildMetaDataMap.build(new File("resources/meta_data_info.txt"));
 		
-		CountStemsAndReadDate countStemsAndReadDate = new CountStemsAndReadDate(isLabelMap, new DateOnSingleLine(), 30);
+		List<DateExtractor> dsList = new LinkedList<>();
+		dsList.add(new DateOnSingleLine());
+		
+		CountStemsAndReadDate countStemsAndReadDate = new CountStemsAndReadDate(isLabelMap, dsList, 30);
 		
 		List<File> fileList = new LinkedList<>();
 		fileList.add(new File("test/resources/mdlz-2013-05-10.txt"));
