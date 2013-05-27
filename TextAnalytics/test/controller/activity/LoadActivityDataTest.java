@@ -30,6 +30,8 @@ public class LoadActivityDataTest {
 			assert (activity.getActivityDate() != null);
 			System.out.println(activity.toString());
 		}
+		
+		assertTrue(true);
 	}
 
 }

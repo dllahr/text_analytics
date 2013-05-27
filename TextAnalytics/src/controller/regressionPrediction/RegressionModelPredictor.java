@@ -36,8 +36,10 @@ public class RegressionModelPredictor {
 		Query coefQuery = SessionManager.createQuery(regressionModelCoefQuery);
 		coefQuery.setParameter(regressionModelParam, rm);
 		
+		@SuppressWarnings("unused")
 		List<RegressionModelCoef> coefList = Utilities.convertGenericList(coefQuery.list());
 		
+		@SuppressWarnings("unused")
 		Map<Integer, Map<Integer, SumCountPair>> dayIndexEigIdAverageValueMap = loadAndCalculateAveragePcVal(rm);
 		
 		

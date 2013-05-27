@@ -3,8 +3,6 @@ package controller.integration.readAndSplitRawFile;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.junit.Test;
 

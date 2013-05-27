@@ -43,7 +43,10 @@ public class GetPcData2Test {
 			Thresholds thresholds = new Thresholds();
 			
 			query.setFirstResult(lowerThresholdInd-1);
+
+			@SuppressWarnings("rawtypes")
 			List result = query.list();
+			
 //			System.out.println("size:  " + result.size());
 			if (result.size() > 0) {
 				thresholds.lowerThreshold = (double)result.get(0);
@@ -58,6 +61,8 @@ public class GetPcData2Test {
 		
 		
 		SessionManager.closeAll();
+		
+		assertTrue(true);
 	}
 
 }

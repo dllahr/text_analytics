@@ -13,7 +13,7 @@ public class ActivityTest {
 	@Test
 	public void test() {
 		List<Activity> result = Utilities.convertGenericList(SessionManager.createQuery("from Activity").list());
-		
+		assertTrue(result.size() > 0);
 	}
 
 }

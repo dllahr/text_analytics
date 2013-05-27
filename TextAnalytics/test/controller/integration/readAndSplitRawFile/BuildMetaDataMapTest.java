@@ -19,6 +19,8 @@ public class BuildMetaDataMapTest {
 		Map<String, Boolean> result = buildMetaDataMap.build(new File("resources/meta_data_info.txt"));
 		
 		StemCounterTest.printMap(result);
+		
+		assertTrue(true);
 	}
 
 }
