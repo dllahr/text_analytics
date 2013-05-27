@@ -2,8 +2,6 @@ package controller.dateExtractionConversion;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,26 +14,12 @@ import controller.dateExtractionConversion.ReadDateFromArticle;
 import controller.dateExtractionConversion.ReadDateFromArticle.DateLineStyle;
 
 public class ReadDateFromArticleTest {
-	private static final String[] fileUrlArray = {"test/resources/doc01_8.txt", "test/resources/doc01_9.txt"};
-	
 	private final ReadDateFromArticle readDateFromArticle;
 	
 	public ReadDateFromArticleTest() {
 		readDateFromArticle = new ReadDateFromArticle(true);
 	}
-	
-	@Test
-	public void testFile() throws IOException {
-		System.out.println("ReadDateFromArticleTest testFile");
 
-		for (String fileUrl : fileUrlArray) {
-			Date result = readDateFromArticle.readDate(new File(fileUrl), ReadDateFromArticle.DateLineStyle.original);
-			assertNotNull(result);
-		}
-		
-		System.out.println();
-	}
-	
 	
 	@Test
 	public void testList() {

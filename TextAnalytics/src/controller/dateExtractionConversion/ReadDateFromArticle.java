@@ -1,12 +1,8 @@
 package controller.dateExtractionConversion;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ReadDateFromArticle {
@@ -30,24 +26,6 @@ public class ReadDateFromArticle {
 		convertArticleDateLine = new ConvertArticleDateLine(shouldDisplayProgress);
 	}
 
-	public Date readDate(File articleFile, DateLineStyle dateLineStyle) throws IOException {
-		if (shouldDisplayProgress) {
-			System.out.println("Attempting to parse date from file " + articleFile.getAbsolutePath());
-		}
-		
-		List<String> lineList = new LinkedList<>();
-		
-		BufferedReader reader = new BufferedReader(new FileReader(articleFile));
-		
-		String curLine;
-		while ((curLine = reader.readLine()) != null) {
-			lineList.add(curLine);
-		}
-		
-		reader.close();
-		
-		return readDate(lineList, dateLineStyle);
-	}
 
 	public Date readDate(List<String> lineList, DateLineStyle dateLineStyle) {
 		final String dateLineMarker, nextLineMarkersArray[];
