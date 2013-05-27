@@ -26,19 +26,17 @@ import controller.util.Utilities;
 
 
 /**
- * NOT VALIDATED for scoriongModel changes
  * @author dlahr
- *
  */
 public class GetPcDataAveStockPrices {
-	private static final int scoringModelId = 8;
-	private static final int companyId = 6;
-	
 	private static final int dayOffset = 40;
 	
 	private static final double[] weightsArray = {0.5, 1.0, 0.5};
 
 	public static void main(String[] args) throws IOException {
+		final int scoringModelId = Integer.valueOf(args[0]);
+		final int companyId = Integer.valueOf(args[1]);
+
 		final Date startDate = new Date();
 		System.out.println("start regression GetPcData " + startDate);
 		
@@ -85,7 +83,7 @@ public class GetPcDataAveStockPrices {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 		writer.write("dayIndex,");
 		for (Eigenvalue eig : eigList) {
-			writer.write(eig.getId() + ",");
+			writer.write("eig" + eig.getId() + ",");
 		}
 		writer.write("frac_change");
 		writer.newLine();
