@@ -28,9 +28,19 @@ Database:	FALSE
 Credit:	FALSE
 Company / organization:	FALSE
 #
-#for older MDLZ (KFT)
+# for original KFT
 #
 LINK TO DOCUMENT IN PROQUEST	FALSE
 ABSTRACT	FALSE
 FULL TEXT	TRUE
 INDEX FIELDS	FALSE
+#
+# Another style
+#
+
+***** Abstract (Summary) *****	FALSE
+***** Full Text *****	TRUE
+***** Indexing (document details) *****	FALSE
+Subjects:	FALSE
+Companies:	FALSE
+Document types:	FALSE

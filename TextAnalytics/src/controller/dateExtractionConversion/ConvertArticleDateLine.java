@@ -5,16 +5,16 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ConvertArticleDateLine {
+class ConvertArticleDateLine {
 	private static final String[] dateFormatStringArray = {"MMM d, yyyy.", "MMM d, yyyy"};
 	
 	private final boolean shouldDisplayProgress;
 	
-	public ConvertArticleDateLine(boolean shouldDisplayProgress) {
+	ConvertArticleDateLine(boolean shouldDisplayProgress) {
 		this.shouldDisplayProgress = shouldDisplayProgress;
 	}
 
-	public Date convertToDate(String dateLine) {
+	Date convertToDate(String dateLine) {
 		Date result = null;
 		boolean doContinue = true;
 		for (int i = 0; doContinue && i < dateFormatStringArray.length; i++) {

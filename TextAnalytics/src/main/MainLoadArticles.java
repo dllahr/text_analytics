@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Map;
 import org.hibernate.Query;
 
 import controller.dateExtractionConversion.DateExtractor;
+import controller.dateExtractionConversion.DateOnMultipleLines;
 import controller.dateExtractionConversion.DateOnSingleLine;
 import controller.integration.CountStemsAndReadDate;
 import controller.integration.readAndSplitRawFile.BuildMetaDataMap;
@@ -31,6 +33,11 @@ public class MainLoadArticles {
 		final int scoringModelId = Integer.valueOf(args[0]);
 		final File inputDir = new File(args[1]);
 		
+		System.out.println("MainLoadArticles");
+		System.out.println("\tscoringModelId:  " + scoringModelId);
+		System.out.println("\tinputDir:  " + inputDir.getAbsolutePath());
+		System.out.println("start time:  " + (new Date()));
+		
 		ScoringModel scoringModel = lookupScoringModel(scoringModelId);
 		
 		Map<String, Boolean> metaDataMap = getMetaDataMap();
@@ -38,6 +45,7 @@ public class MainLoadArticles {
 		
 		List<DateExtractor> dateExtractorList = new LinkedList<>();
 		dateExtractorList.add(new DateOnSingleLine());
+		dateExtractorList.add(new DateOnMultipleLines(false));
 		
 		CountStemsAndReadDate countStemsAndReadDate = new CountStemsAndReadDate(metaDataMap, dateExtractorList,
 				stemBatchSize);

@@ -1,15 +1,15 @@
 package controller.dateExtractionConversion;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class ReadDateFromArticle {
-	public enum DateLineStyle {
+class ReadDateFromArticle {
+	enum DateLineStyle {
 		original,
 		newStyle
 	}
+
 	private static final String dateLineMarkerNewStyle = "Publication date";
 	private static final String[] nextLineMarkersArrayNewStyle = null;
 	
@@ -20,14 +20,14 @@ public class ReadDateFromArticle {
 	
 	private final ConvertArticleDateLine convertArticleDateLine;
 	
-	public ReadDateFromArticle(boolean shouldDisplayProgress) {
+	ReadDateFromArticle(boolean shouldDisplayProgress) {
 		this.shouldDisplayProgress = shouldDisplayProgress;
 		
 		convertArticleDateLine = new ConvertArticleDateLine(shouldDisplayProgress);
 	}
 
 
-	public Date readDate(List<String> lineList, DateLineStyle dateLineStyle) {
+	Date readDate(List<String> lineList, DateLineStyle dateLineStyle) {
 		final String dateLineMarker, nextLineMarkersArray[];
 		if (DateLineStyle.original == dateLineStyle) {
 			dateLineMarker = dateLineMarkerOriginal;
@@ -38,13 +38,8 @@ public class ReadDateFromArticle {
 		}
 
 		
-		final String dateLine;
-		try {
-			dateLine = readDateLineFromFile(lineList, dateLineMarker, nextLineMarkersArray);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+		final String dateLine = buildDateLineFromLineList(lineList, dateLineMarker, nextLineMarkersArray);
+		
 		if (shouldDisplayProgress) {
 			System.out.println(dateLine);
 		}
@@ -54,8 +49,8 @@ public class ReadDateFromArticle {
 	
 	
 	
-	protected static String readDateLineFromFile(List<String> lineList, String dateLineMarker, 
-			String[] nextLineMarkersArray) throws IOException {
+	static String buildDateLineFromLineList(List<String> lineList, String dateLineMarker, 
+			String[] nextLineMarkersArray) {
 		String result = null;
 		
 		Iterator<String> lineIterator = lineList.iterator();
