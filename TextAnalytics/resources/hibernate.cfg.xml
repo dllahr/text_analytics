@@ -44,6 +44,7 @@
 		<mapping class="orm.RegressionModel"/>
 		<mapping class="orm.RegressionModelCoef"/>
 		<mapping class="orm.ScoringModel"/>
+		<mapping class="orm.MeanStemCountVector" />
 		
     </session-factory>
 </hibernate-configuration>

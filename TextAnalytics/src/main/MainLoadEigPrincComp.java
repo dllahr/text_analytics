@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import controller.util.Utilities;
 import orm.Article;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
+import orm.MeanStemCountVector;
 import orm.PrincipalComponent;
 import orm.ScoringModel;
 import orm.SessionManager;
@@ -31,6 +33,7 @@ public class MainLoadEigPrincComp {
 		final File eigvalFile = new File(args[1]);
 		final File eigvectFile = new File(args[2]);
 		final File prinCompFile = new File(args[3]);
+		final File meanStemVectFile = new File(args[4]);
 		
 		ScoringModel sm = findScoringModel(modelId);
 		
@@ -39,7 +42,10 @@ public class MainLoadEigPrincComp {
 		
 		loadEigenvectors(eigvectFile, eigvalList);
 		
-		loadPrinComps(prinCompFile, eigvalList);
+		List<Stem> stemList = getStems(eigvalList.get(0).getScoringModel());
+		loadPrinComps(prinCompFile, eigvalList, stemList);
+		
+		loadMeanStemVect(meanStemVectFile, sm, stemList);
 		
 		System.out.println("Committing to database");
 		SessionManager.commit();
@@ -71,6 +77,8 @@ public class MainLoadEigPrincComp {
 
 			sortIndex++;
 		}
+		
+		reader.close();
 		
 		return result;
 	}
@@ -118,6 +126,7 @@ public class MainLoadEigPrincComp {
 			}
 		}
 		
+		reader.close();
 	}
 	
 	static List<Article> getArticles(ScoringModel sm) {
@@ -127,11 +136,10 @@ public class MainLoadEigPrincComp {
 		return Utilities.convertGenericList(query.list());
 	}
 
-	private static void loadPrinComps(File prinCompFile, List<Eigenvalue> eigvalList) throws IOException {
+	private static void loadPrinComps(File prinCompFile, List<Eigenvalue> eigvalList, List<Stem> stemList) throws IOException {
 		System.out.println("loading principal components:");
 		
 		System.out.println("getting stems from database:");
-		List<Stem> stemList = getStems(eigvalList.get(0).getScoringModel());
 		
 		BufferedReader reader = new BufferedReader(new FileReader(prinCompFile));
 
@@ -172,6 +180,8 @@ public class MainLoadEigPrincComp {
 				throw new RuntimeException("eigenvector load:  there were more rows in the file than there were articles for the scoring model");
 			}
 		}
+		
+		reader.close();
 	}
 	
 	static List<Stem> getStems(ScoringModel sm) {
@@ -179,5 +189,34 @@ public class MainLoadEigPrincComp {
 		query.setParameter("sm", sm);
 		
 		return Utilities.convertGenericList(query.list());
+	}
+	
+	
+	static void loadMeanStemVect(File meanStemVectFile, ScoringModel scoringModel, List<Stem> stemList) throws IOException {
+		System.out.println("loading mean stem vector");
+
+		BufferedReader reader = new BufferedReader(new FileReader(meanStemVectFile));
+
+		Iterator<Stem> stemIter = stemList.iterator();
+		String curLine;
+		while ((curLine = reader.readLine()) != null && stemIter.hasNext()) {
+			Stem stem = stemIter.next();
+
+			final double value = Double.valueOf(curLine);
+			
+			SessionManager.persist(new MeanStemCountVector(scoringModel, stem, value));
+			
+		}
+		
+		if (! stemIter.hasNext()) {
+			String endLine;
+			while ((endLine = reader.readLine()) != null) {
+				if (endLine.trim() != "") {
+					throw new RuntimeException("eigenvector load:  there were more rows in the file than there were articles for the scoring model");
+				}
+			}
+		}
+		reader.close();
+		
 	}
 }

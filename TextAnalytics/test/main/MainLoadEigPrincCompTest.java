@@ -2,6 +2,8 @@ package main;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
@@ -44,4 +46,14 @@ public class MainLoadEigPrincCompTest {
 		return sm;
 	}
 
+	@Test
+	public void testLoadMeanStemCountVector() throws IOException {
+		ScoringModel sm = getScoringModel();
+		
+		List<Stem> stemList = MainLoadEigPrincComp.getStems(sm);
+		
+		File meanStemVectFile = new File("E:/daves_stuff/projects/text_analytics/companies/kraft/model/just_text/cov_eig_prinComp/mean_stem_vect.csv");
+		MainLoadEigPrincComp.loadMeanStemVect(meanStemVectFile, sm, stemList);
+//		SessionManager.commit();
+	}
 }
