@@ -235,9 +235,9 @@ create sequence article_id_seq start with 1;
    CREATE INDEX STOCK_DATA_DAY_INDEX ON STOCK_DATA (COMPANY_ID, DAY_INDEX);
    
 --------------------------------------------------------
---  DDL for table mean_stem_count_vector
+--  DDL for table mean_stem_count
 --------------------------------------------------------
-create table mean_stem_count_vector (
+create table mean_stem_count (
   scoring_model_id          integer,
   stem_id                   integer,
   value                     binary_double,

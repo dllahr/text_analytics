@@ -9,8 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="MEAN_STEM_COUNT_VECTOR")
-public class MeanStemCountVector implements Serializable {
+@Table(name="MEAN_STEM_COUNT")
+public class MeanStemCount implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,10 +26,10 @@ public class MeanStemCountVector implements Serializable {
 	
 	double value;
 	
-	public MeanStemCountVector() {
+	public MeanStemCount() {
 	}
 
-	public MeanStemCountVector(ScoringModel scoringModel, Stem stem,
+	public MeanStemCount(ScoringModel scoringModel, Stem stem,
 			double value) {
 		this.scoringModel = scoringModel;
 		this.stem = stem;

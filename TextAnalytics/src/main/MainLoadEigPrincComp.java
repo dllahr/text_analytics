@@ -15,7 +15,7 @@ import controller.util.Utilities;
 import orm.Article;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
-import orm.MeanStemCountVector;
+import orm.MeanStemCount;
 import orm.PrincipalComponent;
 import orm.ScoringModel;
 import orm.SessionManager;
@@ -204,7 +204,7 @@ public class MainLoadEigPrincComp {
 
 			final double value = Double.valueOf(curLine);
 			
-			SessionManager.persist(new MeanStemCountVector(scoringModel, stem, value));
+			SessionManager.persist(new MeanStemCount(scoringModel, stem, value));
 			
 		}
 		

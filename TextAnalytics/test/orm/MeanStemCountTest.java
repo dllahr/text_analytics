@@ -8,12 +8,12 @@ import org.junit.Test;
 
 import controller.util.Utilities;
 
-public class MeanStemCountVectorTest {
+public class MeanStemCountTest {
 
 	@Test
 	public void test() {
 		@SuppressWarnings("unused")
-		List<MeanStemCountVector> list = Utilities.convertGenericList(SessionManager.createQuery("from MeanStemCountVector").list());
+		List<MeanStemCount> list = Utilities.convertGenericList(SessionManager.createQuery("from MeanStemCount").list());
 		assertTrue(true);
 	}
 
