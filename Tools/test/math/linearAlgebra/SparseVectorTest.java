@@ -73,4 +73,13 @@ public class SparseVectorTest {
 		assertEquals(expected, v1.vectorMultiply(v2Array), eps);
 	}
 
+	@Test
+	public void testVectorMultiplyShortArray() {
+		double[] array = {1.1, 2.2};
+		
+		SparseVector v = new SparseVector();
+		v.addEntry(3, 3.3);
+		
+		v.vectorMultiply(array);
+	}
 }

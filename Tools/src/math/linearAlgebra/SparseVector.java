@@ -44,10 +44,15 @@ public class SparseVector implements Vector {
 	
 	@Override
 	public double vectorMultiply(double otherVector[]) {
+		final int otherVectorLength = otherVector.length;
+
 		double result = 0.0;
 		for (Integer index : data.keySet()) {
-			result += data.get(index) * otherVector[index];
+			if (index < otherVectorLength) {
+				result += data.get(index) * otherVector[index];
+			}
 		}
+
 		return result;
 	}
 
