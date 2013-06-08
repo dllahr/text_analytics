@@ -4,7 +4,7 @@ import java.util.Set;
 
 public interface Vector {
 
-	public abstract void addEntry(Integer index, Double value);
+	public abstract void setEntry(Integer index, Double value);
 
 	public abstract double getEntry(Integer index);
 

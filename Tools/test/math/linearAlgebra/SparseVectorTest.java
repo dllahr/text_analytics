@@ -10,11 +10,11 @@ public class SparseVectorTest {
 	private static final double eps = 1e-5;
 	
 	@Test
-	public void testAddGetEntry() {
+	public void testAddSetEntry() {
 		final int index = 11;
 		final double value = 1.3;
 		SparseVector v = new SparseVector();
-		v.addEntry(index, value);
+		v.setEntry(index, value);
 		
 		assertEquals(0.0, v.getEntry(0), eps);
 		assertEquals(0.0, v.getEntry(12), eps);
@@ -30,7 +30,7 @@ public class SparseVectorTest {
 		
 		SparseVector v1 = new SparseVector();
 		for (int index : v1IndArray) {
-			v1.addEntry(index, v1Array[index]);
+			v1.setEntry(index, v1Array[index]);
 		}
 
 		Set<Integer> indices = v1.getIndices();
@@ -62,11 +62,11 @@ public class SparseVectorTest {
 		
 		SparseVector v1 = new SparseVector();
 		for (int index : v1IndArray) {
-			v1.addEntry(index, v1Array[index]);
+			v1.setEntry(index, v1Array[index]);
 		}
 		SparseVector v2 = new SparseVector();
 		for (int index : v2IndArray) {
-			v2.addEntry(index, v2Array[index]);
+			v2.setEntry(index, v2Array[index]);
 		}
 		
 		assertEquals(expected, v1.vectorMultiply(v2), eps);
@@ -78,7 +78,7 @@ public class SparseVectorTest {
 		double[] array = {1.1, 2.2};
 		
 		SparseVector v = new SparseVector();
-		v.addEntry(3, 3.3);
+		v.setEntry(3, 3.3);
 		
 		v.vectorMultiply(array);
 	}

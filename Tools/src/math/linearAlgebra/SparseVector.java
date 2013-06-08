@@ -16,7 +16,7 @@ public class SparseVector implements Vector {
 	}
 	
 	@Override
-	public void addEntry(Integer index, Double value) {
+	public void setEntry(Integer index, Double value) {
 		data.put(index, value);
 		if (index > maxIndex) {
 			maxIndex = index;
