@@ -41,4 +41,9 @@ public class SessionManagerTest {
 		assertTrue(userList.size() == 1);
 		assertTrue(username.equalsIgnoreCase(userList.get(0)));
 	}
+	
+	@Test
+	public void testSqlQuery() {
+		SessionManager.createSqlQuery("select value from mean_stem_count").list();
+	}
 }

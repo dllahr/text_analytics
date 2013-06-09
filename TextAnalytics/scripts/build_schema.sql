@@ -9,9 +9,9 @@
 	DESCRIPTION VARCHAR2(200 BYTE), 
 	SYMBOL VARCHAR2(100 BYTE), 
 	QTY NUMBER(*,0), 
-	FILL_PRICE BINARY_DOUBLE, 
-	COMMISSION BINARY_DOUBLE, 
-	NET_AMOUNT BINARY_DOUBLE
+	FILL_PRICE NUMBER, 
+	COMMISSION NUMBER, 
+	NET_AMOUNT NUMBER
    );
    
 --------------------------------------------------------
@@ -93,26 +93,7 @@ create sequence article_id_seq start with 1;
    );
 
    COMMENT ON TABLE EIGENVECTOR_VALUE  IS 'if the eigenvectors are the columns of a matrix, the column index is wrt eigenvalues is eigenvalue_id, the row index is article_id';
---------------------------------------------------------
---  DDL for Table PREDICTION
---------------------------------------------------------
 
-  CREATE TABLE PREDICTION 
-   (	ARTICLE_ID NUMBER(*,0), 
-	PREDICTION_MODEL_ID NUMBER(*,0), 
-	STOCK_PRICE BINARY_DOUBLE, 
-	DAY_TIME DATE
-   );
---------------------------------------------------------
---  DDL for Table PREDICTION_MODEL
---------------------------------------------------------
-
-  CREATE TABLE PREDICTION_MODEL 
-   (	ID NUMBER(*,0), 
-	STOCKPRICE_CHANGE_ID NUMBER(*,0), 
-	THRESHOLD_LOWER BINARY_DOUBLE, 
-	THRESHOLD_UPPER BINARY_DOUBLE
-   );
 --------------------------------------------------------
 --  DDL for Table PRINCIPAL_COMPONENT
 --------------------------------------------------------
@@ -140,7 +121,7 @@ create sequence article_id_seq start with 1;
    (	ID NUMBER(*,0), 
 	REGRESSION_MODEL_ID NUMBER(*,0), 
 	EIGENVALUE_ID NUMBER(*,0), 
-	COEF BINARY_DOUBLE
+	COEF NUMBER
    );
 --------------------------------------------------------
 --  DDL for Table SCORING_MODEL
@@ -176,44 +157,7 @@ create sequence article_id_seq start with 1;
    COMMENT ON TABLE STEM  IS 'contains the set of stems found for articles for each company';
    
    create sequence stem_id_seq start with 1;
---------------------------------------------------------
---  DDL for Table STOCKPRICE_CHANGE
---------------------------------------------------------
 
-  CREATE TABLE STOCKPRICE_CHANGE 
-   (	CALC_ID NUMBER(*,0), 
-	EIGENVALUE_ID NUMBER(*,0), 
-	DAY_OFFSET NUMBER(*,0), 
-	AVERAGE FLOAT(126), 
-	FWHM FLOAT(126), 
-	ID NUMBER(*,0), 
-	USE_FOR_PREDICTION CHAR(1 BYTE)
-   );
-
-   COMMENT ON COLUMN STOCKPRICE_CHANGE.FWHM IS 'full width at half max for histogram of statistics calculation';
---------------------------------------------------------
---  DDL for Table STOCKPRICE_CHANGE_CALC
---------------------------------------------------------
-
-  CREATE TABLE STOCKPRICE_CHANGE_CALC 
-   (	ID NUMBER(*,0), 
-	COMPANY_ID NUMBER(*,0), 
-	LOWER_STOCK_DAY_IND NUMBER(*,0), 
-	UPPER_STOCK_DAY_IND NUMBER(*,0), 
-	NUM_SAMPLE NUMBER(*,0), 
-	HIST_RANGE_LOWER BINARY_DOUBLE, 
-	HIST_RANGE_UPPER BINARY_DOUBLE, 
-	NUM_BINS NUMBER(*,0), 
-	PCT_THRESHOLD_LOWER BINARY_DOUBLE, 
-	PCT_THRESHOLD_UPPER BINARY_DOUBLE
-   );
-
-   COMMENT ON COLUMN STOCKPRICE_CHANGE_CALC.NUM_SAMPLE IS 'number of samples used in the calculation';
-   COMMENT ON COLUMN STOCKPRICE_CHANGE_CALC.HIST_RANGE_LOWER IS 'lower limit used when creating the histogram for the stockprice change calculation';
-   COMMENT ON COLUMN STOCKPRICE_CHANGE_CALC.HIST_RANGE_UPPER IS 'upper limit used when creating the histogram for the stockprice change calculation';
-   COMMENT ON COLUMN STOCKPRICE_CHANGE_CALC.NUM_BINS IS 'number of bins used in creating the histogram for the stockprice change calculation';
-   
-   CREATE INDEX STOCK_CALC_COMPANY_INDEX ON STOCKPRICE_CHANGE_CALC (COMPANY_ID);
 --------------------------------------------------------
 --  DDL for Table STOCK_DATA
 --------------------------------------------------------
@@ -240,7 +184,7 @@ create sequence article_id_seq start with 1;
 create table mean_stem_count (
   scoring_model_id          integer,
   stem_id                   integer,
-  value                     binary_double,
+  value                     NUMBER,
   primary key (scoring_model_id, stem_id),
   foreign key (scoring_model_id) references scoring_model(id),
   foreign key (stem_id) references stem(id)
@@ -392,16 +336,7 @@ create table mean_stem_count (
 
   ALTER TABLE STOCKPRICE_CHANGE MODIFY (CALC_ID NOT NULL ENABLE);
   ALTER TABLE STOCKPRICE_CHANGE ADD PRIMARY KEY (ID);
---------------------------------------------------------
---  Constraints for Table PREDICTION
---------------------------------------------------------
 
-  ALTER TABLE PREDICTION ADD PRIMARY KEY (ARTICLE_ID, PREDICTION_MODEL_ID);
---------------------------------------------------------
---  Constraints for Table PREDICTION_MODEL
---------------------------------------------------------
-
-  ALTER TABLE PREDICTION_MODEL ADD PRIMARY KEY (ID);
 --------------------------------------------------------
 --  Ref Constraints for Table ARTICLE
 --------------------------------------------------------
@@ -444,20 +379,7 @@ create table mean_stem_count (
 
   ALTER TABLE EIGENVECTOR_VALUE ADD FOREIGN KEY (EIGENVALUE_ID)
 	  REFERENCES EIGENVALUE (ID) ENABLE;
---------------------------------------------------------
---  Ref Constraints for Table PREDICTION
---------------------------------------------------------
 
-  ALTER TABLE PREDICTION ADD FOREIGN KEY (ARTICLE_ID)
-	  REFERENCES ARTICLE (ID) ENABLE;
-  ALTER TABLE PREDICTION ADD FOREIGN KEY (PREDICTION_MODEL_ID)
-	  REFERENCES PREDICTION_MODEL (ID) ENABLE;
---------------------------------------------------------
---  Ref Constraints for Table PREDICTION_MODEL
---------------------------------------------------------
-
-  ALTER TABLE PREDICTION_MODEL ADD FOREIGN KEY (STOCKPRICE_CHANGE_ID)
-	  REFERENCES STOCKPRICE_CHANGE (ID) ENABLE;
 --------------------------------------------------------
 --  Ref Constraints for Table PRINCIPAL_COMPONENT
 --------------------------------------------------------
