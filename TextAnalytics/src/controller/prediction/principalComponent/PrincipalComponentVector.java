@@ -4,7 +4,7 @@ import math.linearAlgebra.DenseFixedVector;
 import math.linearAlgebra.Vector;
 import orm.Eigenvalue;
 
-public class PrincipalComponentVector {
+class PrincipalComponentVector {
 	public final Eigenvalue eigenvalue;
 	
 	public final Vector vector;

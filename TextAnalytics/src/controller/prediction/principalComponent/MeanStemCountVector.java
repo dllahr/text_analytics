@@ -3,7 +3,7 @@ package controller.prediction.principalComponent;
 import math.linearAlgebra.DenseFixedVector;
 import math.linearAlgebra.Vector;
 
-public class MeanStemCountVector {
+class MeanStemCountVector {
 	public final Vector meanVector;
 	
 	public final int minStemId;

@@ -18,16 +18,16 @@ import controller.util.ValueOperator;
 
 public class ArticleStemCountVectorBuilder {
 
-	public List<ArticleData> retrieve(int scoringModelId, Date minDate, int minStemId) {
+	public List<ArticleStemCountVector> retrieve(int scoringModelId, Date minDate, int minStemId) {
 
 		Map<Article, SparseVector> map = buildArticleStemCountVectorMap(scoringModelId, minDate, minStemId);
 		
-		List<ArticleData> result = new ArrayList<>(map.size());
+		List<ArticleStemCountVector> result = new ArrayList<>(map.size());
 		
 		for (Article article : map.keySet()) {
 			SparseVector vector = map.get(article);
 			
-			result.add(new ArticleData(article, vector));
+			result.add(new ArticleStemCountVector(article, vector));
 		}
 		
 		return result;

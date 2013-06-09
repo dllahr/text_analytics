@@ -9,7 +9,7 @@ import org.hibernate.Query;
 import orm.Eigenvalue;
 import orm.SessionManager;
 
-public class PrincipalComponentVectorBuilder {
+class PrincipalComponentVectorBuilder {
 
 	public List<PrincipalComponentVector> build(int scoringModelId, int numStems) {
 		System.out.println("retrieving principal components");

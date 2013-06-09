@@ -11,13 +11,13 @@ import org.junit.Test;
 import orm.MeanStemCount;
 import orm.Stem;
 
-public class MeanStemVectorBuilderTest {
+public class MeanStemCountVectorBuilderTest {
 
 	@Test
 	public void testRetrieveMeanVector() {
 		System.out.println("testRetrieveMeanVector");
 
-		List<MeanStemCount> list = (new MeanStemVectorBuilder()).retrieveMeanStemCounts(1);
+		List<MeanStemCount> list = (new MeanStemCountVectorBuilder()).retrieveMeanStemCounts(1);
 		for (int i = 0; i < 10; i++) {
 			if (i < list.size()) {
 				MeanStemCount msc = list.get(i);
@@ -30,7 +30,7 @@ public class MeanStemVectorBuilderTest {
 	public void testBuildMeanVector() {
 		System.out.println("testBuildMeanVector");
 
-		MeanStemVectorBuilder builder = new MeanStemVectorBuilder();
+		MeanStemCountVectorBuilder builder = new MeanStemCountVectorBuilder();
 		
 		List<MeanStemCount> list = builder.retrieveMeanStemCounts(1);
 		
@@ -58,7 +58,7 @@ public class MeanStemVectorBuilderTest {
 		list.add(oneMsc);
 		list.add(twoMsc);
 		
-		MeanStemVectorBuilder builder = new MeanStemVectorBuilder();
+		MeanStemCountVectorBuilder builder = new MeanStemCountVectorBuilder();
 		
 		int minId = builder.getMinStemId(list);
 		assertEquals(1, minId);

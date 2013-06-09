@@ -10,7 +10,7 @@ import orm.MeanStemCount;
 import orm.SessionManager;
 import controller.util.Utilities;
 
-public class MeanStemVectorBuilder {
+class MeanStemCountVectorBuilder {
 	
 	public MeanStemCountVector build(int scoringModelId) {
 		List<MeanStemCount> meanStemCountList = retrieveMeanStemCounts(scoringModelId);
