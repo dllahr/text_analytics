@@ -10,6 +10,8 @@ import controller.prediction.principalComponent.ArticleData;
 import controller.prediction.principalComponent.ArticleStemCountVectorBuilder;
 import controller.prediction.principalComponent.MeanStemCountVector;
 import controller.prediction.principalComponent.MeanStemVectorBuilder;
+import controller.prediction.principalComponent.PrincipalComponentVector;
+import controller.prediction.principalComponent.PrincipalComponentVectorBuilder;
 
 
 
@@ -29,7 +31,9 @@ public class MainGeneratePredictions {
 		
 		List<ArticleData> articleDataList = (new ArticleStemCountVectorBuilder()).retrieve(scoringModelId, minDate, meanVect.minStemId);
 		
+		List<PrincipalComponentVector> pcVectorList = (new PrincipalComponentVectorBuilder()).build(scoringModelId, meanVect.meanVector.getMaxIndex() + 1);
 		
+		//(a-m)*pc = a*pc - m*pc
 	}
 
 }

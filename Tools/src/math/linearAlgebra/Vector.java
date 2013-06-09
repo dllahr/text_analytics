@@ -4,16 +4,15 @@ import java.util.Set;
 
 public interface Vector {
 
-	public abstract void setEntry(Integer index, Double value);
+	public void setEntry(Integer index, Double value);
 
-	public abstract double getEntry(Integer index);
+	public double getEntry(Integer index);
 
-	public abstract double vectorMultiply(Vector otherVector);
+	public double vectorMultiply(Vector otherVector);
 
-	public abstract double vectorMultiply(double doubleVector[]);
+	public double vectorMultiply(double doubleVector[]);
 
-	public abstract Set<Integer> getIndices();
+	public Set<Integer> getIndices();
 
-	public abstract int getMaxIndex();
-
+	public int getMaxIndex();
 }
