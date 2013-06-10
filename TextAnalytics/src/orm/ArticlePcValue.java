@@ -27,7 +27,12 @@ public class ArticlePcValue implements Serializable {
 	private Double value;
 	
 	public ArticlePcValue() {
-		
+	}
+
+	public ArticlePcValue(Article article, Eigenvalue eigenvalue, Double value) {
+		this.article = article;
+		this.eigenvalue = eigenvalue;
+		this.value = value;
 	}
 
 	public Article getArticle() {
