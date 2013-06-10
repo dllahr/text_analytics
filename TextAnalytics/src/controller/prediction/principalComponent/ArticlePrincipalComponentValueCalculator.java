@@ -20,7 +20,12 @@ public class ArticlePrincipalComponentValueCalculator {
 				(new PrincipalComponentVectorBuilder()).build(scoringModelId, 
 						meanVect.meanVector.getMaxIndex() + 1);
 		
-		//(a-m)*pc = a*pc - m*pc
+		//use this equation to calculate:  (a-m)*pc = a*pc - m*pc
+		//a is article-stem vector
+		//m is mean stem vector
+		//pc is principal component
+		//
+		//first calculate m*pc because this is independent of # of articles
 		Map<PrincipalComponentVector, Double> pcVectDotMean = multiplyPrincipalComponentVectorsByMeanVector(pcVectorList, meanVect);
 
 		List<ArticlePrincipalComponentValues> result = new ArrayList<>(artStemCountVectList.size());
@@ -30,7 +35,10 @@ public class ArticlePrincipalComponentValueCalculator {
 			result.add(artPcv);
 			
 			for (PrincipalComponentVector pcv : pcVectDotMean.keySet()) {
+				//calculate a*pc
 				double articleDotPcv = artVect.stemCountVector.vectorMultiply(pcv.vector);
+				
+				//using previous values, calculate a*pc - m*pc
 				double value = articleDotPcv - pcVectDotMean.get(pcv);
 
 				artPcv.prinCompValuesMap.put(pcv.eigenvalue, value);
