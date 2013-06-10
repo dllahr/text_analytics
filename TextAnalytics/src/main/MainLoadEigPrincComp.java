@@ -91,12 +91,10 @@ public class MainLoadEigPrincComp {
 		BufferedReader reader = new BufferedReader(new FileReader(eigvectFile));
 		
 		int lineNum = 0;
-		for (Article article : articleList) {
-
-			String curLine = reader.readLine();
-			if (null == curLine) {
-				throw new RuntimeException("eigenvector load:  file ended but there are still articles present");
-			}
+		Iterator<Article> articleIterator = articleList.iterator();
+		String curLine;
+		while (articleIterator.hasNext() && (curLine = reader.readLine()) != null) {
+			Article article = articleIterator.next();
 			
 			String[] split = curLine.split(delimeter);
 			if (split.length != eigvalList.size()) {
@@ -119,13 +117,15 @@ public class MainLoadEigPrincComp {
 			}
 		}
 		
-		String endLine;
-		while ((endLine = reader.readLine()) != null) {
-			if (endLine.trim() != "") {
-				throw new RuntimeException("eigenvector load:  there were more rows in the file than there were articles for the scoring model");
+		if (! articleIterator.hasNext()) {
+			String endLine;
+
+			while ((endLine = reader.readLine()) != null) {
+				if (endLine.trim() != "") {
+					throw new RuntimeException("eigenvector load:  there were more rows in the eigenvector file than there were articles for the scoring model");
+				}
 			}
 		}
-		
 		reader.close();
 	}
 	
@@ -145,12 +145,12 @@ public class MainLoadEigPrincComp {
 
 		System.out.println("loading values:");
 		int lineNum = 0;
-		for (Stem stem : stemList) {
-			
-			String curLine = reader.readLine();
-			if (null == curLine) {
-				throw new RuntimeException("eigenvector load:  file ended but there are still articles present");
-			}
+		
+		String curLine;
+		Iterator<Stem> stemIterator = stemList.iterator();
+		
+		while (stemIterator.hasNext() && (curLine = reader.readLine()) != null) {
+			Stem stem = stemIterator.next();
 			
 			String[] split = curLine.split(delimeter);
 			if (split.length != eigvalList.size()) {
@@ -173,11 +173,15 @@ public class MainLoadEigPrincComp {
 				System.out.println("load principal component current lineNum:  " + lineNum);
 			}
 		}
-		
-		String endLine;
-		while ((endLine = reader.readLine()) != null) {
-			if (endLine.trim() != "") {
-				throw new RuntimeException("eigenvector load:  there were more rows in the file than there were articles for the scoring model");
+
+
+		if (! stemIterator.hasNext()) {
+			String endLine;
+
+			while ((endLine = reader.readLine()) != null) {
+				if (endLine.trim() != "") {
+					throw new RuntimeException("eigenvector load:  there were more rows in the file than there were articles for the scoring model");
+				}
 			}
 		}
 		
