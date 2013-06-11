@@ -39,7 +39,6 @@ public class Article {
 	private String additionalIdentifier;
 	
 	public Article() {
-		
 	}
 
 	public Integer getId() {
