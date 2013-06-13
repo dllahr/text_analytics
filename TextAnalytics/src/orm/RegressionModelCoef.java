@@ -1,6 +1,5 @@
 package orm;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -17,8 +16,9 @@ public class RegressionModelCoef {
 	@JoinColumn(name="REGRESSION_MODEL_ID")
 	private RegressionModel regressionModel;
 	
-	@Column(name="EIGENVALUE_ID")
-	private Integer eigenvalueId;
+	@ManyToOne
+	@JoinColumn(name="EIGENVALUE_ID")
+	private Eigenvalue eigenvalue;
 	
 	private Double coef;
 	
@@ -33,12 +33,12 @@ public class RegressionModelCoef {
 		this.id = id;
 	}
 
-	public Integer getEigenvalueId() {
-		return eigenvalueId;
+	public Eigenvalue getEigenvalue() {
+		return eigenvalue;
 	}
 
-	public void setEigenvalueId(Integer eigenvalueId) {
-		this.eigenvalueId = eigenvalueId;
+	public void setEigenvalue(Eigenvalue eigenvalue) {
+		this.eigenvalue = eigenvalue;
 	}
 
 	public Double getCoef() {
