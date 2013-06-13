@@ -20,11 +20,11 @@ import orm.ArticlePcValue;
 import orm.Eigenvalue;
 import orm.SessionManager;
 
-class AggregatePrincipalComponentValuesByDay {
+class DayPrincipalComponentVaueVectorBuilder {
 	
 	private final MapBuilder mapBuilder;
 	
-	public AggregatePrincipalComponentValuesByDay() {
+	public DayPrincipalComponentVaueVectorBuilder() {
 		mapBuilder = new MapBuilder();
 	}
 
@@ -96,7 +96,7 @@ class AggregatePrincipalComponentValuesByDay {
 	
 	Map<DayEigenvalue, List<Double>> organizePcValByDayIndex(List<ArticlePcValue> artPcValList) {
 		ValueOperator<ArticlePcValue, DayEigenvalue, List<Double>> vo = new 
-				ValueOperator<ArticlePcValue, AggregatePrincipalComponentValuesByDay.DayEigenvalue, List<Double>>() {
+				ValueOperator<ArticlePcValue, DayPrincipalComponentVaueVectorBuilder.DayEigenvalue, List<Double>>() {
 			@Override
 			public DayEigenvalue getKey(ArticlePcValue t) {
 				return new DayEigenvalue(t.getArticle().getDayIndex(), t.getEigenvalue());
