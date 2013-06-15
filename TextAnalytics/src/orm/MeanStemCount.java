@@ -17,14 +17,14 @@ public class MeanStemCount implements Serializable {
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "SCORING_MODEL_ID")
-	ScoringModel scoringModel;
+	private ScoringModel scoringModel;
 	
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "STEM_ID")
-	Stem stem;
+	private Stem stem;
 	
-	double value;
+	private double value;
 	
 	public MeanStemCount() {
 	}
