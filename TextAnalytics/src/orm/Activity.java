@@ -125,14 +125,14 @@ public class Activity {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		
-		builder.append(id).append(" ");
-		builder.append(activityDate).append(" ");
-		builder.append(transaction).append(" ");
-		builder.append(description).append(" ");
-		builder.append(symbol).append(" ");
-		builder.append(quantity).append(" ");
-		builder.append(fillPrice).append(" ");
-		builder.append(commission).append(" ");
+		builder.append(id).append(Constants.toStringDelimeter);
+		builder.append(activityDate).append(Constants.toStringDelimeter);
+		builder.append(transaction).append(Constants.toStringDelimeter);
+		builder.append(description).append(Constants.toStringDelimeter);
+		builder.append(symbol).append(Constants.toStringDelimeter);
+		builder.append(quantity).append(Constants.toStringDelimeter);
+		builder.append(fillPrice).append(Constants.toStringDelimeter);
+		builder.append(commission).append(Constants.toStringDelimeter);
 		builder.append(netAmount);
 		
 		return builder.toString();

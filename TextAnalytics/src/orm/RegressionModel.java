@@ -10,7 +10,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name="REGRESSION_MODEL")
 public class RegressionModel {
-	private static final String delimeter = " ";
 	
 	@Id
 	private Integer id;
@@ -75,8 +74,8 @@ public class RegressionModel {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(id).append(delimeter).append(scoringModel.getId()).append(delimeter);
-		builder.append(company.getId()).append(delimeter).append(dayOffset).append(delimeter);
+		builder.append(id).append(Constants.toStringDelimeter).append(scoringModel.getId()).append(Constants.toStringDelimeter);
+		builder.append(company.getId()).append(Constants.toStringDelimeter).append(dayOffset).append(Constants.toStringDelimeter);
 		builder.append(rExpression.substring(0,10));
 		
 		return builder.toString();

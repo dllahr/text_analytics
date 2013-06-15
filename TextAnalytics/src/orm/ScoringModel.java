@@ -43,18 +43,6 @@ public class ScoringModel  {
 		this.notes = notes;
 	}
 
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append(id).append(" ").append("companies: ");
-		for (Company company : companySet) {
-			builder.append(company.getId()).append(" ");
-		}
-		builder.append(notes);
-		return builder.toString();
-	}
-
 	public Set<Company> getCompanySet() {
 		return companySet;
 	}
@@ -74,5 +62,17 @@ public class ScoringModel  {
 		}
 		
 		return result;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(id).append(Constants.toStringDelimeter).append("companies: ");
+		for (Company company : companySet) {
+			builder.append(company.getId()).append(Constants.toStringDelimeter);
+		}
+		builder.append(notes);
+
+		return builder.toString();
 	}
 }

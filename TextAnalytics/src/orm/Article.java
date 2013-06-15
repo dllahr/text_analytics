@@ -13,8 +13,7 @@ import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Article {
-	private static final long millisPerDay = 24*60*60*1000;
-	
+
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "articleIdSeq")
 	@SequenceGenerator(name = "articleIdSeq", sequenceName = "article_id_seq", allocationSize = 1)
 	@Id
@@ -86,7 +85,7 @@ public class Article {
 	}
 	
 	public static int calculateDayIndex(Date date) {
-		return (int) (date.getTime() / millisPerDay);
+		return (int) (date.getTime() / Constants.millisPerDay);
 	}
 
 	public Integer getStartLineNum() {

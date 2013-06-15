@@ -55,7 +55,7 @@ public class Company {
 
 	@Override
 	public String toString() {
-		return id + " " + name + " " + stockSymbol;
+		return id + Constants.toStringDelimeter + name + Constants.toStringDelimeter + stockSymbol;
 	}
 
 	public Set<ScoringModel> getScoringModelSet() {

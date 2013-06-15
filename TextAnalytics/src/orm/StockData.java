@@ -15,8 +15,6 @@ import javax.persistence.Table;
 public class StockData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final long millisPerDay = 1000*60*60*24;
 	
 	@Id
 	@ManyToOne
@@ -116,6 +114,6 @@ public class StockData implements Serializable {
 	
 	public void setDayTimeAndDayIndex(Date dayTime) {
 		setDayTime(dayTime);
-		setDayIndex((int)(dayTime.getTime() / millisPerDay));
+		setDayIndex((int)(dayTime.getTime() / Constants.millisPerDay));
 	}
 }
