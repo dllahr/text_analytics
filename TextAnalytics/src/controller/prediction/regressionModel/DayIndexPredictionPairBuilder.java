@@ -7,6 +7,7 @@ import org.hibernate.Query;
 
 import controller.util.Utilities;
 
+import orm.RegressionModel;
 import orm.RegressionModelCoef;
 import orm.SessionManager;
 
@@ -15,18 +16,17 @@ import math.linearAlgebra.Vector;
 
 public class DayIndexPredictionPairBuilder {
 	
-	public List<DayIndexPredictionPair> build(int regressionModelId, List<DayPrincipalComponentValueVector> dayPcValVectList) {
-		final int dayOffset = getRegressionModelDayOffset(regressionModelId);
+	public List<DayIndexPredictionPair> build(RegressionModel rm, List<DayPrincipalComponentValueVector> dayPcValVectList) {
 
-		final double intercept = getRegressionModelIntercept(regressionModelId);
-		Vector coefVect = buildRegressionModelCoefVector(regressionModelId);
+		final double intercept = getRegressionModelIntercept(rm.getId());
+		Vector coefVect = buildRegressionModelCoefVector(rm.getId());
 		
 		List<DayIndexPredictionPair> result = new ArrayList<>(dayPcValVectList.size());
 		
 		for (DayPrincipalComponentValueVector dayPcValVect : dayPcValVectList) {
 			double prediction = intercept + dayPcValVect.prinCompValueVect.vectorMultiply(coefVect);
 			
-			result.add(new DayIndexPredictionPair(dayPcValVect.dayIndex, dayPcValVect.dayIndex + dayOffset, prediction));
+			result.add(new DayIndexPredictionPair(dayPcValVect.dayIndex, dayPcValVect.dayIndex + rm.getDayOffset(), prediction));
 		}
 		
 		return result;

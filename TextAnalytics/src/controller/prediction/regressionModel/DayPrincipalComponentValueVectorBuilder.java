@@ -20,7 +20,7 @@ import orm.ArticlePcValue;
 import orm.Eigenvalue;
 import orm.SessionManager;
 
-class DayPrincipalComponentValueVectorBuilder {
+public class DayPrincipalComponentValueVectorBuilder {
 	
 	private final MapBuilder mapBuilder;
 	
