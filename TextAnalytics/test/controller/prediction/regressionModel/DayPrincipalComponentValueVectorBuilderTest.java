@@ -12,7 +12,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import controller.prediction.regressionModel.DayPrincipalComponentVaueVectorBuilder.DayEigenvalue;
+import controller.prediction.regressionModel.DayPrincipalComponentValueVectorBuilder.DayEigenvalue;
 import controller.util.Utilities;
 
 import orm.Article;
@@ -26,7 +26,7 @@ public class DayPrincipalComponentValueVectorBuilderTest {
 	
 	@Test
 	public void testRetrieveArticlePcValues() {
-		List<ArticlePcValue> list = DayPrincipalComponentVaueVectorBuilder.retrieveArticlePcValues(1, 15834);
+		List<ArticlePcValue> list = DayPrincipalComponentValueVectorBuilder.retrieveArticlePcValues(1, 15834);
 		assertNotNull(list);
 		assertEquals(400, list.size());
 	}
@@ -93,7 +93,7 @@ public class DayPrincipalComponentValueVectorBuilderTest {
 		list.add(new ArticlePcValue(day2, e2, 7.7));
 		list.add(new ArticlePcValue(day2, e2, 8.8));
 		
-		Map<DayEigenvalue, List<Double>> map = (new DayPrincipalComponentVaueVectorBuilder()).organizePcValByDayIndex(list);
+		Map<DayEigenvalue, List<Double>> map = (new DayPrincipalComponentValueVectorBuilder()).organizePcValByDayIndex(list);
 		assertNotNull(map);
 		assertEquals(4, map.keySet().size());
 
@@ -140,7 +140,7 @@ public class DayPrincipalComponentValueVectorBuilderTest {
 		list.add(new ArticlePcValue(day2, e2, 7.7));
 		list.add(new ArticlePcValue(day2, e2, 8.8));
 		
-		DayPrincipalComponentVaueVectorBuilder aggregator = new DayPrincipalComponentVaueVectorBuilder();
+		DayPrincipalComponentValueVectorBuilder aggregator = new DayPrincipalComponentValueVectorBuilder();
 		
 		Map<DayEigenvalue, List<Double>> map = aggregator.organizePcValByDayIndex(list);
 		
