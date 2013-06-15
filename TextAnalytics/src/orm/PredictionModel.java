@@ -1,47 +1,51 @@
 package orm;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
 @Entity
 @Table(name = "PREDICTION_MODEL")
 public class PredictionModel {
-	
-	private final static String delimeter = " "; 
 
 	@Id
-	Integer id;
+	private Integer id;
 	
 	@ManyToOne
 	@JoinColumn(name = "REGRESSION_MODEL_ID")
-	RegressionModel regressionModel;
+	private RegressionModel regressionModel;
 	
 	@Column(name = "LOWER_THRESHOLD")
-	Double lowerThreshold;
+	private Double lowerThreshold;
 	
 	@Column(name = "UPPER_THRESHOLD")
-	Double upperThreshold;
+	private Double upperThreshold;
 	
 	@Column(name = "PERCENTILE0_VALUE")
-	Double percentile0Value;
+	private Double percentile0Value;
 	
 	@Column(name = "PERCENTILE25_VALUE")
-	Double percentile25Value;
+	private Double percentile25Value;
 	
 	@Column(name = "PERCENTILE50_VALUE")
-	Double percentile50Value;
+	private Double percentile50Value;
 
 	@Column(name = "PERCENTILE75_VALUE")
-	Double percentile75Value;
+	private Double percentile75Value;
 	
 	@Column(name = "PERCENTILE100_VALUE")
-	Double percentile100Value;
+	private Double percentile100Value;
 	
+	@OneToMany(mappedBy="predictionModel")
+	private Set<PredictionModelStockSmoothingCoef> stockSmoothingCoefSet;
+
 	public PredictionModel() {
 	}
 
@@ -116,16 +120,26 @@ public class PredictionModel {
 	public void setPercentile100Value(Double percentile100Value) {
 		this.percentile100Value = percentile100Value;
 	}
+	
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(id).append(delimeter).append(regressionModel.getId()).append(delimeter);
-		builder.append(lowerThreshold).append(delimeter).append(upperThreshold).append(delimeter);
-		builder.append(percentile0Value).append(delimeter).append(percentile25Value).append(delimeter);
-		builder.append(percentile50Value).append(delimeter).append(percentile75Value).append(delimeter);
+		builder.append(id).append(Constants.toStringDelimeter).append(regressionModel.getId()).append(Constants.toStringDelimeter);
+		builder.append(lowerThreshold).append(Constants.toStringDelimeter).append(upperThreshold).append(Constants.toStringDelimeter);
+		builder.append(percentile0Value).append(Constants.toStringDelimeter).append(percentile25Value).append(Constants.toStringDelimeter);
+		builder.append(percentile50Value).append(Constants.toStringDelimeter).append(percentile75Value).append(Constants.toStringDelimeter);
 		builder.append(percentile100Value);
 		
 		return builder.toString();
+	}
+
+	public Set<PredictionModelStockSmoothingCoef> getStockSmoothingCoefSet() {
+		return stockSmoothingCoefSet;
+	}
+
+	public void setStockSmoothingCoefSet(
+			Set<PredictionModelStockSmoothingCoef> stockSmoothingCoefSet) {
+		this.stockSmoothingCoefSet = stockSmoothingCoefSet;
 	}
 }

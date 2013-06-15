@@ -209,7 +209,13 @@ create table prediction_model (
   foreign key (regression_model_id) references regression_model(id)
 );
 
-
+create table prdctn_mdl_stock_smooth_coef (
+  prediction_model_id                     integer,
+  relative_day_index                      integer,
+  coef                                    number not null,
+  
+  primary key (prediction_model_id, relative_day_index)
+);
 --------------------------------------------------------
 --  DDL for Index EIGVECT_VALUE_EIGENVALUE_ID
 --------------------------------------------------------
