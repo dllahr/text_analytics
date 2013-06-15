@@ -178,9 +178,8 @@ create sequence article_id_seq start with 1;
 
    CREATE INDEX STOCK_DATA_DAY_INDEX ON STOCK_DATA (COMPANY_ID, DAY_INDEX);
    
---------------------------------------------------------
---  DDL for table mean_stem_count
---------------------------------------------------------
+
+   
 create table mean_stem_count (
   scoring_model_id          integer,
   stem_id                   integer,
@@ -188,6 +187,23 @@ create table mean_stem_count (
   primary key (scoring_model_id, stem_id),
   foreign key (scoring_model_id) references scoring_model(id),
   foreign key (stem_id) references stem(id)
+);
+
+create table prediction_model (
+  id                      integer,
+  regression_model_id     integer,
+  
+  lower_threshold         number,
+  upper_threshold         number,
+  
+  percentile0_value       number,
+  percentile25_value      number,
+  percentile50_value      number,
+  percentile75_value      number,
+  percentile100_value     number,
+
+  primary key (id),
+  foreign key (regression_model_id) references regression_model(id)
 );
 
 
