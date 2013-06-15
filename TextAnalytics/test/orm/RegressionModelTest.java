@@ -19,6 +19,7 @@ public class RegressionModelTest {
 		
 		assertNotNull(model.getId());
 		assertNotNull(model.getScoringModel());
+		assertNotNull(model.getCompany());
 	}
 
 }

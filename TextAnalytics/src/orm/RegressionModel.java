@@ -10,6 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="REGRESSION_MODEL")
 public class RegressionModel {
+	private static final String delimeter = " ";
 	
 	@Id
 	private Integer id;
@@ -17,6 +18,10 @@ public class RegressionModel {
 	@ManyToOne
 	@JoinColumn(name="SCORING_MODEL_ID")
 	private ScoringModel scoringModel;
+	
+	@ManyToOne
+	@JoinColumn(name="COMPANY_ID")
+	private Company company;
 	
 	@Column(name="DAY_OFFSET")
 	private Integer dayOffset;
@@ -59,10 +64,21 @@ public class RegressionModel {
 		this.rExpression = rExpression;
 	}
 
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
 	@Override
 	public String toString() {
-		return id + " " + scoringModel.getId() + " " + dayOffset + " " + rExpression.substring(0, 10);
-	}
-	
-	
+		StringBuilder builder = new StringBuilder();
+		builder.append(id).append(delimeter).append(scoringModel.getId()).append(delimeter);
+		builder.append(company.getId()).append(delimeter).append(dayOffset).append(delimeter);
+		builder.append(rExpression.substring(0,10));
+		
+		return builder.toString();
+	}	
 }

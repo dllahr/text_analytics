@@ -113,6 +113,9 @@ create sequence article_id_seq start with 1;
 	SCORING_MODEL_ID NUMBER(*,0), 
 	R_EXPRESSION VARCHAR2(4000 BYTE)
    );
+alter table regression_model add company_id integer;
+alter table regression_model add foreign key (company_id) references company(id);
+
 --------------------------------------------------------
 --  DDL for Table REGRESSION_MODEL_COEF
 --------------------------------------------------------
