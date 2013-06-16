@@ -7,10 +7,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import controller.stockPrices.SmoothedStockPrices;
+
 import orm.Company;
 import orm.SessionManager;
 
-import research.regression.SmoothedStockPrices;
 
 public class CalculateSmoothedStockPriceChange {
 	

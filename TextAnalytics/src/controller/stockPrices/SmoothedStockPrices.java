@@ -1,4 +1,4 @@
-package research.regression;
+package controller.stockPrices;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +9,6 @@ import java.util.Map;
 
 import orm.Company;
 import orm.StockData;
-import controller.stockPrices.FindStockPrices;
 
 public class SmoothedStockPrices {
 	

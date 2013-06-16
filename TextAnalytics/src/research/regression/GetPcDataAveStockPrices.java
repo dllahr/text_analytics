@@ -22,6 +22,7 @@ import orm.Eigenvalue;
 import orm.EigenvectorValue;
 import orm.SessionManager;
 import research.correlation.SumData;
+import controller.stockPrices.SmoothedStockPrices;
 import controller.util.Utilities;
 
 

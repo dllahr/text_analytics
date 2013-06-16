@@ -1,4 +1,4 @@
-package research.regression;
+package controller.stockPrices;
 
 import static org.junit.Assert.*;
 
@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.hibernate.Query;
 import org.junit.Test;
+
+import controller.stockPrices.SmoothedStockPrices;
 
 import orm.ScoringModel;
 import orm.SessionManager;
