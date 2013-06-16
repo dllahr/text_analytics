@@ -5,7 +5,6 @@ import gui.regressionPrediction.RegressionPredictionPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -14,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import controller.Controller;
-import controller.stockUpdate.StockUpdate;
+
 
 public class FrameBuilder {
 
@@ -29,12 +28,7 @@ public class FrameBuilder {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					(new StockUpdate()).updateStockPrices();
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				throw new RuntimeException("update stock prices no longer implemented");
 			}
 		});
 		JPanel stockPanel = new JPanel();

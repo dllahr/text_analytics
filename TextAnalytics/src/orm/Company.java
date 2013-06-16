@@ -1,5 +1,6 @@
 package orm;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -8,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+
+import org.hibernate.Query;
 
 @Entity
 public class Company {
@@ -64,5 +67,19 @@ public class Company {
 
 	public void setScoringModelSet(Set<ScoringModel> scoringModelSet) {
 		this.scoringModelSet = scoringModelSet;
+	}
+	
+	public static Company findById(int companyId) {
+		Query query = SessionManager.createQuery("from Company where id = :id");
+		query.setInteger("id", companyId);
+		
+		@SuppressWarnings("rawtypes")
+		List list = query.list();
+		
+		if (list.size() > 0) {
+			return (Company)list.get(0);
+		} else {
+			return null;
+		}
 	}
 }
