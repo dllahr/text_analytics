@@ -29,6 +29,12 @@ public class PredictionModelStockSmoothingCoef implements Serializable {
 	public PredictionModelStockSmoothingCoef() {
 	}
 
+	public PredictionModelStockSmoothingCoef(PredictionModel predictionModel, int relativeDayIndex, double coef) {
+		this.predictionModel = predictionModel;
+		this.relativeDayIndex = relativeDayIndex;
+		this.coef = coef;
+	}
+
 	public PredictionModel getPredictionModel() {
 		return predictionModel;
 	}
