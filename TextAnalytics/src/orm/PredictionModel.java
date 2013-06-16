@@ -142,4 +142,41 @@ public class PredictionModel {
 			Set<PredictionModelStockSmoothingCoef> stockSmoothingCoefSet) {
 		this.stockSmoothingCoefSet = stockSmoothingCoefSet;
 	}
+	
+	
+	public Filter buildFilter() {
+		Filter filter;
+		
+		if (lowerThreshold != null && upperThreshold != null) {
+			filter = new Filter() {
+				@Override
+				public boolean passesFilter(double value) {
+					return value >= lowerThreshold && value <= upperThreshold;
+				}
+			};
+		} else if (lowerThreshold != null) {
+			filter = new Filter() {
+				@Override
+				public boolean passesFilter(double value) {
+					return value >= lowerThreshold;
+				}
+			};
+		} else if (upperThreshold != null) {
+			filter = new Filter() {
+				@Override
+				public boolean passesFilter(double value) {
+					return value <= upperThreshold;
+				}
+			};
+		} else {
+			throw new RuntimeException("PredictionBuilder filterRawPredictions attempting to filter raw predictions but prediction model " +
+					"had no thresholds.  prediction model id:  " + id);
+		}
+		
+		return filter;
+	}
+	
+	public interface Filter {
+		public boolean passesFilter(double value);
+	}
 }

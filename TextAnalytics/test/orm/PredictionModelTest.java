@@ -35,4 +35,29 @@ public class PredictionModelTest {
 			System.out.println(coef);
 		}
 	}
+	
+	@Test
+	public void testBuildFilter() {
+		PredictionModel pm = new PredictionModel();
+		
+		pm.setLowerThreshold(1.1);
+		PredictionModel.Filter filter = pm.buildFilter();
+		assertTrue(filter.passesFilter(1.2));
+		assertTrue(filter.passesFilter(1.1));
+		assertFalse(filter.passesFilter(1.0));
+		
+		pm.setUpperThreshold(2.2);
+		filter = pm.buildFilter();
+		assertTrue(filter.passesFilter(1.2));
+		assertTrue(filter.passesFilter(1.1));
+		assertTrue(filter.passesFilter(2.2));
+		assertFalse(filter.passesFilter(1.0));
+		assertFalse(filter.passesFilter(2.3));
+		
+		pm.setLowerThreshold(null);
+		filter = pm.buildFilter();
+		assertTrue(filter.passesFilter(2.2));
+		assertTrue(filter.passesFilter(2.1));
+		assertFalse(filter.passesFilter(2.3));
+	}
 }
