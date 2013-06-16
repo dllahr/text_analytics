@@ -14,19 +14,19 @@ import orm.SessionManager;
 import math.linearAlgebra.DenseFixedVector;
 import math.linearAlgebra.Vector;
 
-public class DayIndexPredictionPairBuilder {
+public class DayIndexRawPredictionPairBuilder {
 	
-	public List<DayIndexPredictionPair> build(RegressionModel rm, List<DayPrincipalComponentValueVector> dayPcValVectList) {
+	public List<DayIndexRawPredictionPair> build(RegressionModel rm, List<DayPrincipalComponentValueVector> dayPcValVectList) {
 
 		final double intercept = getRegressionModelIntercept(rm.getId());
 		Vector coefVect = buildRegressionModelCoefVector(rm.getId());
 		
-		List<DayIndexPredictionPair> result = new ArrayList<>(dayPcValVectList.size());
+		List<DayIndexRawPredictionPair> result = new ArrayList<>(dayPcValVectList.size());
 		
 		for (DayPrincipalComponentValueVector dayPcValVect : dayPcValVectList) {
 			double prediction = intercept + dayPcValVect.prinCompValueVect.vectorMultiply(coefVect);
 			
-			result.add(new DayIndexPredictionPair(dayPcValVect.dayIndex, dayPcValVect.dayIndex + rm.getDayOffset(), prediction));
+			result.add(new DayIndexRawPredictionPair(dayPcValVect.dayIndex, dayPcValVect.dayIndex + rm.getDayOffset(), prediction));
 		}
 		
 		return result;

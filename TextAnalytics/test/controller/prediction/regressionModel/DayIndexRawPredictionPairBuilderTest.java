@@ -6,11 +6,11 @@ import math.linearAlgebra.Vector;
 
 import org.junit.Test;
 
-public class DayIndexPredictionPairBuilderTest {
+public class DayIndexRawPredictionPairBuilderTest {
 
 	@Test
 	public void testBuildRegressionModelCoefVector() {
-		Vector vect = DayIndexPredictionPairBuilder.buildRegressionModelCoefVector(1);
+		Vector vect = DayIndexRawPredictionPairBuilder.buildRegressionModelCoefVector(1);
 		assertNotNull(vect);
 		assertTrue(vect.getMaxIndex() > 0);
 		
@@ -23,13 +23,13 @@ public class DayIndexPredictionPairBuilderTest {
 
 	@Test
 	public void testGetRegressionModelIntercept() {
-		double intercept = DayIndexPredictionPairBuilder.getRegressionModelIntercept(1);
+		double intercept = DayIndexRawPredictionPairBuilder.getRegressionModelIntercept(1);
 		System.out.println(intercept);
 	}
 	
 	@Test
 	public void testGetRegressionModelDayOffset() {
-		int dayOffset = DayIndexPredictionPairBuilder.getRegressionModelDayOffset(1);
+		int dayOffset = DayIndexRawPredictionPairBuilder.getRegressionModelDayOffset(1);
 		assertTrue(dayOffset >= 0);
 		System.out.println(dayOffset);
 	}

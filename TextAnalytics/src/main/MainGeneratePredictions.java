@@ -13,8 +13,8 @@ import orm.Article;
 import orm.RegressionModel;
 import orm.SessionManager;
 
-import controller.prediction.regressionModel.DayIndexPredictionPair;
-import controller.prediction.regressionModel.DayIndexPredictionPairBuilder;
+import controller.prediction.regressionModel.DayIndexRawPredictionPair;
+import controller.prediction.regressionModel.DayIndexRawPredictionPairBuilder;
 import controller.prediction.regressionModel.DayPrincipalComponentValueVector;
 import controller.prediction.regressionModel.DayPrincipalComponentValueVectorBuilder;
 
@@ -35,19 +35,19 @@ public class MainGeneratePredictions {
 				(new DayPrincipalComponentValueVectorBuilder()).build(rm.getScoringModel().getId(), minArticleDayIndex);
 		
 		System.out.println("generate raw predictions based regression model and principal component values:");
-		List<DayIndexPredictionPair> dayIndexPredictionPairList = 
-				(new DayIndexPredictionPairBuilder()).build(rm, dayPcValVectList);
+		List<DayIndexRawPredictionPair> dayIndexPredictionPairList = 
+				(new DayIndexRawPredictionPairBuilder()).build(rm, dayPcValVectList);
 		
 		System.out.println("sort predictions by date:");
-		Collections.sort(dayIndexPredictionPairList, new Comparator<DayIndexPredictionPair>() {
+		Collections.sort(dayIndexPredictionPairList, new Comparator<DayIndexRawPredictionPair>() {
 			@Override
-			public int compare(DayIndexPredictionPair o1, DayIndexPredictionPair o2) {
+			public int compare(DayIndexRawPredictionPair o1, DayIndexRawPredictionPair o2) {
 				return o1.initialDayIndex - o2.initialDayIndex;
 			}
 		});
 		
 		System.out.println("results:");
-		for (DayIndexPredictionPair pair : dayIndexPredictionPairList) {
+		for (DayIndexRawPredictionPair pair : dayIndexPredictionPairList) {
 			System.out.println(pair.initialDayIndex + " " + pair.predictionDayIndex + " " + pair.prediction);
 		}
 		
