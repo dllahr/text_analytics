@@ -1,5 +1,7 @@
 package controller.prediction.regressionModel;
 
+import orm.Constants;
+
 public class DayIndexRawPredictionPair {
 	public final int initialDayIndex;
 	public final int predictionDayIndex;
@@ -9,5 +11,11 @@ public class DayIndexRawPredictionPair {
 		this.initialDayIndex = initialDayIndex;
 		this.predictionDayIndex = predictionDayIndex;
 		this.prediction = prediction;
+	}
+
+	@Override
+	public String toString() {
+		return initialDayIndex + Constants.toStringDelimeter + predictionDayIndex 
+				+ Constants.toStringDelimeter + prediction;
 	}
 }
