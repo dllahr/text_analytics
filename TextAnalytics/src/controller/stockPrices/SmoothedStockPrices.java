@@ -14,6 +14,15 @@ public class SmoothedStockPrices {
 	
 	private final Map<Integer, Double> dayIndexSmoothedMap;
 
+	private int maxDayIndex;
+
+	/**
+	 * for the purposes of mocking
+	 */
+	SmoothedStockPrices(Map<Integer, Double> dayIndexSmoothedMap) {
+		this.dayIndexSmoothedMap = dayIndexSmoothedMap;
+		this.maxDayIndex = -1;
+	}
 
 	/**
 	 * weights must have odd number of entries
@@ -27,6 +36,8 @@ public class SmoothedStockPrices {
 		Map<Integer, Double> rawDayIndexSmoothedPriceMap = calculateSmoothedPrices(stockDataList, weights);
 		
 		dayIndexSmoothedMap = buildDayIndexStockDataMap(rawDayIndexSmoothedPriceMap);
+		
+		this.maxDayIndex = Collections.max(dayIndexSmoothedMap.keySet());
 	}
 	
 	
@@ -36,7 +47,7 @@ public class SmoothedStockPrices {
 			return result;
 		} else {
 			throw new RuntimeException("FindSmoothedStockPrices getSmoothedPriceClosestAfterDayIndex provided " +
-					"dayIndex is not found in map - is it before the minDayIndex provided to the constructor or " +
+					"dayIndex (" + dayIndex + ") is not found in map - is it before the minDayIndex provided to the constructor or " +
 					"after the last available dayIndex in the database?");
 		}
 	}
@@ -107,5 +118,7 @@ public class SmoothedStockPrices {
 		return result;
 	}
 	
-	
+	public int getMaxDayIndex() {
+		return maxDayIndex;
+	}
 }
