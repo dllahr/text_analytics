@@ -32,12 +32,16 @@ public class SmoothedStockPrices {
 	 */
 	public SmoothedStockPrices(int minDayIndex, Company company, double[] weights) {
 		final List<StockData> stockDataList = FindStockPrices.lookupStockData(minDayIndex, company);
-		
+
 		Map<Integer, Double> rawDayIndexSmoothedPriceMap = calculateSmoothedPrices(stockDataList, weights);
 		
-		dayIndexSmoothedMap = buildDayIndexStockDataMap(rawDayIndexSmoothedPriceMap);
-		
-		this.maxDayIndex = Collections.max(dayIndexSmoothedMap.keySet());
+		if (rawDayIndexSmoothedPriceMap.size() > 0) {
+			dayIndexSmoothedMap = buildDayIndexStockDataMap(rawDayIndexSmoothedPriceMap);
+			maxDayIndex = Collections.max(dayIndexSmoothedMap.keySet());
+		} else {
+			dayIndexSmoothedMap = new HashMap<>();
+			maxDayIndex = -1;
+		}
 	}
 	
 	
@@ -55,6 +59,8 @@ public class SmoothedStockPrices {
 
 	
 	static Map<Integer, Double> calculateSmoothedPrices(List<StockData> stockDataList, double[] weights) {
+		Map<Integer, Double> result = new HashMap<Integer, Double>();
+		
 		double weightsSum = 0.0;
 		for (double weight : weights) {
 			weightsSum += weight;
@@ -70,10 +76,10 @@ public class SmoothedStockPrices {
 		//[null p0 p1 p2 p3 p4]
 		window.add(null);
 		for (int i = 0; i < (weights.length-1); i++) {
-			window.add(leadingIterator.next());
-		}
-		
-		Map<Integer, Double> result = new HashMap<Integer, Double>();
+			if (leadingIterator.hasNext()) {
+				window.add(leadingIterator.next());
+			}
+		}		
 		
 		while (leadingIterator.hasNext()) {
 			//slide the window over by 1 entry
