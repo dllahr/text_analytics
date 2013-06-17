@@ -2,8 +2,6 @@ package controller.prediction.regressionModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,7 +26,7 @@ public class PredictionBuilder {
 		if (filteredRawList.size() > 0) {
 			final int minDayIndex = filteredRawList.get(0).initialDayIndex;
 			
-			SmoothedStockPriceParams params = determineParams(pm.getStockSmoothingCoefSet(), minDayIndex);
+			SmoothedStockPriceParams params = determineParams(pm.buildRelDayIndexSortedList(), minDayIndex);
 			
 			SmoothedStockPrices smoothedStockPrices = new SmoothedStockPrices(params.minDayIndex, 
 					pm.getRegressionModel().getCompany(), params.weights);
@@ -65,17 +63,8 @@ public class PredictionBuilder {
 		return result;
 	}
 
-	static SmoothedStockPriceParams determineParams(Collection<PredictionModelStockSmoothingCoef> coefColl, 
+	public static SmoothedStockPriceParams determineParams(List<PredictionModelStockSmoothingCoef> coefList, 
 			int minPredictionDayIndex) {
-
-		List<PredictionModelStockSmoothingCoef> coefList = new ArrayList<>(coefColl);
-
-		Collections.sort(coefList, new Comparator<PredictionModelStockSmoothingCoef>() {
-			@Override
-			public int compare(PredictionModelStockSmoothingCoef o1, PredictionModelStockSmoothingCoef o2) {
-				return o1.getRelativeDayIndex() - o2.getRelativeDayIndex();
-			}
-		});
 
 		final int minRelativeDayIndex = coefList.get(0).getRelativeDayIndex();
 		final int maxRelativeDayIndex = coefList.get(coefList.size() - 1).getRelativeDayIndex();

@@ -1,5 +1,8 @@
 package orm;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -9,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.Query;
 
 
 @Entity
@@ -143,6 +148,13 @@ public class PredictionModel {
 		this.stockSmoothingCoefSet = stockSmoothingCoefSet;
 	}
 	
+	public List<PredictionModelStockSmoothingCoef> buildRelDayIndexSortedList() {
+		List<PredictionModelStockSmoothingCoef> result = new ArrayList<>(stockSmoothingCoefSet);
+		
+		Collections.sort(result, PredictionModelStockSmoothingCoef.buildDayIndexComparator());
+		
+		return result;
+	}
 	
 	public Filter buildFilter() {
 		Filter filter;
@@ -178,5 +190,20 @@ public class PredictionModel {
 	
 	public interface Filter {
 		public boolean passesFilter(double value);
+	}
+	
+	public static PredictionModel findById(int predictionModelId) {
+		Query query = SessionManager.createQuery("from PredictionModel where id = :id");
+		query.setInteger("id", predictionModelId);
+		
+		@SuppressWarnings("rawtypes")
+		List list = query.list();
+		
+		if (list.size() > 0) {
+			return (PredictionModel)list.get(0);
+		} else {
+			return null;
+		}
+				
 	}
 }

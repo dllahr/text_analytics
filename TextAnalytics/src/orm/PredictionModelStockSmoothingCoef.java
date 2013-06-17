@@ -1,6 +1,7 @@
 package orm;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -66,5 +67,15 @@ public class PredictionModelStockSmoothingCoef implements Serializable {
 		builder.append(coef);
 
 		return builder.toString();
+	}
+	
+	public static Comparator<PredictionModelStockSmoothingCoef> buildDayIndexComparator() {
+
+		return new Comparator<PredictionModelStockSmoothingCoef>() {
+			@Override
+			public int compare(PredictionModelStockSmoothingCoef o1, PredictionModelStockSmoothingCoef o2) {
+				return o1.getRelativeDayIndex() - o2.getRelativeDayIndex();
+			}
+		};
 	}
 }

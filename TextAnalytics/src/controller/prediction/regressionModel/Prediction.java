@@ -13,6 +13,8 @@ public class Prediction {
 	public final double pricePercentile50;
 	public final double pricePercentile75;
 	
+	public Double result;
+	
 	public Prediction(int initialDayIndex, int predictionDayIndex, double pricePercentile25, double pricePercentile50,
 			double pricePercentile75) {
 
@@ -31,6 +33,7 @@ public class Prediction {
 		builder.append(pricePercentile25).append(Constants.toStringDelimeter);
 		builder.append(pricePercentile50).append(Constants.toStringDelimeter);
 		builder.append(pricePercentile75).append(Constants.toStringDelimeter);
+		builder.append(result);
 
 		return builder.toString();
 	}
