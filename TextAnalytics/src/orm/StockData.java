@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import controller.util.Utilities;
+
 @Entity
 @Table(name="STOCK_DATA")
 public class StockData implements Serializable {
@@ -114,6 +116,6 @@ public class StockData implements Serializable {
 	
 	public void setDayTimeAndDayIndex(Date dayTime) {
 		setDayTime(dayTime);
-		setDayIndex((int)(dayTime.getTime() / Constants.millisPerDay));
+		setDayIndex(Utilities.calculateDayIndex(dayTime));
 	}
 }

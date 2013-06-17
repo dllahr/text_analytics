@@ -1,5 +1,6 @@
 package main;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -7,7 +8,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import orm.Article;
 import orm.PredictionModel;
 import orm.RegressionModel;
 
@@ -18,6 +18,7 @@ import controller.prediction.regressionModel.DayPrincipalComponentValueVectorBui
 import controller.prediction.regressionModel.Prediction;
 import controller.prediction.regressionModel.PredictionBuilder;
 import controller.prediction.regressionModel.PredictionResultBuilder;
+import controller.util.Utilities;
 
 
 public class MainGeneratePredictions {
@@ -25,10 +26,13 @@ public class MainGeneratePredictions {
 	
 	public static void main(String[] args) throws ParseException {
 		final int regressionModelId = Integer.valueOf(args[0]);
-		final Date minArticleDate = (new SimpleDateFormat(dateFormatString)).parse(args[1]);
+		
+		final DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
+		final Date minArticleDate = dateFormat.parse(args[1]);
+
 		final int predictionModelId = Integer.valueOf(args[2]);
 		
-		final int minArticleDayIndex = Article.calculateDayIndex(minArticleDate);
+		final int minArticleDayIndex = Utilities.calculateDayIndex(minArticleDate);
 		
 		System.out.println("find regression model with ID:  " + regressionModelId);
 		RegressionModel rm = RegressionModel.findById(regressionModelId);
@@ -67,7 +71,12 @@ public class MainGeneratePredictions {
 		
 		System.out.println("predictions and results where available:");
 		for (Prediction prediction : predictionList) {
-			System.out.println(prediction);
+			StringBuilder builder = new StringBuilder();
+			builder.append(prediction).append(" ");
+			builder.append(dateFormat.format(Utilities.calculateDate(prediction.initialDayIndex))).append(" ");
+			builder.append(dateFormat.format(Utilities.calculateDate(prediction.predictionDayIndex))).append(" ");
+			
+			System.out.println(builder);
 			
 			if (prediction.result != null) {
 				if (prediction.result <= prediction.pricePercentile25) {
@@ -97,6 +106,7 @@ public class MainGeneratePredictions {
 		for (int bin : resultBins) {
 			sum += bin;
 		}
+		System.out.println("total predictions with results:  " + sum);
 
 		for (int i = 0; i < fracResultBins.length; i++) {
 			fracResultBins[i] = ((double)resultBins[i])/((double)sum);

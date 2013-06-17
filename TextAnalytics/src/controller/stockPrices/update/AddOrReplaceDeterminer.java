@@ -11,8 +11,8 @@ import java.util.List;
 import org.hibernate.Query;
 
 import controller.stockPrices.update.AddOrReplaceInfo.AddOrReplace;
+import controller.util.Utilities;
 
-import orm.Article;
 import orm.SessionManager;
 import orm.StockData;
 
@@ -50,7 +50,7 @@ public class AddOrReplaceDeterminer {
 				String dateString = split[InputFormatConstants.dateCol];
 				Date date = dateFormat.parse(dateString);
 
-				dayIndex = Article.calculateDayIndex(date);
+				dayIndex = Utilities.calculateDayIndex(date);
 
 				notFound = dayIndex > newest.getDayIndex();
 			} else {

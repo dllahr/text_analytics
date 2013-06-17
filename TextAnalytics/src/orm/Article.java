@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
+import controller.util.Utilities;
+
 @Entity
 public class Article {
 
@@ -73,7 +75,7 @@ public class Article {
 	}
 	
 	public void setDayIndex(Date date) {
-		this.dayIndex = calculateDayIndex(date);
+		this.dayIndex = Utilities.calculateDayIndex(date);
 	}
 
 	public Date getPublishDate() {
@@ -82,10 +84,6 @@ public class Article {
 
 	public void setPublishDate(Date publishDate) {
 		this.publishDate = publishDate;
-	}
-	
-	public static int calculateDayIndex(Date date) {
-		return (int) (date.getTime() / Constants.millisPerDay);
 	}
 
 	public Integer getStartLineNum() {

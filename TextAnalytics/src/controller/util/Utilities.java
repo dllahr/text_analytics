@@ -1,7 +1,10 @@
 package controller.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import orm.Constants;
 
 public class Utilities {
 	@SuppressWarnings("unchecked")
@@ -11,5 +14,13 @@ public class Utilities {
 			result.add((T)obj);
 		}
 		return result;
+	}
+	
+	public static int calculateDayIndex(Date date) {
+		return (int) (date.getTime() / Constants.millisPerDay);
+	}
+	
+	public static Date calculateDate(int dayIndex) {
+		return new Date(Constants.millisPerDay * dayIndex);
 	}
 }

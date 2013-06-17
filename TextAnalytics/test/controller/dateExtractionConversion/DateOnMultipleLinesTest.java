@@ -11,7 +11,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import orm.Article;
+import controller.util.Utilities;
+
 
 public class DateOnMultipleLinesTest {
 
@@ -24,7 +25,7 @@ public class DateOnMultipleLinesTest {
 		
 		Date result = doml.extract(lines);
 		assertNotNull(result);
-		assertEquals(15281, Article.calculateDayIndex(result));
+		assertEquals(15281, Utilities.calculateDayIndex(result));
 	}
 	
 	public static List<String> readTestDataFile(String filename) throws IOException {
