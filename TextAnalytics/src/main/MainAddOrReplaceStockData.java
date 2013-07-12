@@ -23,7 +23,7 @@ public class MainAddOrReplaceStockData {
 		final int companyId = Integer.valueOf(args[0]);
 		final File stockDataFile = new File(args[1]);
 		
-		System.out.println("Checking whether new stock data can be added or if all must be repalced");
+		System.out.println("Checking whether new stock data can be added or if all must be replaced");
 		BufferedReader stockDataReader = buildReaderSkipHeader(stockDataFile);
 		AddOrReplaceInfo info = (new AddOrReplaceDeterminer()).determine(companyId, stockDataReader);
 		stockDataReader.close();
