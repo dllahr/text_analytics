@@ -12,6 +12,16 @@ import orm.StockData;
 
 public class StockDataReplacer extends StockDataBuilder {
 	
+	/**
+	 * expected format in reader:
+Date,Open,High,Low,Close,Volume,Adj Close
+2013-07-11,29.60,30.20,29.45,30.17,8894500,30.17
+
+	 * @param companyId
+	 * @param stockDataReader
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public void replaceStockData(int companyId, BufferedReader stockDataReader) throws IOException, ParseException {
 		deleteExistingStockDataForCompany(companyId);
 		

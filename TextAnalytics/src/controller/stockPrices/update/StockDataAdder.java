@@ -12,6 +12,16 @@ public class StockDataAdder extends StockDataBuilder {
 	public StockDataAdder() {
 	}
 
+	/**
+	 * expected format from reader:
+Date,Open,High,Low,Close,Volume,Adj Close
+2013-07-11,29.60,30.20,29.45,30.17,8894500,30.17
+
+	 * @param newestInDatabase
+	 * @param stockDataReader
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public void addStockData(StockData newestInDatabase, BufferedReader stockDataReader) throws IOException, ParseException {
 		
 		String curLine = null;
