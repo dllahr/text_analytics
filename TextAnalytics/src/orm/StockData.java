@@ -118,4 +118,20 @@ public class StockData implements Serializable {
 		setDayTime(dayTime);
 		setDayIndex(Utilities.calculateDayIndex(dayTime));
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(company.getId()).append(Constants.toStringDelimeter);
+		builder.append(dayTime).append(Constants.toStringDelimeter);
+		builder.append(open).append(Constants.toStringDelimeter);
+		builder.append(high).append(Constants.toStringDelimeter);
+		builder.append(low).append(Constants.toStringDelimeter);
+		builder.append(close).append(Constants.toStringDelimeter);
+		builder.append(volume).append(Constants.toStringDelimeter);
+		builder.append(adjustedClose).append(Constants.toStringDelimeter);
+		builder.append(dayIndex);
+
+		return builder.toString();
+	}
 }
