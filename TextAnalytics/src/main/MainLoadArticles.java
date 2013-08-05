@@ -74,6 +74,8 @@ public class MainLoadArticles {
 			System.out.println("saved to database " + count);
 			SessionManager.commit();
 		}
+		
+		System.out.println("end time:  " + new Date());
 	}
 	
 	private static ScoringModel lookupScoringModel(int scoringModelId) {
