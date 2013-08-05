@@ -160,6 +160,10 @@ alter table regression_model add foreign key (company_id) references company(id)
    COMMENT ON TABLE STEM  IS 'contains the set of stems found for articles for each company';
    
    create sequence stem_id_seq start with 1;
+   
+   alter table stem add is_stop number(1,0); 
+   
+   alter table stem modify is_stop not null;
 
 --------------------------------------------------------
 --  DDL for Table STOCK_DATA

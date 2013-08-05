@@ -21,8 +21,10 @@ public class Stem {
 	
 	private String text;
 	
+	private boolean isStop;
+	
 	public Stem() {
-		
+		isStop = false;
 	}
 
 	public Integer getId() {
@@ -47,5 +49,13 @@ public class Stem {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public boolean isStop() {
+		return isStop;
+	}
+
+	public void setStop(boolean isStop) {
+		this.isStop = isStop;
 	}
 }
