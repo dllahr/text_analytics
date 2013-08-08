@@ -1,5 +1,6 @@
 package orm;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +22,7 @@ public class Stem {
 	
 	private String text;
 	
+	@Column(name="IS_STOP")
 	private boolean isStop;
 	
 	public Stem() {
