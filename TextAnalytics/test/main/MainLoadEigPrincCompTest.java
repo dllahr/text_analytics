@@ -40,7 +40,7 @@ public class MainLoadEigPrincCompTest {
 	}
 	
 	private ScoringModel getScoringModel() {
-		ScoringModel sm = (ScoringModel)SessionManager.createQuery("from ScoringModel where id = 1").list().get(0);
+		ScoringModel sm = (ScoringModel)SessionManager.createQuery("from ScoringModel where id = 2").list().get(0);
 		assertNotNull(sm);
 		
 		return sm;
@@ -52,8 +52,19 @@ public class MainLoadEigPrincCompTest {
 		
 		List<Stem> stemList = MainLoadEigPrincComp.getStems(sm);
 		
-		File meanStemVectFile = new File("E:/daves_stuff/projects/text_analytics/companies/kraft/model/just_text/cov_eig_prinComp/mean_stem_vect.csv");
+		File meanStemVectFile = new File("E:/daves_stuff/projects/text_analytics/companies/ge/models/model_jb/cov_eig_prinComp/mean_stem_vect.csv");
+//		assertTrue("do not run this test because it commits unless you really mean to", false);
 		MainLoadEigPrincComp.loadMeanStemVect(meanStemVectFile, sm, stemList);
-//		SessionManager.commit();
+	}
+	
+	@Test
+	public void testCheckForSameParent() {
+		File[] fileArray = {new File("/a/b"), new File("/a/c"), new File("/a/d")};
+		
+		assertTrue(MainLoadEigPrincComp.haveSameParent(fileArray));
+		
+		fileArray[2] = new File("/e/f");
+		
+		assertFalse(MainLoadEigPrincComp.haveSameParent(fileArray));
 	}
 }

@@ -24,6 +24,7 @@ import orm.Stem;
 public class MainLoadEigPrincComp {
 	private static final String delimeter = ",";
 
+	private static final long batchSize = 1000000;
 	/**
 	 * @param args
 	 * @throws IOException 
@@ -35,9 +36,19 @@ public class MainLoadEigPrincComp {
 		final File prinCompFile = new File(args[3]);
 		final File meanStemVectFile = new File(args[4]);
 		
-		ScoringModel sm = findScoringModel(modelId);
+		System.out.println("eigenvalue file:  " + eigvalFile.getAbsolutePath());
+		System.out.println("eigenvector file:  " + eigvectFile.getAbsolutePath());
+		System.out.println("principal component file:  " + prinCompFile.getAbsolutePath());
+		System.out.println("mean stem vector file:  " + meanStemVectFile.getAbsolutePath());
+		if (! haveSameParent(new File[]{})) {
+			System.out.println("WARNING:  these files are not all in the same directory");
+			System.out.println("press any key to continue anyway");
+			System.in.read();
+		}
 		
-		List<Eigenvalue> eigvalList = loadEigenvalues(eigvalFile, sm);
+		ScoringModel scoringModel = findScoringModel(modelId);
+		
+		List<Eigenvalue> eigvalList = loadEigenvalues(eigvalFile, scoringModel);
 		System.out.println("Loaded eigenvalues:  " + eigvalList.size());
 		
 		loadEigenvectors(eigvectFile, eigvalList);
@@ -45,10 +56,8 @@ public class MainLoadEigPrincComp {
 		List<Stem> stemList = getStems(eigvalList.get(0).getScoringModel());
 		loadPrinComps(prinCompFile, eigvalList, stemList);
 		
-		loadMeanStemVect(meanStemVectFile, sm, stemList);
-		
-		System.out.println("Committing to database");
-		SessionManager.commit();
+		loadMeanStemVect(meanStemVectFile, scoringModel, stemList);
+
 		System.out.println("Done!");
 	}
 	
@@ -78,6 +87,12 @@ public class MainLoadEigPrincComp {
 			sortIndex++;
 		}
 		
+		doCommit("eigenvalues");
+		
+		for (Eigenvalue e : result) {
+			SessionManager.merge(e);
+		}
+		
 		reader.close();
 		
 		return result;
@@ -85,6 +100,8 @@ public class MainLoadEigPrincComp {
 	
 	private static void loadEigenvectors(File eigvectFile, List<Eigenvalue> eigvalList) throws IOException {
 		System.out.println("Loading eigenvectors:");
+		
+		final int numEigVal = eigvalList.size();
 		
 		List<Article> articleList = getArticles(eigvalList.get(0).getScoringModel());
 		
@@ -113,7 +130,11 @@ public class MainLoadEigPrincComp {
 			lineNum++;
 			
 			if (lineNum%1000 == 0) {
-				System.out.println("load eigenvector current lineNum:  " + lineNum);
+				System.out.println("read eigenvector current lineNum:  " + lineNum);
+			}
+			
+			if ((lineNum*numEigVal)%batchSize == 0) {
+				doCommit("eigenvectors");
 			}
 		}
 		
@@ -126,6 +147,11 @@ public class MainLoadEigPrincComp {
 				}
 			}
 		}
+		
+		if ((lineNum*numEigVal)%batchSize != 0) {
+			doCommit("eigenvectors");
+		}
+
 		reader.close();
 	}
 	
@@ -138,12 +164,13 @@ public class MainLoadEigPrincComp {
 
 	private static void loadPrinComps(File prinCompFile, List<Eigenvalue> eigvalList, List<Stem> stemList) throws IOException {
 		System.out.println("loading principal components:");
+		final int numEigVal = eigvalList.size();
 		
-		System.out.println("getting stems from database:");
+		System.out.println("\tgetting stems from database:");
 		
 		BufferedReader reader = new BufferedReader(new FileReader(prinCompFile));
 
-		System.out.println("loading values:");
+		System.out.println("\treading:");
 		int lineNum = 0;
 		
 		String curLine;
@@ -170,7 +197,11 @@ public class MainLoadEigPrincComp {
 			lineNum++;
 			
 			if (lineNum%1000 == 0) {
-				System.out.println("load principal component current lineNum:  " + lineNum);
+				System.out.println("read principal component current lineNum:  " + lineNum);
+			}
+			
+			if ((lineNum*numEigVal)%batchSize == 0) {
+				doCommit("principal components");
 			}
 		}
 
@@ -180,9 +211,13 @@ public class MainLoadEigPrincComp {
 
 			while ((endLine = reader.readLine()) != null) {
 				if (endLine.trim() != "") {
-					throw new RuntimeException("eigenvector load:  there were more rows in the file than there were articles for the scoring model");
+					throw new RuntimeException("principal component load:  there were more rows in the file than there were stems for the scoring model");
 				}
 			}
+		}
+		
+		if ((lineNum*numEigVal)%batchSize != 0) {
+			doCommit("principal components");
 		}
 		
 		reader.close();
@@ -197,7 +232,7 @@ public class MainLoadEigPrincComp {
 	
 	
 	static void loadMeanStemVect(File meanStemVectFile, ScoringModel scoringModel, List<Stem> stemList) throws IOException {
-		System.out.println("loading mean stem vector");
+		System.out.println("reading mean stem vector");
 
 		BufferedReader reader = new BufferedReader(new FileReader(meanStemVectFile));
 
@@ -216,11 +251,30 @@ public class MainLoadEigPrincComp {
 			String endLine;
 			while ((endLine = reader.readLine()) != null) {
 				if (endLine.trim() != "") {
-					throw new RuntimeException("eigenvector load:  there were more rows in the file than there were articles for the scoring model");
+					throw new RuntimeException("mean stem vector load:  there were more rows in the file than there were stems for the scoring model");
 				}
 			}
 		}
 		reader.close();
 		
+		doCommit("mean stem vector");
+	}
+	
+	private static void doCommit(String loadEntityName) {
+		System.out.print("saving " + loadEntityName + " ... ");
+		SessionManager.commit();
+		System.out.println("done");
+	}
+	
+	static boolean haveSameParent(File[] fileArray) {
+		String directory = fileArray[0].getParentFile().getAbsolutePath();
+		
+		for (int i = 0; i < fileArray.length; i++) {
+			if (! fileArray[i].getParentFile().getAbsolutePath().equals(directory)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }
