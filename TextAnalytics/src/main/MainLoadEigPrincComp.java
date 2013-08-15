@@ -142,7 +142,7 @@ public class MainLoadEigPrincComp {
 			String endLine;
 
 			while ((endLine = reader.readLine()) != null) {
-				if (endLine.trim() != "") {
+				if (! endLine.trim().equals("")) {
 					throw new RuntimeException("eigenvector load:  there were more rows in the eigenvector file than there were articles for the scoring model");
 				}
 			}
@@ -210,7 +210,7 @@ public class MainLoadEigPrincComp {
 			String endLine;
 
 			while ((endLine = reader.readLine()) != null) {
-				if (endLine.trim() != "") {
+				if (! endLine.trim().equals("")) {
 					throw new RuntimeException("principal component load:  there were more rows in the file than there were stems for the scoring model");
 				}
 			}
@@ -250,7 +250,7 @@ public class MainLoadEigPrincComp {
 		if (! stemIter.hasNext()) {
 			String endLine;
 			while ((endLine = reader.readLine()) != null) {
-				if (endLine.trim() != "") {
+				if (! endLine.trim().equals("")) {
 					throw new RuntimeException("mean stem vector load:  there were more rows in the file than there were stems for the scoring model");
 				}
 			}

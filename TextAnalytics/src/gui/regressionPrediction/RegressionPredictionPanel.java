@@ -69,7 +69,7 @@ public class RegressionPredictionPanel extends JPanel {
 
 			@Override
 			public int compare(RegressionModel o1, RegressionModel o2) {
-				if (o1.getScoringModel().getId() == o2.getScoringModel().getId()) {
+				if (o1.getScoringModel().getId().equals(o2.getScoringModel().getId())) {
 					return o1.getId() - o2.getId();
 				} else {
 					return o1.getScoringModel().getNotes().compareTo(o2.getScoringModel().getNotes());

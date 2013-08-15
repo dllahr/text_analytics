@@ -27,7 +27,7 @@ public class ArticlePrincipalComponentValuesCalculatorTest {
 		
 		for (int i = 0; i < 10; i++) {
 			for (Eigenvalue e : artPcv.prinCompValuesMap.keySet()) {
-				if (e.getId() == i) {
+				if (e.getId().equals(i)) {
 					System.out.println(i + " " + artPcv.prinCompValuesMap.get(e));
 					break;
 				}

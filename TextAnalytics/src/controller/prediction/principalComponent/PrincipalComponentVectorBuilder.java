@@ -31,7 +31,7 @@ class PrincipalComponentVectorBuilder {
 		for (Object[] row : rowList) {
 			Integer curEigId = ((BigDecimal)row[0]).intValue();
 			
-			if (prevEig.getId() != curEigId) {
+			if (! prevEig.getId().equals(curEigId)) {
 				System.out.println("current eigenvalue id:  " + curEigId);
 				
 				prevEig = findEigenvalue(curEigId);

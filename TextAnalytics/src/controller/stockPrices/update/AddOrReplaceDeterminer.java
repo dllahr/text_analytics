@@ -58,7 +58,7 @@ public class AddOrReplaceDeterminer {
 			}
 		}
 
-		if (newest.getDayIndex() == dayIndex) {
+		if (newest.getDayIndex().equals(dayIndex)) {
 			final double adjClose = Double.valueOf(split[InputFormatConstants.adjCloseCol]);
 
 			System.out.println("found matching dayIndex, adjusted close is:  " + adjClose);
