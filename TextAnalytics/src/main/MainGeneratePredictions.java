@@ -3,6 +3,7 @@ package main;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -30,15 +31,19 @@ public class MainGeneratePredictions {
 		final DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
 		final Date minArticleDate = dateFormat.parse(args[1]);
 
-		final int predictionModelId = Integer.valueOf(args[2]);
+		final List<Integer> predictionModelIdList = parsePredictionModelIdListParameter(args[2]);
 		
 		final int minArticleDayIndex = Utilities.calculateDayIndex(minArticleDate);
 		
 		System.out.println("find regression model with ID:  " + regressionModelId);
 		RegressionModel rm = RegressionModel.findById(regressionModelId);
 		
-		System.out.println("find prediction model with ID:  " + predictionModelId);
-		PredictionModel pm = PredictionModel.findById(predictionModelId);
+		System.out.print("find prediction model with ID's:  ");
+		for (int id : predictionModelIdList) {
+			System.out.print(id + " ");
+		}
+		System.out.println();
+		List<PredictionModel> pmList = PredictionModel.findAllById(predictionModelIdList);
 		
 		System.out.println("retrieve principal component values aggregated by article publish day.  min article date:  " + minArticleDayIndex);
 		List<DayPrincipalComponentValueVector> dayPcValVectList = 
@@ -62,10 +67,10 @@ public class MainGeneratePredictions {
 		}
 		
 		System.out.println("generate predictions:");
-		List<Prediction> predictionList = (new PredictionBuilder()).build(pm, rawPredictionList);
+		List<Prediction> predictionList = (new PredictionBuilder()).build(pmList, rawPredictionList);
 		
 		System.out.println("lookup results of predictions:");
-		(new PredictionResultBuilder()).build(predictionList, pm);
+		(new PredictionResultBuilder()).build(predictionList);
 		
 		int[] resultBins = {0, 0, 0, 0};
 		
@@ -113,5 +118,17 @@ public class MainGeneratePredictions {
 		}
 		
 		return fracResultBins;
+	}
+	
+	static List<Integer> parsePredictionModelIdListParameter(String predictionModelIdListParam) {
+		String[] split = predictionModelIdListParam.trim().split(",");
+		
+		List<Integer> result = new ArrayList<>(split.length);
+		
+		for (int i = 0; i < split.length; i++) {
+			result.add(Integer.valueOf(split[i].trim()));
+		}
+		
+		return result;
 	}
 }

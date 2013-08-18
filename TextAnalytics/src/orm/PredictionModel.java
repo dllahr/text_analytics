@@ -1,7 +1,9 @@
 package orm;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.Query;
+
+import controller.util.Utilities;
 
 
 @Entity
@@ -193,17 +197,24 @@ public class PredictionModel {
 	}
 	
 	public static PredictionModel findById(int predictionModelId) {
-		Query query = SessionManager.createQuery("from PredictionModel where id = :id");
-		query.setInteger("id", predictionModelId);
+		List<Integer> predictionModelIdList = new LinkedList<>();
+		predictionModelIdList.add(predictionModelId);
 		
-		@SuppressWarnings("rawtypes")
-		List list = query.list();
+		List<PredictionModel> resultList = findAllById(predictionModelIdList);
 		
-		if (list.size() > 0) {
-			return (PredictionModel)list.get(0);
-		} else {
+		if (resultList.size() == 1) {
+			return resultList.get(0);
+		} else if (resultList.size() == 0) {
 			return null;
+		} else {
+			throw new RuntimeException("PredictionModel findById should have only found one or zero prediction model when searching by ID, found more than one");
 		}
-				
+	}
+	
+	public static List<PredictionModel> findAllById(Collection<Integer> predictionModelIdColl) {
+		Query query = SessionManager.createQuery("from PredictionModel where id in (:idList)");
+		query.setParameterList("idList", predictionModelIdColl);
+		
+		return Utilities.convertGenericList(query.list());
 	}
 }

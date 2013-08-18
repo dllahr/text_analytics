@@ -2,6 +2,7 @@ package main;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -14,17 +15,30 @@ import orm.SessionManager;
 import controller.prediction.principalComponent.ArticlePcValueSaver;
 import controller.prediction.principalComponent.ArticlePrincipalComponentValueCalculator;
 import controller.prediction.principalComponent.ArticlePrincipalComponentValues;
+import controller.util.Utilities;
 
 
 public class MainGeneratePrincipalComponentValues {
+	private static final String dateFormatString = "yyyy-MM-dd";
 
 	private static final String mostRecentDateQueryString = "select max(day_index) from article where " +
 			"scoring_model_id = :scoringModelId and id in (select article_id from article_pc_value)";
 	
 	public static void main(String[] args) throws ParseException {
-		final int scoringModelId = Integer.valueOf(args[0]);
+		System.out.println("Generate principal component values");
 		
-		final int mostRecentDayIndex = getMostRecentDayIndexOfArticleWithPrincipalComponentValue(scoringModelId);
+		final int scoringModelId = Integer.valueOf(args[0]);
+		System.out.println("scoring model id:  " + scoringModelId);
+		
+		final int mostRecentDayIndex;
+		if (args[1].equals("-d")) {
+			System.out.println("-d option present, parsing date from arguments");
+
+			mostRecentDayIndex = Utilities.calculateDayIndex((new SimpleDateFormat(dateFormatString)).parse(args[2]));
+		} else {
+			mostRecentDayIndex = getMostRecentDayIndexOfArticleWithPrincipalComponentValue(scoringModelId);
+		}
+		System.out.println("Most recent date:  " + mostRecentDayIndex);
 		
 		final Date minDate = new Date(Constants.millisPerDay*(mostRecentDayIndex+1));
 		

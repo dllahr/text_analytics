@@ -17,25 +17,25 @@ public class PredictionBuilder {
 	 * @param rawPredColl sorted by dayIndex
 	 * @return
 	 */
-	public List<Prediction> build(PredictionModel pm, List<DayIndexRawPredictionPair> rawPredColl) {
+	public List<Prediction> build(Collection<PredictionModel> pmColl, List<DayIndexRawPredictionPair> rawPredColl) {
 
-		List<Prediction> result;
+		List<Prediction> result = new LinkedList<>();
 		
-		List<DayIndexRawPredictionPair> filteredRawList = filterRawPredictions(rawPredColl, pm);
-		
-		if (filteredRawList.size() > 0) {
-			final int minDayIndex = filteredRawList.get(0).initialDayIndex;
-			
-			SmoothedStockPriceParams params = determineParams(pm.buildRelDayIndexSortedList(), minDayIndex);
-			
-			SmoothedStockPrices smoothedStockPrices = new SmoothedStockPrices(params.minDayIndex, 
-					pm.getRegressionModel().getCompany(), params.weights);
-			
-			result = buildPredictions(smoothedStockPrices, filteredRawList, pm);
-		} else {
-			System.out.println("PredictionBuilder build none of the raw predictions passed the filter for prediction model:  " + pm.getId());
-			
-			result = new LinkedList<>();
+		for (PredictionModel pm : pmColl) {
+			List<DayIndexRawPredictionPair> filteredRawList = filterRawPredictions(rawPredColl, pm);
+
+			if (filteredRawList.size() > 0) {
+				final int minDayIndex = filteredRawList.get(0).initialDayIndex;
+
+				SmoothedStockPriceParams params = determineParams(pm.buildRelDayIndexSortedList(), minDayIndex);
+
+				SmoothedStockPrices smoothedStockPrices = new SmoothedStockPrices(params.minDayIndex, 
+						pm.getRegressionModel().getCompany(), params.weights);
+
+				result.addAll(buildPredictions(smoothedStockPrices, filteredRawList, pm));
+			} else {
+				System.out.println("PredictionBuilder build none of the raw predictions passed the filter for prediction model:  " + pm.getId());
+			}
 		}
 		
 		return result;
@@ -53,7 +53,7 @@ public class PredictionBuilder {
 				final double pricePercentile50 = pm.getPercentile50Value() * initialPrice;
 				final double pricePercentile75 = pm.getPercentile75Value() * initialPrice;
 
-				result.add(new Prediction(raw.initialDayIndex, raw.predictionDayIndex, pricePercentile25, pricePercentile50, pricePercentile75));
+				result.add(new Prediction(raw.initialDayIndex, raw.predictionDayIndex, pricePercentile25, pricePercentile50, pricePercentile75, pm));
 			} else {
 				System.out.println("PredictionBuilder buildPredictions unable to calculate prediction because stock data not in database.  day index:  " 
 						+ raw.initialDayIndex);
