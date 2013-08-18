@@ -15,7 +15,11 @@ public class DayIndexRawPredictionPair {
 
 	@Override
 	public String toString() {
-		return initialDayIndex + Constants.toStringDelimeter + predictionDayIndex 
-				+ Constants.toStringDelimeter + prediction;
+		StringBuilder builder = new StringBuilder();
+		builder.append(initialDayIndex).append(Constants.toStringDelimeter);
+		builder.append(predictionDayIndex).append(Constants.toStringDelimeter);
+		builder.append(String.format("%.5G", prediction));
+		
+		return builder.toString();
 	}
 }

@@ -6,6 +6,8 @@ import orm.PredictionModel;
 
 
 public class Prediction {
+	private static final String priceDisplayPrecision = "%.5G";
+
 	public final int initialDayIndex;
 	
 	public final int predictionDayIndex;
@@ -36,11 +38,11 @@ public class Prediction {
 		StringBuilder builder = new StringBuilder();
 		builder.append(initialDayIndex).append(Constants.toStringDelimeter);
 		builder.append(predictionDayIndex).append(Constants.toStringDelimeter);
-		builder.append(pricePercentile25).append(Constants.toStringDelimeter);
-		builder.append(pricePercentile50).append(Constants.toStringDelimeter);
-		builder.append(pricePercentile75).append(Constants.toStringDelimeter);
+		builder.append(String.format(priceDisplayPrecision, pricePercentile25)).append(Constants.toStringDelimeter);
+		builder.append(String.format(priceDisplayPrecision, pricePercentile50)).append(Constants.toStringDelimeter);
+		builder.append(String.format(priceDisplayPrecision, pricePercentile75)).append(Constants.toStringDelimeter);
 		builder.append(predictionModel.getId()).append(Constants.toStringDelimeter);
-		builder.append(result);
+		builder.append(String.format(priceDisplayPrecision, result));
 
 		return builder.toString();
 	}

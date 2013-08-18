@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import orm.PredictionModel;
 import orm.RegressionModel;
@@ -65,14 +67,13 @@ public class MainGeneratePredictions {
 		for (DayIndexRawPredictionPair raw : rawPredictionList) {
 			System.out.println(raw);
 		}
+		System.out.println();
 		
 		System.out.println("generate predictions:");
 		List<Prediction> predictionList = (new PredictionBuilder()).build(pmList, rawPredictionList);
 		
 		System.out.println("lookup results of predictions:");
 		(new PredictionResultBuilder()).build(predictionList);
-		
-		int[] resultBins = {0, 0, 0, 0};
 		
 		System.out.println("predictions and results where available:");
 		for (Prediction prediction : predictionList) {
@@ -82,29 +83,33 @@ public class MainGeneratePredictions {
 			builder.append(dateFormat.format(Utilities.calculateDate(prediction.predictionDayIndex))).append(" ");
 			
 			System.out.println(builder);
-			
-			if (prediction.result != null) {
-				if (prediction.result <= prediction.pricePercentile25) {
-					resultBins[0]++;
-				} else if (prediction.result <= prediction.pricePercentile50) {
-					resultBins[1]++;
-				} else if (prediction.result <= prediction.pricePercentile75) {
-					resultBins[2]++;
-				} else {
-					resultBins[3]++;
-				}
-			}
-		}
-		
-		System.out.println("fraction of results in each quartile:");
-		double[] fracResultBins = calculateFracResultBins(resultBins);
-		for (double fraction : fracResultBins) {
-			System.out.print(fraction + " ");
 		}
 		System.out.println();
+
+
+		System.out.println();
+		Map<PredictionModel, Integer[]> predictionModelResultBinMap = calculateResultBins(predictionList);
+		for (PredictionModel pm : pmList) {
+			System.out.println("fraction of results in each quartile, for prediction model " + pm.getId());
+
+			Integer[] resultBins = predictionModelResultBinMap.get(pm);
+			
+			if (resultBins != null) {
+				double[] fracResultBins = calculateFracResultBins(resultBins);
+				for (double fraction : fracResultBins) {
+					System.out.print(String.format("%.3G", fraction) + " ");
+				}
+				System.out.println();
+
+			} else {
+				System.out.println("Warning:  no predictions made for prediction model " + pm.getId());
+			}
+			
+			System.out.println();
+		}		
 	}
 	
-	static double[] calculateFracResultBins(int[] resultBins) {
+	static double[] calculateFracResultBins(Integer[] resultBins) {
 		double[] fracResultBins = new double[resultBins.length];
 		
 		int sum = 0;
@@ -118,6 +123,37 @@ public class MainGeneratePredictions {
 		}
 		
 		return fracResultBins;
+	}
+	
+	static Map<PredictionModel, Integer[]> calculateResultBins(List<Prediction> predictionList) {
+		Map<PredictionModel, Integer[]> result = new HashMap<PredictionModel, Integer[]>();
+		
+		for (Prediction prediction : predictionList) {
+			Integer[] resultBins = result.get(prediction.predictionModel);
+			if (null == resultBins) {
+				final int numBins = 4;
+				resultBins = new Integer[numBins];
+				for (int i = 0; i < numBins; i++) {
+					resultBins[i] = 0;
+				}
+
+				result.put(prediction.predictionModel, resultBins);
+			}
+
+			if (prediction.result != null) {
+				if (prediction.result <= prediction.pricePercentile25) {
+					resultBins[0]++;
+				} else if (prediction.result <= prediction.pricePercentile50) {
+					resultBins[1]++;
+				} else if (prediction.result <= prediction.pricePercentile75) {
+					resultBins[2]++;
+				} else {
+					resultBins[3]++;
+				}
+			}
+		}
+		
+		return result;
 	}
 	
 	static List<Integer> parsePredictionModelIdListParameter(String predictionModelIdListParam) {
