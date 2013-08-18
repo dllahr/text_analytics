@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import controller.integration.readAndSplitRawFile.SplitArticle;
+import controller.util.Counter;
 
 import gate.Annotation;
 import gate.Corpus;

@@ -21,6 +21,7 @@ import controller.prediction.regressionModel.DayPrincipalComponentValueVectorBui
 import controller.prediction.regressionModel.Prediction;
 import controller.prediction.regressionModel.PredictionBuilder;
 import controller.prediction.regressionModel.PredictionResultBuilder;
+import controller.util.Counter;
 import controller.util.Utilities;
 
 
@@ -63,6 +64,7 @@ public class MainGeneratePredictions {
 			}
 		});
 		
+
 		System.out.println("raw predictions:");
 		for (DayIndexRawPredictionPair raw : rawPredictionList) {
 			System.out.println(raw);

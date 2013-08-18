@@ -1,4 +1,4 @@
-package controller.stemCountArticles;
+package controller.util;
 
 public class Counter {
 	private int count;
