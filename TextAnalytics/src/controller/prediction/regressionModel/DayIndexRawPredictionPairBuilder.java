@@ -11,7 +11,7 @@ import orm.RegressionModel;
 import orm.RegressionModelCoef;
 import orm.SessionManager;
 
-import math.linearAlgebra.DenseFixedVector;
+import math.linearAlgebra.SparseVector;
 import math.linearAlgebra.Vector;
 
 public class DayIndexRawPredictionPairBuilder {
@@ -32,21 +32,22 @@ public class DayIndexRawPredictionPairBuilder {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param regressionModelId
+	 * @return position in vector corresponds to sort index of eigenvalue
+	 */
 	static Vector buildRegressionModelCoefVector(int regressionModelId) {
 		Query query = SessionManager.createQuery("from RegressionModelCoef where regressionModel.id = :rmId "
-				+ "and eigenvalue is not null "
-				+ "order by eigenvalue.sortIndex");
+				+ "and eigenvalue is not null");
 		query.setInteger("rmId", regressionModelId);
 		
 		List<RegressionModelCoef> coefList = Utilities.convertGenericList(query.list());
 		
-		Vector result = new DenseFixedVector(coefList.size());
+		Vector result = new SparseVector();
 		
-		int index = 0;
 		for (RegressionModelCoef coef : coefList) {
-			result.setEntry(index, coef.getCoef());
-
-			index++;
+			result.setEntry(coef.getEigenvalue().getSortIndex(), coef.getCoef());
 		}
 
 		return result;

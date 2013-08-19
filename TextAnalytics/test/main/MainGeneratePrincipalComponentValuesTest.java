@@ -13,6 +13,7 @@ public class MainGeneratePrincipalComponentValuesTest {
 	@Test
 	public void testGetMostRecent() {
 		System.out.println(MainGeneratePrincipalComponentValues.getMostRecentDayIndexOfArticleWithPrincipalComponentValue(1));
+		assertTrue(true);
 	}
 
 	@Test

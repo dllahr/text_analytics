@@ -2,6 +2,7 @@ package controller.prediction.regressionModel;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -26,9 +27,21 @@ public class DayPrincipalComponentValueVectorBuilderTest {
 	
 	@Test
 	public void testRetrieveArticlePcValues() {
-		List<ArticlePcValue> list = DayPrincipalComponentValueVectorBuilder.retrieveArticlePcValues(1, 15834);
+		List<Integer> eigIdList = new ArrayList<>();
+		for (int i = 1; i <= 100; i++) {
+			eigIdList.add(i);
+		}
+
+		List<ArticlePcValue> list = DayPrincipalComponentValueVectorBuilder.retrieveArticlePcValues(15834, eigIdList);
 		assertNotNull(list);
-		assertEquals(400, list.size());
+		
+		int count = 0;
+		for (ArticlePcValue apv : list) {
+			if (apv.getArticle().getDayIndex() == 15834) {
+				count++;
+			}
+		}
+		assertEquals(300, count);
 	}
 
 	@Test

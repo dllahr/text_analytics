@@ -11,8 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Query;
+
 import orm.PredictionModel;
 import orm.RegressionModel;
+import orm.SessionManager;
 
 import controller.prediction.regressionModel.DayIndexRawPredictionPair;
 import controller.prediction.regressionModel.DayIndexRawPredictionPairBuilder;
@@ -21,7 +24,6 @@ import controller.prediction.regressionModel.DayPrincipalComponentValueVectorBui
 import controller.prediction.regressionModel.Prediction;
 import controller.prediction.regressionModel.PredictionBuilder;
 import controller.prediction.regressionModel.PredictionResultBuilder;
-import controller.util.Counter;
 import controller.util.Utilities;
 
 
@@ -50,7 +52,8 @@ public class MainGeneratePredictions {
 		
 		System.out.println("retrieve principal component values aggregated by article publish day.  min article date:  " + minArticleDayIndex);
 		List<DayPrincipalComponentValueVector> dayPcValVectList = 
-				(new DayPrincipalComponentValueVectorBuilder()).build(rm.getScoringModel().getId(), minArticleDayIndex);
+				(new DayPrincipalComponentValueVectorBuilder()).build(minArticleDayIndex, 
+						retrieveEigenvalueIdsForRegressionModel(regressionModelId));
 		
 		System.out.println("generate raw predictions based regression model and principal component values:");
 		List<DayIndexRawPredictionPair> rawPredictionList = 
@@ -69,8 +72,10 @@ public class MainGeneratePredictions {
 		for (DayIndexRawPredictionPair raw : rawPredictionList) {
 			System.out.println(raw);
 		}
+		System.out.println("total count of raw predictions: " + rawPredictionList.size());
 		System.out.println();
-		
+
+
 		System.out.println("generate predictions:");
 		List<Prediction> predictionList = (new PredictionBuilder()).build(pmList, rawPredictionList);
 		
@@ -168,5 +173,12 @@ public class MainGeneratePredictions {
 		}
 		
 		return result;
+	}
+	
+	static List<Integer> retrieveEigenvalueIdsForRegressionModel(int regressionModelId) {
+		Query query = SessionManager.createQuery("select eigenvalue.id from RegressionModelCoef where regressionModel.id = :regressionModelId");
+		query.setInteger("regressionModelId", regressionModelId);
+		
+		return Utilities.convertGenericList(query.list());
 	}
 }

@@ -2,6 +2,8 @@ package controller.prediction.regressionModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,6 +39,13 @@ public class PredictionBuilder {
 				System.out.println("PredictionBuilder build none of the raw predictions passed the filter for prediction model:  " + pm.getId());
 			}
 		}
+		
+		Collections.sort(result, new Comparator<Prediction>() {
+			@Override
+			public int compare(Prediction o1, Prediction o2) {
+				return o1.initialDayIndex - o2.initialDayIndex;
+			}
+		});
 		
 		return result;
 	}

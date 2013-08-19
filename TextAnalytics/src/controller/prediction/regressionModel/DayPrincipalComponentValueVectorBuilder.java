@@ -1,13 +1,11 @@
 package controller.prediction.regressionModel;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import math.linearAlgebra.DenseFixedVector;
+import math.linearAlgebra.SparseVector;
 import math.linearAlgebra.Vector;
 
 import org.hibernate.Query;
@@ -28,9 +26,16 @@ public class DayPrincipalComponentValueVectorBuilder {
 		mapBuilder = new MapBuilder();
 	}
 
-	public List<DayPrincipalComponentValueVector> build(int scoringModelId, int minDayIndex) {
+	/**
+	 * 
+	 * @param scoringModelId
+	 * @param minDayIndex
+	 * @param eigenvalueIdList
+	 * @return vectors have principal components at positions specified by sort index of eigenvalues
+	 */
+	public List<DayPrincipalComponentValueVector> build(int minDayIndex, List<Integer> eigenvalueIdList) {
 		
-		Map<DayEigenvalue, List<Double>> map = organizePcValByDayIndex(retrieveArticlePcValues(scoringModelId, minDayIndex));
+		Map<DayEigenvalue, List<Double>> map = organizePcValByDayIndex(retrieveArticlePcValues(minDayIndex, eigenvalueIdList));
 		
 		return aggregateByDay(map);
 	}
@@ -46,14 +51,11 @@ public class DayPrincipalComponentValueVectorBuilder {
 				this.average = average;
 			}
 		}
-		
-		//for determining the number of eigenvectors
-		Set<Eigenvalue> eigSet = new HashSet<>();
+
 		
 		//convert the provided map into a list of key-value pairs, calculating the average of the list in map-value
 		List<Pair> pairList = new ArrayList<>(map.size());
 		for (DayEigenvalue dayEigenvalue : map.keySet()) {
-			eigSet.add(dayEigenvalue.eig);
 			
 			List<Double> valueList = map.get(dayEigenvalue);
 			
@@ -64,9 +66,7 @@ public class DayPrincipalComponentValueVectorBuilder {
 
 			pairList.add(new Pair(dayEigenvalue, sum/valueList.size()));
 		}
-		
-		final int numEig = eigSet.size();
-		eigSet = null;
+
 		
 		ValueOperator<Pair, Integer, Vector> vo = new ValueOperator<Pair, Integer, Vector>() {
 			@Override
@@ -75,7 +75,7 @@ public class DayPrincipalComponentValueVectorBuilder {
 			}
 			@Override
 			public Vector buildNew() {
-				return new DenseFixedVector(numEig);
+				return new SparseVector();
 			}
 			@Override
 			public void addValue(Pair t, Vector aggregation) {
@@ -116,11 +116,12 @@ public class DayPrincipalComponentValueVectorBuilder {
 	
 	
 	
-	static List<ArticlePcValue> retrieveArticlePcValues(int scoringModelId, int minDayIndex) {
-		Query query = SessionManager.createQuery("from ArticlePcValue where eigenvalue.scoringModel.id = :smId" +
-				" and article.dayIndex >= :minDayIndex");
-		query.setInteger("smId", scoringModelId);
+	static List<ArticlePcValue> retrieveArticlePcValues(int minDayIndex, List<Integer> eigenvalueIdList) {
+		
+		Query query = SessionManager.createQuery("from ArticlePcValue where " +
+				" article.dayIndex >= :minDayIndex and eigenvalue.id in (:eigenvalueIdList)");
 		query.setInteger("minDayIndex", minDayIndex);
+		query.setParameterList("eigenvalueIdList", eigenvalueIdList);
 		
 		return Utilities.convertGenericList(query.list());
 	}
