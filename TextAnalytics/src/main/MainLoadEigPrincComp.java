@@ -40,7 +40,7 @@ public class MainLoadEigPrincComp {
 		System.out.println("eigenvector file:  " + eigvectFile.getAbsolutePath());
 		System.out.println("principal component file:  " + prinCompFile.getAbsolutePath());
 		System.out.println("mean stem vector file:  " + meanStemVectFile.getAbsolutePath());
-		if (! haveSameParent(new File[]{})) {
+		if (! haveSameParent(new File[]{eigvalFile, eigvectFile, prinCompFile, meanStemVectFile})) {
 			System.out.println("WARNING:  these files are not all in the same directory");
 			System.out.println("press any key to continue anyway");
 			System.in.read();
