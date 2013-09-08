@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.hibernate.Query;
 
-import orm.Constants;
 import orm.SessionManager;
 
 import controller.prediction.principalComponent.ArticlePcValueSaver;
@@ -31,16 +30,18 @@ public class MainGeneratePrincipalComponentValues {
 		System.out.println("scoring model id:  " + scoringModelId);
 		
 		final int mostRecentDayIndex;
-		if (args[1].equals("-d")) {
+		if (args.length > 1 && args[1].equals("-d")) {
 			System.out.println("-d option present, parsing date from arguments");
 
 			mostRecentDayIndex = Utilities.calculateDayIndex((new SimpleDateFormat(dateFormatString)).parse(args[2]));
 		} else {
 			mostRecentDayIndex = getMostRecentDayIndexOfArticleWithPrincipalComponentValue(scoringModelId);
 		}
-		System.out.println("Most recent date:  " + mostRecentDayIndex);
+		System.out.println("Most recent date:  " + mostRecentDayIndex + " " + Utilities.calculateDate(mostRecentDayIndex));
 		
-		final Date minDate = new Date(Constants.millisPerDay*(mostRecentDayIndex+1));
+		final int minDayIndex = mostRecentDayIndex+1;
+		final Date minDate = Utilities.calculateDate(minDayIndex);
+		System.out.println("start date:  " + minDayIndex + " " + minDate);
 		
 		List<ArticlePrincipalComponentValues> list = 
 				(new ArticlePrincipalComponentValueCalculator()).calculate(scoringModelId, minDate);

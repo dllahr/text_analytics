@@ -58,7 +58,7 @@ public class ArticleStemCountVectorBuilder {
 		Query query = SessionManager.createQuery("from ArticleStemCount where article.scoringModel.id = :smId and article.publishDate >= :date");
 		query.setInteger("smId", scoringModelId);
 		query.setDate("date", minDate);
-		
+
 		return Utilities.convertGenericList(query.list());
 	}
 }

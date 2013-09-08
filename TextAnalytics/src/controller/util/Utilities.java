@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import orm.Constants;
-
 public class Utilities {
+	private static final long millisPerDay = 1000*60*60*24;
+	
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> convertGenericList(@SuppressWarnings("rawtypes") List objList) {
 		List<T> result = new ArrayList<>(objList.size());
@@ -17,10 +17,10 @@ public class Utilities {
 	}
 	
 	public static int calculateDayIndex(Date date) {
-		return (int) (date.getTime() / Constants.millisPerDay);
+		return (int) (date.getTime() / millisPerDay);
 	}
 	
 	public static Date calculateDate(int dayIndex) {
-		return new Date(Constants.millisPerDay * dayIndex);
+		return new Date(millisPerDay * (dayIndex+1));
 	}
 }
