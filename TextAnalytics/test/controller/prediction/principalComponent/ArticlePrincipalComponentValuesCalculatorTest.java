@@ -4,20 +4,27 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
 
+import orm.Article;
 import orm.Eigenvalue;
 
 public class ArticlePrincipalComponentValuesCalculatorTest {
 
 	@Test
 	public void test() throws ParseException {
+		final int scoringModelId = 1;
+		final Date date = (new SimpleDateFormat("yyyy-MM-dd").parse("2013-05-10"));
+		
+		List<Integer> articleIdList = 
+				Article.retrieveArticleIdsForMinDateAndScoringModel(date, date, scoringModelId);
+		
 		ArticlePrincipalComponentValueCalculator calc = new ArticlePrincipalComponentValueCalculator();
 		
-		List<ArticlePrincipalComponentValues> list = 
-				calc.calculate(1, (new SimpleDateFormat("yyyy-MM-dd").parse("2013-05-10")));
+		List<ArticlePrincipalComponentValues> list = calc.calculate(scoringModelId, articleIdList);
 		
 		assertNotNull(list);
 		assertTrue(list.size() > 0);
@@ -32,6 +39,13 @@ public class ArticlePrincipalComponentValuesCalculatorTest {
 					break;
 				}
 			}
+		}
+	}
+	
+	@Test
+	public void fake() {
+		for (int i = 0; i < 10; i++) {
+			System.out.println(i++);
 		}
 	}
 

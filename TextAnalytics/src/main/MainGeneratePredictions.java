@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Query;
 
+import orm.Article;
 import orm.PredictionModel;
 import orm.RegressionModel;
-import orm.SessionManager;
+import orm.RegressionModelCoef;
 
 import controller.prediction.regressionModel.DayIndexRawPredictionPair;
 import controller.prediction.regressionModel.DayIndexRawPredictionPairBuilder;
@@ -28,7 +28,7 @@ import controller.util.Utilities;
 
 
 public class MainGeneratePredictions {
-	static final String dateFormatString = "yyyy-MM-dd";
+	private static final String dateFormatString = "yyyy-MM-dd";
 	
 	public static void main(String[] args) throws ParseException {
 		//parse command line options
@@ -44,7 +44,7 @@ public class MainGeneratePredictions {
 		System.out.println("find regression model with ID:  " + regressionModelId);
 		RegressionModel rm = RegressionModel.findById(regressionModelId);
 		
-		List<Integer> articleIdList = retrieveArticleIdsForMinDateAndScoringModel(minArticleDate, maxArticleDate,
+		List<Integer> articleIdList = Article.retrieveArticleIdsForMinDateAndScoringModel(minArticleDate, maxArticleDate,
 				rm.getScoringModel().getId());
 		
 		System.out.print("find prediction model with ID's:  ");
@@ -57,7 +57,7 @@ public class MainGeneratePredictions {
 		System.out.println("retrieve principal component values aggregated by article publish day.  Min/Max article dates: " + args[2] + " " + (args.length >= 4 ? args[3] : ""));
 		List<DayPrincipalComponentValueVector> dayPcValVectList = 
 				(new DayPrincipalComponentValueVectorBuilder()).build(articleIdList, 
-						retrieveEigenvalueIdsForRegressionModel(regressionModelId));
+						RegressionModelCoef.retrieveEigenvalueIdsForRegressionModel(regressionModelId));
 		
 		System.out.println("generate raw predictions based regression model and principal component values:");
 		List<DayIndexRawPredictionPair> rawPredictionList = 
@@ -177,38 +177,5 @@ public class MainGeneratePredictions {
 		}
 		
 		return result;
-	}
-	
-	static List<Integer> retrieveEigenvalueIdsForRegressionModel(int regressionModelId) {
-		Query query = SessionManager.createQuery("select eigenvalue.id from RegressionModelCoef where regressionModel.id = :regressionModelId");
-		query.setInteger("regressionModelId", regressionModelId);
-		
-		return Utilities.convertGenericList(query.list());
-	}
-	
-	/**
-	 * 
-	 * @param minArticleDate required
-	 * @param maxArticleDate optional / can be null
-	 * @param scoringModelId required
-	 * @return
-	 */
-	static List<Integer> retrieveArticleIdsForMinDateAndScoringModel(Date minArticleDate, Date maxArticleDate, int scoringModelId) {
-		StringBuilder builder = new StringBuilder();
-		builder.append("select id from Article where scoringModel.id = :scoringModelId and publishDate >= :minPublishDate");
-		
-		if (maxArticleDate != null) {
-			builder.append(" and publishDate <= :maxPublishDate");
-		}
-
-		Query query = SessionManager.createQuery(builder.toString());
-		query.setInteger("scoringModelId", scoringModelId);
-		query.setDate("minPublishDate", minArticleDate);
-		
-		if (maxArticleDate != null) {
-			query.setDate("maxPublishDate", maxArticleDate);
-		}
-		
-		return Utilities.convertGenericList(query.list());
 	}
 }

@@ -1,7 +1,6 @@
 package controller.prediction.principalComponent;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,11 +9,11 @@ import java.util.Map;
 
 public class ArticlePrincipalComponentValueCalculator {
 
-	public List<ArticlePrincipalComponentValues> calculate(int scoringModelId, Date minArticleDate) {
+	public List<ArticlePrincipalComponentValues> calculate(int scoringModelId, List<Integer> articleIdList) {
 		MeanStemCountVector meanVect = (new MeanStemCountVectorBuilder()).build(scoringModelId);
 		
-		List<ArticleStemCountVector> artStemCountVectList = (new ArticleStemCountVectorBuilder()).retrieve(scoringModelId, 
-				minArticleDate, meanVect.minStemId);
+		List<ArticleStemCountVector> artStemCountVectList = (new ArticleStemCountVectorBuilder()).retrieve(articleIdList, 
+				meanVect.minStemId);
 		
 		List<PrincipalComponentVector> pcVectorList = 
 				(new PrincipalComponentVectorBuilder()).build(scoringModelId, 

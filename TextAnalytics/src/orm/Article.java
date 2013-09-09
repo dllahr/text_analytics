@@ -1,6 +1,7 @@
 package orm;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+
+import org.hibernate.Query;
 
 import controller.util.Utilities;
 
@@ -100,5 +103,31 @@ public class Article {
 
 	public void setAdditionalIdentifier(String additionalIdentifier) {
 		this.additionalIdentifier = additionalIdentifier;
+	}
+
+	/**
+	 * 
+	 * @param minArticleDate required
+	 * @param maxArticleDate optional / can be null
+	 * @param scoringModelId required
+	 * @return
+	 */
+	public static List<Integer> retrieveArticleIdsForMinDateAndScoringModel(Date minArticleDate, Date maxArticleDate, int scoringModelId) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("select id from Article where scoringModel.id = :scoringModelId and publishDate >= :minPublishDate");
+		
+		if (maxArticleDate != null) {
+			builder.append(" and publishDate <= :maxPublishDate");
+		}
+	
+		Query query = SessionManager.createQuery(builder.toString());
+		query.setInteger("scoringModelId", scoringModelId);
+		query.setDate("minPublishDate", minArticleDate);
+		
+		if (maxArticleDate != null) {
+			query.setDate("maxPublishDate", maxArticleDate);
+		}
+		
+		return Utilities.convertGenericList(query.list());
 	}
 }

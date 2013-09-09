@@ -1,7 +1,7 @@
 package controller.prediction.principalComponent;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -12,15 +12,17 @@ import org.hibernate.Query;
 import orm.Article;
 import orm.ArticleStemCount;
 import orm.SessionManager;
+import controller.util.BatchRetriever;
+import controller.util.GenericRetriever;
 import controller.util.MapBuilder;
 import controller.util.Utilities;
 import controller.util.ValueOperator;
 
 public class ArticleStemCountVectorBuilder {
 
-	public List<ArticleStemCountVector> retrieve(int scoringModelId, Date minDate, int minStemId) {
+	public List<ArticleStemCountVector> retrieve(List<Integer> articleIdList, int minStemId) {
 
-		Map<Article, SparseVector> map = buildArticleStemCountVectorMap(scoringModelId, minDate, minStemId);
+		Map<Article, SparseVector> map = buildArticleStemCountVectorMap(articleIdList, minStemId);
 		
 		List<ArticleStemCountVector> result = new ArrayList<>(map.size());
 		
@@ -33,8 +35,8 @@ public class ArticleStemCountVectorBuilder {
 		return result;
 	}
 	
-	Map<Article, SparseVector> buildArticleStemCountVectorMap(int scoringModelId, Date minDate, final int minStemId) {
-		List<ArticleStemCount> articleStemCountList = retrieveArticleStemCount(scoringModelId, minDate);
+	Map<Article, SparseVector> buildArticleStemCountVectorMap(List<Integer> articleIdList, final int minStemId) {
+		List<ArticleStemCount> articleStemCountList = retrieveArticleStemCount(articleIdList);
 		
 		ValueOperator<ArticleStemCount, Article, SparseVector> vo = new ValueOperator<ArticleStemCount, Article, SparseVector>() {
 			@Override
@@ -54,11 +56,20 @@ public class ArticleStemCountVectorBuilder {
 		return (new MapBuilder()).build(vo, articleStemCountList);
 	}
 	
-	List<ArticleStemCount> retrieveArticleStemCount(int scoringModelId, Date minDate) {
-		Query query = SessionManager.createQuery("from ArticleStemCount where article.scoringModel.id = :smId and article.publishDate >= :date");
-		query.setInteger("smId", scoringModelId);
-		query.setDate("date", minDate);
+	List<ArticleStemCount> retrieveArticleStemCount(List<Integer> articleIdList) {
+		final Query query = SessionManager.createQuery("from ArticleStemCount where article.id in (:articleIdList)");
+		
+		GenericRetriever<Integer> gr = new GenericRetriever<Integer>() {
+			@SuppressWarnings("rawtypes")
+			@Override
+			public List retrieve(Collection<Integer> coll) {
+				query.setParameterList("articleIdList", coll);
+				return query.list();
+			}
+		};
+		
+		BatchRetriever<Integer> br = new BatchRetriever<>(gr);
 
-		return Utilities.convertGenericList(query.list());
+		return Utilities.convertGenericList(br.retrieveAll(articleIdList));
 	}
 }

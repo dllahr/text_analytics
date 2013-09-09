@@ -1,10 +1,16 @@
 package orm;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.Query;
+
+import controller.util.Utilities;
 
 @Entity
 @Table(name="REGRESSION_MODEL_COEF")
@@ -55,5 +61,12 @@ public class RegressionModelCoef {
 
 	public void setRegressionModel(RegressionModel regressionModel) {
 		this.regressionModel = regressionModel;
+	}
+
+	public static List<Integer> retrieveEigenvalueIdsForRegressionModel(int regressionModelId) {
+		Query query = SessionManager.createQuery("select eigenvalue.id from RegressionModelCoef where regressionModel.id = :regressionModelId");
+		query.setInteger("regressionModelId", regressionModelId);
+		
+		return Utilities.convertGenericList(query.list());
 	}
 }
