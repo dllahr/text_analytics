@@ -48,16 +48,19 @@ public class MainGeneratePredictionsTest {
 	@Test
 	public void testRetrieveArticleIdsForMinDateAndScoringModel() throws ParseException {
 		final DateFormat dateFormat = new SimpleDateFormat(MainGeneratePredictions.dateFormatString);
-		Date date = dateFormat.parse("2013-08-20");
+		Date minDate = dateFormat.parse("2013-08-20");
 		
-		List<Integer> articleIdList = MainGeneratePredictions.retrieveArticleIdsForMinDateAndScoringModel(date, 1);
+		List<Integer> articleIdList = MainGeneratePredictions.retrieveArticleIdsForMinDateAndScoringModel(minDate, null, 1);
 		assertNotNull(articleIdList);
 		assertTrue(articleIdList.size() > 0);
 		
 		for (Integer id : articleIdList) {
 			System.out.println(id);
 		}
+		
+		Date maxDate = dateFormat.parse("2013-08-23");
+		articleIdList = MainGeneratePredictions.retrieveArticleIdsForMinDateAndScoringModel(minDate, maxDate, 1);
+		assertNotNull(articleIdList);
+		assertEquals(6, articleIdList.size());
 	}
-
-	
 }

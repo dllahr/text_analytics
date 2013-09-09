@@ -31,19 +31,21 @@ public class MainGeneratePredictions {
 	static final String dateFormatString = "yyyy-MM-dd";
 	
 	public static void main(String[] args) throws ParseException {
+		//parse command line options
 		final int regressionModelId = Integer.valueOf(args[0]);
 		
+		final List<Integer> predictionModelIdList = parsePredictionModelIdListParameter(args[1]);
+		
 		final DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
-		final Date minArticleDate = dateFormat.parse(args[1]);
-
-		final List<Integer> predictionModelIdList = parsePredictionModelIdListParameter(args[2]);
+		final Date minArticleDate = dateFormat.parse(args[2]);
+		final Date maxArticleDate = args.length >= 4 ? dateFormat.parse(args[3]) : null;
 		
-		final int minArticleDayIndex = Utilities.calculateDayIndex(minArticleDate);
-		
+		//commence da jigglin
 		System.out.println("find regression model with ID:  " + regressionModelId);
 		RegressionModel rm = RegressionModel.findById(regressionModelId);
 		
-		List<Integer> articleIdList = retrieveArticleIdsForMinDateAndScoringModel(minArticleDate, rm.getScoringModel().getId());
+		List<Integer> articleIdList = retrieveArticleIdsForMinDateAndScoringModel(minArticleDate, maxArticleDate,
+				rm.getScoringModel().getId());
 		
 		System.out.print("find prediction model with ID's:  ");
 		for (int id : predictionModelIdList) {
@@ -52,7 +54,7 @@ public class MainGeneratePredictions {
 		System.out.println();
 		List<PredictionModel> pmList = PredictionModel.findAllById(predictionModelIdList);
 		
-		System.out.println("retrieve principal component values aggregated by article publish day.  min article date:  " + minArticleDayIndex);
+		System.out.println("retrieve principal component values aggregated by article publish day.  Min/Max article dates: " + args[2] + " " + (args.length >= 4 ? args[3] : ""));
 		List<DayPrincipalComponentValueVector> dayPcValVectList = 
 				(new DayPrincipalComponentValueVectorBuilder()).build(articleIdList, 
 						retrieveEigenvalueIdsForRegressionModel(regressionModelId));
@@ -184,10 +186,28 @@ public class MainGeneratePredictions {
 		return Utilities.convertGenericList(query.list());
 	}
 	
-	static List<Integer> retrieveArticleIdsForMinDateAndScoringModel(Date minArticleDate, int scoringModelId) {
-		Query query = SessionManager.createQuery("select id from Article where publishDate >= :publishDate and scoringModel.id = :scoringModelId");
-		query.setDate("publishDate", minArticleDate);
+	/**
+	 * 
+	 * @param minArticleDate required
+	 * @param maxArticleDate optional / can be null
+	 * @param scoringModelId required
+	 * @return
+	 */
+	static List<Integer> retrieveArticleIdsForMinDateAndScoringModel(Date minArticleDate, Date maxArticleDate, int scoringModelId) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("select id from Article where scoringModel.id = :scoringModelId and publishDate >= :minPublishDate");
+		
+		if (maxArticleDate != null) {
+			builder.append(" and publishDate <= :maxPublishDate");
+		}
+
+		Query query = SessionManager.createQuery(builder.toString());
 		query.setInteger("scoringModelId", scoringModelId);
+		query.setDate("minPublishDate", minArticleDate);
+		
+		if (maxArticleDate != null) {
+			query.setDate("maxPublishDate", maxArticleDate);
+		}
 		
 		return Utilities.convertGenericList(query.list());
 	}
