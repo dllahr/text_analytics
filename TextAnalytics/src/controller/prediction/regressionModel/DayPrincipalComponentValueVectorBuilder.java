@@ -1,6 +1,7 @@
 package controller.prediction.regressionModel;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,8 @@ import math.linearAlgebra.Vector;
 
 import org.hibernate.Query;
 
+import controller.util.BatchRetriever;
+import controller.util.GenericRetriever;
 import controller.util.MapBuilder;
 import controller.util.Utilities;
 import controller.util.ValueOperator;
@@ -19,8 +22,6 @@ import orm.Eigenvalue;
 import orm.SessionManager;
 
 public class DayPrincipalComponentValueVectorBuilder {
-	
-	private final static int retrieveBatchSize = 1000;
 	
 	private final MapBuilder mapBuilder;
 	
@@ -120,27 +121,23 @@ public class DayPrincipalComponentValueVectorBuilder {
 	
 	
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	static List<ArticlePcValue> retrieveArticlePcValues(List<Integer> articleIdList, List<Integer> eigenvalueIdList) {
-		
-		Query query = SessionManager.createQuery("from ArticlePcValue where " +
+		final Query query = SessionManager.createQuery("from ArticlePcValue where " +
 				" article.id in (:articleIdList) and eigenvalue.id in (:eigenvalueIdList)");
 		query.setParameterList("eigenvalueIdList", eigenvalueIdList);
+		
+		GenericRetriever<Integer> apvRetriever = new GenericRetriever<Integer>() {	
+			@Override
+			public List retrieve(Collection<Integer> coll) {
+				query.setParameterList("articleIdList", coll);
+				return query.list();
+			}
+		};
+		
+		BatchRetriever<Integer> br = new BatchRetriever<>(apvRetriever);
 
-		List rawResult = new LinkedList<>();
-		
-		final int numBatch = articleIdList.size() / retrieveBatchSize;
-		for (int i = 0; i < numBatch; i++) {
-			final int startInd = i*retrieveBatchSize;
-			final int endInd = (i+1)*retrieveBatchSize;
-			
-			query.setParameterList("articleIdList", articleIdList.subList(startInd, endInd));
-			
-			rawResult.addAll(query.list());
-		}
-		
-		query.setParameterList("articleIdList", articleIdList.subList(numBatch*retrieveBatchSize, articleIdList.size()));
-		rawResult.addAll(query.list());
+		List rawResult = br.retrieveAll(articleIdList);
 
 		return Utilities.convertGenericList(rawResult);
 	}
