@@ -2,6 +2,7 @@ package controller.prediction.regressionModel;
 
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.Query;
 import org.junit.Test;
 
 import controller.prediction.regressionModel.DayPrincipalComponentValueVectorBuilder.DayEigenvalue;
@@ -28,22 +30,87 @@ public class DayPrincipalComponentValueVectorBuilderTest {
 	@Test
 	public void testRetrieveArticlePcValues() {
 		List<Integer> eigIdList = new ArrayList<>();
-		for (int i = 1; i <= 100; i++) {
+		for (int i = 101; i <= 200; i++) {
 			eigIdList.add(i);
 		}
+		
+		final int articleId = 69198;
+		List<Integer> articleIdList = new LinkedList<>();
+		articleIdList.add(articleId);
 
-		List<ArticlePcValue> list = DayPrincipalComponentValueVectorBuilder.retrieveArticlePcValues(15834, eigIdList);
+		List<ArticlePcValue> list = DayPrincipalComponentValueVectorBuilder.retrieveArticlePcValues(articleIdList, eigIdList);
+		assertNotNull(list);
+
+		assertEquals(100, list.size());
+		
+		assertEquals((long)articleId, (long)list.get(0).getArticle().getId());
+	}
+	
+	@Test
+	public void testRetrieveArticlePcValuesMoreThan1000Articles() {
+		List<Integer> eigIdList = new ArrayList<>();
+		for (int i = 101; i <= 200; i++) {
+			eigIdList.add(i);
+		}
+		
+		Query query = SessionManager.createSqlQuery("select distinct article_id from article_pc_value where eigenvalue_id in (:eigIdList)");
+		query.setParameterList("eigIdList", eigIdList);
+		@SuppressWarnings("rawtypes")
+		List rawArticleIdList = query.list();
+		List<Integer> articleIdList = new ArrayList<>(rawArticleIdList.size());
+		for (Object row : rawArticleIdList) {
+			articleIdList.add(((BigDecimal)row).intValueExact());
+		}
+
+		assertNotNull(articleIdList);
+		assertTrue(articleIdList.size() > 1000);
+		
+		List<ArticlePcValue> list = DayPrincipalComponentValueVectorBuilder.retrieveArticlePcValues(articleIdList, eigIdList);
 		assertNotNull(list);
 		
-		int count = 0;
+		List<ArticlePcValue> exampleList = new LinkedList<>();
+		Set<Integer> exampleArticleIdSet = new HashSet<>();
+		exampleArticleIdSet.add(articleIdList.get(0));
+		exampleArticleIdSet.add(articleIdList.get(articleIdList.size()-1));
+		
+		Set<Integer> foundArticleIdSet = new HashSet<>();
+		Set<Integer> foundEigIdSet = new HashSet<>();
 		for (ArticlePcValue apv : list) {
-			if (apv.getArticle().getDayIndex() == 15834) {
-				count++;
+			final int articleId = apv.getArticle().getId();
+			foundArticleIdSet.add(articleId);
+			foundEigIdSet.add(apv.getEigenvalue().getId());
+			
+			if (exampleArticleIdSet.contains(articleId)) {
+				exampleList.add(apv);
 			}
 		}
-		assertEquals(300, count);
+		
+		assertEquals(articleIdList.size(), foundArticleIdSet.size());
+		for (Integer articleId : articleIdList) {
+			assertTrue(foundArticleIdSet.contains(articleId));
+		}
+		
+		assertEquals(eigIdList.size(), foundEigIdSet.size());
+		for (Integer eigId : eigIdList) {
+			assertTrue(foundEigIdSet.contains(eigId));
+		}
+		
+		Collections.sort(exampleList, new Comparator<ArticlePcValue>() {
+			@Override
+			public int compare(ArticlePcValue o1, ArticlePcValue o2) {
+				if (o1.getArticle().getId() == o2.getArticle().getId()) {
+					return o1.getEigenvalue().getId() - o2.getEigenvalue().getId();
+				} else {
+					return o1.getArticle().getId() - o2.getArticle().getId();
+				}
+			}
+		});
+		for (ArticlePcValue apv : exampleList) {
+			System.out.println(apv);
+		}
 	}
 
+	
 	@Test
 	public void testDayEigenvalueClass() {
 		Article day1 = new Article();

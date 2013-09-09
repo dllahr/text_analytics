@@ -28,7 +28,7 @@ import controller.util.Utilities;
 
 
 public class MainGeneratePredictions {
-	private static final String dateFormatString = "yyyy-MM-dd";
+	static final String dateFormatString = "yyyy-MM-dd";
 	
 	public static void main(String[] args) throws ParseException {
 		final int regressionModelId = Integer.valueOf(args[0]);
@@ -43,6 +43,8 @@ public class MainGeneratePredictions {
 		System.out.println("find regression model with ID:  " + regressionModelId);
 		RegressionModel rm = RegressionModel.findById(regressionModelId);
 		
+		List<Integer> articleIdList = retrieveArticleIdsForMinDateAndScoringModel(minArticleDate, rm.getScoringModel().getId());
+		
 		System.out.print("find prediction model with ID's:  ");
 		for (int id : predictionModelIdList) {
 			System.out.print(id + " ");
@@ -52,7 +54,7 @@ public class MainGeneratePredictions {
 		
 		System.out.println("retrieve principal component values aggregated by article publish day.  min article date:  " + minArticleDayIndex);
 		List<DayPrincipalComponentValueVector> dayPcValVectList = 
-				(new DayPrincipalComponentValueVectorBuilder()).build(minArticleDayIndex, 
+				(new DayPrincipalComponentValueVectorBuilder()).build(articleIdList, 
 						retrieveEigenvalueIdsForRegressionModel(regressionModelId));
 		
 		System.out.println("generate raw predictions based regression model and principal component values:");
@@ -178,6 +180,14 @@ public class MainGeneratePredictions {
 	static List<Integer> retrieveEigenvalueIdsForRegressionModel(int regressionModelId) {
 		Query query = SessionManager.createQuery("select eigenvalue.id from RegressionModelCoef where regressionModel.id = :regressionModelId");
 		query.setInteger("regressionModelId", regressionModelId);
+		
+		return Utilities.convertGenericList(query.list());
+	}
+	
+	static List<Integer> retrieveArticleIdsForMinDateAndScoringModel(Date minArticleDate, int scoringModelId) {
+		Query query = SessionManager.createQuery("select id from Article where publishDate >= :publishDate and scoringModel.id = :scoringModelId");
+		query.setDate("publishDate", minArticleDate);
+		query.setInteger("scoringModelId", scoringModelId);
 		
 		return Utilities.convertGenericList(query.list());
 	}

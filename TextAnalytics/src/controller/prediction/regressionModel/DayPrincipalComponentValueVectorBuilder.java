@@ -20,6 +20,8 @@ import orm.SessionManager;
 
 public class DayPrincipalComponentValueVectorBuilder {
 	
+	private final static int retrieveBatchSize = 1000;
+	
 	private final MapBuilder mapBuilder;
 	
 	public DayPrincipalComponentValueVectorBuilder() {
@@ -33,9 +35,11 @@ public class DayPrincipalComponentValueVectorBuilder {
 	 * @param eigenvalueIdList
 	 * @return vectors have principal components at positions specified by sort index of eigenvalues
 	 */
-	public List<DayPrincipalComponentValueVector> build(int minDayIndex, List<Integer> eigenvalueIdList) {
+	public List<DayPrincipalComponentValueVector> build(List<Integer> articleIdList, List<Integer> eigenvalueIdList) {
 		
-		Map<DayEigenvalue, List<Double>> map = organizePcValByDayIndex(retrieveArticlePcValues(minDayIndex, eigenvalueIdList));
+		List<ArticlePcValue> articlePcValueList = retrieveArticlePcValues(articleIdList, eigenvalueIdList);
+		
+		Map<DayEigenvalue, List<Double>> map = organizePcValByDayIndex(articlePcValueList);
 		
 		return aggregateByDay(map);
 	}
@@ -116,14 +120,29 @@ public class DayPrincipalComponentValueVectorBuilder {
 	
 	
 	
-	static List<ArticlePcValue> retrieveArticlePcValues(int minDayIndex, List<Integer> eigenvalueIdList) {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	static List<ArticlePcValue> retrieveArticlePcValues(List<Integer> articleIdList, List<Integer> eigenvalueIdList) {
 		
 		Query query = SessionManager.createQuery("from ArticlePcValue where " +
-				" article.dayIndex >= :minDayIndex and eigenvalue.id in (:eigenvalueIdList)");
-		query.setInteger("minDayIndex", minDayIndex);
+				" article.id in (:articleIdList) and eigenvalue.id in (:eigenvalueIdList)");
 		query.setParameterList("eigenvalueIdList", eigenvalueIdList);
+
+		List rawResult = new LinkedList<>();
 		
-		return Utilities.convertGenericList(query.list());
+		final int numBatch = articleIdList.size() / retrieveBatchSize;
+		for (int i = 0; i < numBatch; i++) {
+			final int startInd = i*retrieveBatchSize;
+			final int endInd = (i+1)*retrieveBatchSize;
+			
+			query.setParameterList("articleIdList", articleIdList.subList(startInd, endInd));
+			
+			rawResult.addAll(query.list());
+		}
+		
+		query.setParameterList("articleIdList", articleIdList.subList(numBatch*retrieveBatchSize, articleIdList.size()));
+		rawResult.addAll(query.list());
+
+		return Utilities.convertGenericList(rawResult);
 	}
 	
 	static class DayEigenvalue {

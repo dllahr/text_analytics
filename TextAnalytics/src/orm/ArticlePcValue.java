@@ -58,4 +58,9 @@ public class ArticlePcValue implements Serializable {
 	public void setValue(Double value) {
 		this.value = value;
 	}
+
+	@Override
+	public String toString() {
+		return article.getId() + Constants.toStringDelimeter + eigenvalue.getId() + Constants.toStringDelimeter + value;
+	}
 }

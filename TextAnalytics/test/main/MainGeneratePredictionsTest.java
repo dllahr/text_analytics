@@ -2,6 +2,10 @@ package main;
 
 import static org.junit.Assert.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -41,7 +45,19 @@ public class MainGeneratePredictionsTest {
 		}
 	}
 	
-	
+	@Test
+	public void testRetrieveArticleIdsForMinDateAndScoringModel() throws ParseException {
+		final DateFormat dateFormat = new SimpleDateFormat(MainGeneratePredictions.dateFormatString);
+		Date date = dateFormat.parse("2013-08-20");
+		
+		List<Integer> articleIdList = MainGeneratePredictions.retrieveArticleIdsForMinDateAndScoringModel(date, 1);
+		assertNotNull(articleIdList);
+		assertTrue(articleIdList.size() > 0);
+		
+		for (Integer id : articleIdList) {
+			System.out.println(id);
+		}
+	}
 
 	
 }
