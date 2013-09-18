@@ -15,4 +15,8 @@ public interface Vector {
 	public Set<Integer> getIndices();
 
 	public int getMaxIndex();
+	
+	public Vector negate();
+	
+	public Vector createCopy();
 }

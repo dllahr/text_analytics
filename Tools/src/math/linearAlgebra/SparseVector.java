@@ -65,4 +65,25 @@ public class SparseVector implements Vector {
 	public int getMaxIndex() {
 		return maxIndex;
 	}
+
+	@Override
+	public Vector negate() {
+		SparseVector neg = new SparseVector();
+		
+		for (Integer index : data.keySet()) {
+			neg.setEntry(index, -data.get(index));
+		}
+		
+		return neg;
+	}
+
+
+	@Override
+	public Vector createCopy() {
+		SparseVector result = new SparseVector();
+		
+		result.data.putAll(data);
+		
+		return result;
+	}
 }

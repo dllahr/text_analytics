@@ -1,8 +1,12 @@
 package math.linearAlgebra;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public class DenseFixedVector implements Vector {
+	
+	private Set<Integer> indexSet = null;
 
 	private final double[] entryArray;
 	
@@ -11,7 +15,7 @@ public class DenseFixedVector implements Vector {
 	}
 	
 	public DenseFixedVector(double[] entryArray) {
-		this.entryArray = new double[entryArray.length];
+		this(entryArray.length);
 		
 		for (int i = 0; i < entryArray.length; i++) {
 			this.entryArray[i] = entryArray[i];
@@ -58,7 +62,15 @@ public class DenseFixedVector implements Vector {
 
 	@Override
 	public Set<Integer> getIndices() {
-		throw new UnsupportedOperationException("DenseFixedVector getIndices");
+		if (null == indexSet) {
+			indexSet = new HashSet<Integer>();
+			for (int i = 0; i < entryArray.length; i++) {
+				indexSet.add(i);
+			}
+			indexSet = Collections.unmodifiableSet(indexSet);
+		}
+		
+		return indexSet;
 	}
 
 	@Override
@@ -66,4 +78,28 @@ public class DenseFixedVector implements Vector {
 		return entryArray.length - 1;
 	}
 
+	@Override
+	public Vector negate() {
+		DenseFixedVector neg = new DenseFixedVector(entryArray.length);
+		for (int i = 0; i < neg.entryArray.length; i++) {
+			neg.entryArray[i] = - entryArray[i];
+		}
+		return neg;
+	}
+
+	public Vector add(Vector other) {
+		final int length = entryArray.length > other.getMaxIndex()+1 ? entryArray.length : other.getMaxIndex()+1;
+		DenseFixedVector sum = new DenseFixedVector(length);
+		
+		for (int i = 0; i < length; i++) {
+			sum.entryArray[i] = getEntry(i) + other.getEntry(i);
+		}
+		
+		return sum;
+	}
+
+	@Override
+	public Vector createCopy() {
+		return new DenseFixedVector(entryArray);
+	}
 }
