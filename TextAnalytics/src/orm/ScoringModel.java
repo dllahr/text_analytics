@@ -9,6 +9,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.Query;
+
 @Entity
 @Table(name="SCORING_MODEL")
 public class ScoringModel  {
@@ -51,7 +53,7 @@ public class ScoringModel  {
 		this.companySet = companySet;
 	}
 	
-	public Company getCompanyById(int companyId) {
+	public Company getCompany(int companyId) {
 		Company result = null;
 		
 		for (Company company : companySet) {
@@ -74,5 +76,11 @@ public class ScoringModel  {
 		builder.append(notes);
 
 		return builder.toString();
+	}
+	
+	public static ScoringModel getScoringModel(int scoringModelId) {
+		Query query = SessionManager.createQuery("from ScoringModel where id = :id");
+		query.setInteger("id", scoringModelId);
+		return (ScoringModel)query.list().get(0);
 	}
 }

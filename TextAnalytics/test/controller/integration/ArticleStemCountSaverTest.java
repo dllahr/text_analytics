@@ -14,7 +14,6 @@ import controller.stemCountArticles.ArticleStemCountSaver;
 import controller.util.Utilities;
 
 import orm.ArticleStemCount;
-import orm.ScoringModel;
 import orm.SessionManager;
 import orm.Stem;
 
@@ -24,14 +23,12 @@ public class ArticleStemCountSaverTest {
 	public void testSave() {
 		SessionManager.setUseForTest(true);
 		
-		ScoringModel sm = new ScoringModel();
-		sm.setId(1);
-		SessionManager.persist(sm);
+		final int articleSourceId = 1;
 		
 		Stem stem = new Stem();
 		stem.setId(1);
 		stem.setText("one");
-		stem.setScoringModel(sm);
+		stem.setArticleSourceId(articleSourceId);
 		SessionManager.persist(stem);
 		
 		SplitArticle splitArticle = new SplitArticle(new File("fake file"), 0);
@@ -40,7 +37,7 @@ public class ArticleStemCountSaverTest {
 		splitArticle.stemCountMap.put(stem.getText(), 2);
 		splitArticle.stemCountMap.put("two", 3);
 		
-		ArticleStemCountSaver.saveStemCountToDatabase(splitArticle, sm);
+		ArticleStemCountSaver.saveStemCountToDatabase(splitArticle, articleSourceId);
 		
 //		SessionManager.commit();
 		

@@ -13,16 +13,28 @@
 	COMMISSION NUMBER, 
 	NET_AMOUNT NUMBER
    );
-   
+
+--------------------------------------------------------
+--  DDL for Table ARTICLE_SOURCE
+--------------------------------------------------------
+create table article_source (
+  id                  integer primary key,
+  description         varchar2(4000)
+);
+
 --------------------------------------------------------
 --  DDL for Table ARTICLE
 --------------------------------------------------------
   CREATE TABLE ARTICLE 
    (	ID NUMBER(*,0), 
-	SCORING_MODEL_ID NUMBER(*,0), 
+	ARTICLE_SOURCE_ID NUMBER(*,0), 
 	PUBLISH_DATE DATE, 
 	DAY_INDEX NUMBER(*,0), 
-	FILENAME VARCHAR2(4000 BYTE)
+	FILENAME VARCHAR2(4000 BYTE),
+	start_line_number integer,
+	additional_identifier varchar2(4000),
+	
+	foreign key (article_source_id) references article_source(id)
    );
 
    COMMENT ON COLUMN ARTICLE.DAY_INDEX IS 'integer representing day that data is for';
@@ -153,17 +165,16 @@ alter table regression_model add foreign key (company_id) references company(id)
 
   CREATE TABLE STEM 
    (	ID NUMBER(*,0), 
-	SCORING_MODEL_ID NUMBER(*,0), 
-	TEXT VARCHAR2(500 BYTE)
+	article_source_id NUMBER(*,0), 
+	TEXT VARCHAR2(500 BYTE),
+	is_stop number(1,0) not null,
+	
+	foreign key (article_source_id) references article_source(id)
    );
 
    COMMENT ON TABLE STEM  IS 'contains the set of stems found for articles for each company';
    
    create sequence stem_id_seq start with 1;
-   
-   alter table stem add is_stop number(1,0); 
-   
-   alter table stem modify is_stop not null;
 
 --------------------------------------------------------
 --  DDL for Table STOCK_DATA

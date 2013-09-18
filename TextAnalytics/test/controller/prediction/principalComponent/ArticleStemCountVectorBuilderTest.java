@@ -22,7 +22,7 @@ public class ArticleStemCountVectorBuilderTest {
 	@Test
 	public void testRetrieveArticleStemCount() throws ParseException {
 		Date minDate = (new SimpleDateFormat("yyyy-MM-dd")).parse("2013-05-09");
-		List<Integer> articleIdList = Article.retrieveArticleIdsForMinDateAndScoringModel(minDate, null, 1);
+		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, null, 1);
 		
 		List<ArticleStemCount> list = (new ArticleStemCountVectorBuilder()).retrieveArticleStemCount(articleIdList);
 		assertTrue(list.size() > 0);
@@ -31,7 +31,7 @@ public class ArticleStemCountVectorBuilderTest {
 	@Test
 	public void testBuildArticleStemCountVectorMap() throws ParseException {
 		Date minDate = (new SimpleDateFormat("yyyy-MM-dd")).parse("2013-05-09");
-		List<Integer> articleIdList = Article.retrieveArticleIdsForMinDateAndScoringModel(minDate, null, 1);
+		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, null, 1);
 		
 		Map<Article, SparseVector> map = (new ArticleStemCountVectorBuilder()).buildArticleStemCountVectorMap(articleIdList, 1);
 		

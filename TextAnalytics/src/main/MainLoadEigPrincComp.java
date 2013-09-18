@@ -10,8 +10,6 @@ import java.util.List;
 
 import org.hibernate.Query;
 
-import controller.util.Utilities;
-
 import orm.Article;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
@@ -30,11 +28,12 @@ public class MainLoadEigPrincComp {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		final int modelId = Integer.valueOf(args[0]);
-		final File eigvalFile = new File(args[1]);
-		final File eigvectFile = new File(args[2]);
-		final File prinCompFile = new File(args[3]);
-		final File meanStemVectFile = new File(args[4]);
+		final int scoringModelId = Integer.valueOf(args[0]);
+		final int articleSourceId = Integer.valueOf(args[1]);
+		final File eigvalFile = new File(args[2]);
+		final File eigvectFile = new File(args[3]);
+		final File prinCompFile = new File(args[4]);
+		final File meanStemVectFile = new File(args[5]);
 		
 		System.out.println("eigenvalue file:  " + eigvalFile.getAbsolutePath());
 		System.out.println("eigenvector file:  " + eigvectFile.getAbsolutePath());
@@ -46,14 +45,16 @@ public class MainLoadEigPrincComp {
 			System.in.read();
 		}
 		
-		ScoringModel scoringModel = findScoringModel(modelId);
+		ScoringModel scoringModel = findScoringModel(scoringModelId);
 		
 		List<Eigenvalue> eigvalList = loadEigenvalues(eigvalFile, scoringModel);
 		System.out.println("Loaded eigenvalues:  " + eigvalList.size());
 		
-		loadEigenvectors(eigvectFile, eigvalList);
+		loadEigenvectors(articleSourceId, eigvectFile, eigvalList);
 		
-		List<Stem> stemList = getStems(eigvalList.get(0).getScoringModel());
+		System.out.println("getting stems from database:");
+		List<Stem> stemList = Stem.getStemsOrderedById(articleSourceId);
+
 		loadPrinComps(prinCompFile, eigvalList, stemList);
 		
 		loadMeanStemVect(meanStemVectFile, scoringModel, stemList);
@@ -86,6 +87,7 @@ public class MainLoadEigPrincComp {
 
 			sortIndex++;
 		}
+		reader.close();
 		
 		doCommit("eigenvalues");
 		
@@ -93,17 +95,17 @@ public class MainLoadEigPrincComp {
 			SessionManager.merge(e);
 		}
 		
-		reader.close();
-		
 		return result;
 	}
 	
-	private static void loadEigenvectors(File eigvectFile, List<Eigenvalue> eigvalList) throws IOException {
+	private static void loadEigenvectors(int articleSourceId, File eigvectFile, List<Eigenvalue> eigvalList) 
+			throws IOException {
+
 		System.out.println("Loading eigenvectors:");
 		
 		final int numEigVal = eigvalList.size();
 		
-		List<Article> articleList = getArticles(eigvalList.get(0).getScoringModel());
+		List<Article> articleList = Article.getArticlesOrderById(articleSourceId);
 		
 		BufferedReader reader = new BufferedReader(new FileReader(eigvectFile));
 		
@@ -154,23 +156,16 @@ public class MainLoadEigPrincComp {
 
 		reader.close();
 	}
-	
-	static List<Article> getArticles(ScoringModel sm) {
-		Query query = SessionManager.createQuery("from Article where scoringModel = :sm order by id");
-		query.setParameter("sm", sm);
-		
-		return Utilities.convertGenericList(query.list());
-	}
 
-	private static void loadPrinComps(File prinCompFile, List<Eigenvalue> eigvalList, List<Stem> stemList) throws IOException {
+
+	private static void loadPrinComps(File prinCompFile, List<Eigenvalue> eigvalList, List<Stem> stemList) 
+			throws IOException {
+
 		System.out.println("loading principal components:");
 		final int numEigVal = eigvalList.size();
 		
-		System.out.println("\tgetting stems from database:");
-		
 		BufferedReader reader = new BufferedReader(new FileReader(prinCompFile));
 
-		System.out.println("\treading:");
 		int lineNum = 0;
 		
 		String curLine;
@@ -221,13 +216,6 @@ public class MainLoadEigPrincComp {
 		}
 		
 		reader.close();
-	}
-	
-	static List<Stem> getStems(ScoringModel sm) {
-		Query query = SessionManager.createQuery("from Stem where scoringModel = :sm order by id");
-		query.setParameter("sm", sm);
-		
-		return Utilities.convertGenericList(query.list());
 	}
 	
 	

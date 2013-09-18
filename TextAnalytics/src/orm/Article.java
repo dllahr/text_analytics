@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 import org.hibernate.Query;
@@ -24,9 +22,8 @@ public class Article {
 	@Id
 	private Integer id;
 	
-	@ManyToOne
-	@JoinColumn(name="SCORING_MODEL_ID")
-	private ScoringModel scoringModel;
+	@Column(name="ARTICLE_SOURCE_ID")
+	private Integer articleSourceId;
 	
 	private String filename;
 	
@@ -53,12 +50,12 @@ public class Article {
 		this.id = id;
 	}
 
-	public ScoringModel getScoringModel() {
-		return scoringModel;
+	public Integer getArticleSourceId() {
+		return articleSourceId;
 	}
 
-	public void setScoringModel(ScoringModel scoringModel) {
-		this.scoringModel = scoringModel;
+	public void setArticleSourceId(Integer articleSourceId) {
+		this.articleSourceId = articleSourceId;
 	}
 
 	public String getFilename() {
@@ -112,21 +109,30 @@ public class Article {
 	 * @param scoringModelId required
 	 * @return
 	 */
-	public static List<Integer> retrieveArticleIdsForMinDateAndScoringModel(Date minArticleDate, Date maxArticleDate, int scoringModelId) {
+	public static List<Integer> getArticleIdsForMinDateAndArticleSource(Date minArticleDate, 
+			Date maxArticleDate, int articleSourceId) {
+		
 		StringBuilder builder = new StringBuilder();
-		builder.append("select id from Article where scoringModel.id = :scoringModelId and publishDate >= :minPublishDate");
+		builder.append("select id from Article where articleSourceId = :articleSourceId and publishDate >= :minPublishDate");
 		
 		if (maxArticleDate != null) {
 			builder.append(" and publishDate <= :maxPublishDate");
 		}
 	
 		Query query = SessionManager.createQuery(builder.toString());
-		query.setInteger("scoringModelId", scoringModelId);
+		query.setInteger("articleSourceId", articleSourceId);
 		query.setDate("minPublishDate", minArticleDate);
 		
 		if (maxArticleDate != null) {
 			query.setDate("maxPublishDate", maxArticleDate);
 		}
+		
+		return Utilities.convertGenericList(query.list());
+	}
+	
+	public static List<Article> getArticlesOrderById(int articleSourceId) {
+		Query query = SessionManager.createQuery("from Article where articleSourceId = :asId order by id");
+		query.setParameter("asId", articleSourceId);
 		
 		return Utilities.convertGenericList(query.list());
 	}

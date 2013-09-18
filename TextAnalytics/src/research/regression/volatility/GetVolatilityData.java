@@ -16,7 +16,7 @@ import orm.EigenvectorValue;
 import orm.SessionManager;
 import orm.StockData;
 import research.correlation.SumData;
-import research.regression.GetPcData;
+import research.regression.RegressionUtils;
 
 
 /**
@@ -35,10 +35,10 @@ public class GetVolatilityData {
 	public static void main(String[] args) {
 		System.out.println("GetVolatilityData start");
 		
-		ScoringModel scoringModel = GetPcData.lookupScoringModel(scoringModelId);
+		ScoringModel scoringModel = ScoringModel.getScoringModel(scoringModelId);
 		System.out.println("Company: " + scoringModel.getId());
 		
-		Company company = scoringModel.getCompanyById(companyId);
+		Company company = scoringModel.getCompany(companyId);
 		if (null == company) {
 			System.err.println("could not find company with ID " + companyId + " associated with scoring model");
 			return;
@@ -47,13 +47,13 @@ public class GetVolatilityData {
 		}
 		
 		System.out.println("lookup eigenvector values");
-		List<EigenvectorValue> evvList = GetPcData.lookupEigenvectorValues(scoringModel);
+		List<EigenvectorValue> evvList = EigenvectorValue.getEigenvectorValuesOrderByArticleDayIndexAndEigId(scoringModel);
 		
 		System.out.println("get article day indexes");
-		List<Integer> articleDayIndexList = GetPcData.calculateUniqueArticleDays(evvList);
+		List<Integer> articleDayIndexList = RegressionUtils.calculateUniqueArticleDays(evvList);
 		
 		System.out.println("aggregate eigenvector values by article day index");
-		Map<Eigenvalue, Map<Integer, SumData>> eigDayIndexSumDataMap = GetPcData.calculateEigMap(evvList);
+		Map<Eigenvalue, Map<Integer, SumData>> eigDayIndexSumDataMap = RegressionUtils.calculateEigMap(evvList);
 		
 		List<Eigenvalue> eigList = new ArrayList<>(eigDayIndexSumDataMap.keySet());
 		Collections.sort(eigList, new Comparator<Eigenvalue>() {

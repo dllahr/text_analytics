@@ -39,13 +39,16 @@ public class MainGeneratePrincipalComponentValues {
 		final int scoringModelId = Integer.valueOf(args[0]);
 		System.out.println("scoring model id:  " + scoringModelId);
 		
+		final int articleSourceId = Integer.valueOf(args[1]);
+		System.out.println("article source id:  " + articleSourceId);
+		
 		DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
 		
 		Date minDate = null;
 		Date maxDate = null;
 		boolean doPrint = false;
 		boolean doSave = true;
-		for (int i = 1; i < args.length; i++) {
+		for (int i = 2; i < args.length; i++) {
 			if (args[i].equals(minDateOption)) {
 				System.out.println(minDateOption + " option present, parsing min date from arguments");
 				i++;
@@ -70,7 +73,7 @@ public class MainGeneratePrincipalComponentValues {
 		}
 		System.out.println("Min date:  " + minDate + " " + Utilities.calculateDayIndex(minDate));
 
-		List<Integer> articleIdList = Article.retrieveArticleIdsForMinDateAndScoringModel(minDate, maxDate, scoringModelId);
+		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, maxDate, articleSourceId);
 		
 		List<ArticlePrincipalComponentValues> list = 
 				(new ArticlePrincipalComponentValueCalculator()).calculate(scoringModelId, articleIdList);

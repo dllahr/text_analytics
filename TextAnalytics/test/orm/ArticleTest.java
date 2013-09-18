@@ -27,7 +27,7 @@ public class ArticleTest {
 		final DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
 		Date minDate = dateFormat.parse("2013-08-20");
 		
-		List<Integer> articleIdList = Article.retrieveArticleIdsForMinDateAndScoringModel(minDate, null, 1);
+		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, null, 1);
 		assertNotNull(articleIdList);
 		assertTrue(articleIdList.size() > 0);
 		
@@ -36,8 +36,20 @@ public class ArticleTest {
 		}
 		
 		Date maxDate = dateFormat.parse("2013-08-23");
-		articleIdList = Article.retrieveArticleIdsForMinDateAndScoringModel(minDate, maxDate, 1);
+		articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, maxDate, 1);
 		assertNotNull(articleIdList);
 		assertEquals(6, articleIdList.size());
+	}
+	
+	@Test
+	public void testGetArticles() {
+		List<Article> list = Article.getArticlesOrderById(1);
+		assertTrue(list.size() > 0);
+		
+		int prevId = list.get(0).getId() - 1;
+		for (Article article : list) {
+			assertTrue(article.getId() > prevId);
+			prevId = article.getId();
+		}
 	}
 }

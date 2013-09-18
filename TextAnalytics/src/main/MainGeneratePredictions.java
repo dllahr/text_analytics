@@ -38,14 +38,18 @@ public class MainGeneratePredictions {
 		
 		final DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
 		final Date minArticleDate = dateFormat.parse(args[2]);
-		final Date maxArticleDate = args.length >= 4 ? dateFormat.parse(args[3]) : null;
+		
+		final int articleSourceId = Integer.valueOf(args[3]);
+		
+		final Date maxArticleDate = args.length >= 5 ? dateFormat.parse(args[4]) : null;
+		
 		
 		//commence da jigglin
 		System.out.println("find regression model with ID:  " + regressionModelId);
 		RegressionModel rm = RegressionModel.findById(regressionModelId);
 		
-		List<Integer> articleIdList = Article.retrieveArticleIdsForMinDateAndScoringModel(minArticleDate, maxArticleDate,
-				rm.getScoringModel().getId());
+		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minArticleDate, maxArticleDate,
+				articleSourceId);
 		
 		System.out.print("find prediction model with ID's:  ");
 		for (int id : predictionModelIdList) {

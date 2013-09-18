@@ -4,8 +4,14 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+
+import math.linearAlgebra.Operations;
+import math.linearAlgebra.Vector;
 
 import org.junit.Test;
 
@@ -16,11 +22,12 @@ public class ArticlePrincipalComponentValuesCalculatorTest {
 
 	@Test
 	public void test() throws ParseException {
+		final int articleSourceId = 1;
 		final int scoringModelId = 1;
 		final Date date = (new SimpleDateFormat("yyyy-MM-dd").parse("2013-05-10"));
 		
 		List<Integer> articleIdList = 
-				Article.retrieveArticleIdsForMinDateAndScoringModel(date, date, scoringModelId);
+				Article.getArticleIdsForMinDateAndArticleSource(date, date, articleSourceId);
 		
 		ArticlePrincipalComponentValueCalculator calc = new ArticlePrincipalComponentValueCalculator();
 		
@@ -43,10 +50,36 @@ public class ArticlePrincipalComponentValuesCalculatorTest {
 	}
 	
 	@Test
-	public void fake() {
-		for (int i = 0; i < 10; i++) {
-			System.out.println(i++);
+	public void testSpecific() {
+		final int scoringModelId = 1;
+		List<Integer> articleIdList = new LinkedList<>();
+		articleIdList.add(351);
+		
+		MeanStemCountVector meanVect = (new MeanStemCountVectorBuilder()).build(scoringModelId);
+		
+		List<ArticleStemCountVector> artStemCountVectList = (new ArticleStemCountVectorBuilder()).retrieve(articleIdList, 
+				meanVect.minStemId);
+		
+		ArticleStemCountVector asc = artStemCountVectList.get(0);
+		List<Integer> stemIndexList = new ArrayList<>(asc.stemCountVector.getIndices());
+		Collections.sort(stemIndexList);
+		for (Integer stemIndex : stemIndexList) {
+			System.out.println(stemIndex + " " + asc.stemCountVector.getEntry(stemIndex));
 		}
+		
+		Vector diff = Operations.addVectors(asc.stemCountVector.negate(), meanVect.meanVector);
+		for (int i = 0; i < 10; i++) {
+			System.out.println(diff.getEntry(i));
+		}
+		
+		List<PrincipalComponentVector> pcVectorList = 
+				(new PrincipalComponentVectorBuilder()).build(scoringModelId, 
+						meanVect.meanVector.getMaxIndex() + 1);
+		
+		PrincipalComponentVector pcv = pcVectorList.get(21);
+		System.out.println(pcv.eigenvalue.getId());
+		
+		double result = diff.vectorMultiply(pcv.vector);
+		System.out.println(result);
 	}
-
 }

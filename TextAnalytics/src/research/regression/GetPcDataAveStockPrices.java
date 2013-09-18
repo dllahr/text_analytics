@@ -9,12 +9,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.hibernate.Query;
 
 import orm.Company;
 import orm.ScoringModel;
@@ -23,7 +19,6 @@ import orm.EigenvectorValue;
 import orm.SessionManager;
 import research.correlation.SumData;
 import controller.stockPrices.SmoothedStockPrices;
-import controller.util.Utilities;
 
 
 /**
@@ -41,10 +36,10 @@ public class GetPcDataAveStockPrices {
 		final Date startDate = new Date();
 		System.out.println("start regression GetPcData " + startDate);
 		
-		ScoringModel scoringModel = lookupScoringModel(scoringModelId);
+		ScoringModel scoringModel = ScoringModel.getScoringModel(scoringModelId);
 		System.out.println("for scoringModel " + scoringModel.getId());
 		
-		Company company = scoringModel.getCompanyById(companyId);
+		Company company = scoringModel.getCompany(companyId);
 		if (null == company) {
 			System.err.println("could not find company with ID " + companyId + " associated with scoring model");
 			return;
@@ -60,13 +55,13 @@ public class GetPcDataAveStockPrices {
 		}
 		
 		System.out.println("lookup eigenvector values " + new Date());
-		List<EigenvectorValue> evvList = lookupEigenvectorValues(scoringModel);
+		List<EigenvectorValue> evvList = EigenvectorValue.getEigenvectorValuesOrderByArticleDayIndexAndEigId(scoringModel);
 		
 		System.out.println("get article day indexes " + new Date());
-		List<Integer> articleDayIndexList = calculateUniqueArticleDays(evvList);
+		List<Integer> articleDayIndexList = RegressionUtils.calculateUniqueArticleDays(evvList);
 		
 		System.out.println("aggregate eigenvector values by article day index " + new Date());
-		Map<Eigenvalue, Map<Integer, SumData>> eigDayIndexSumDataMap = calculateEigMap(evvList);
+		Map<Eigenvalue, Map<Integer, SumData>> eigDayIndexSumDataMap = RegressionUtils.calculateEigMap(evvList);
 		
 		List<Eigenvalue> eigList = new ArrayList<>(eigDayIndexSumDataMap.keySet());
 		Collections.sort(eigList, new Comparator<Eigenvalue>() {
@@ -139,65 +134,5 @@ public class GetPcDataAveStockPrices {
 		}
 		
 		return result;
-	}
-	
-	public static Map<Eigenvalue, Map<Integer, SumData>> calculateEigMap(List<EigenvectorValue> evvList) {
-		Map<Eigenvalue, Map<Integer, SumData>> result = new HashMap<Eigenvalue, Map<Integer, SumData>>();
-		
-		for (EigenvectorValue evv : evvList) {
-			Map<Integer, SumData> dayValueMap = result.get(evv.getEigenvalue());
-			if (null == dayValueMap) {
-				dayValueMap = new HashMap<>();
-				result.put(evv.getEigenvalue(), dayValueMap);
-			}
-			
-			SumData sumData = dayValueMap.get(evv.getArticle().getDayIndex());
-			if (null == sumData) {
-				sumData = new SumData();
-				dayValueMap.put(evv.getArticle().getDayIndex(), sumData);
-			}
-			
-			sumData.value += evv.getValue();
-			sumData.count++;
-		}
-		
-		return result;
-	}
-
-	public static List<Integer> calculateUniqueArticleDays(List<EigenvectorValue> evvList) {
-		Set<Integer> articleDaySet = new HashSet<>();
-		Set<Integer> nullDayIndexArticleIdSet = new HashSet<>();
-		
-		for (EigenvectorValue evv : evvList) {
-			final Integer dayIndex = evv.getArticle().getDayIndex();
-			
-			if (dayIndex != null) {
-				articleDaySet.add(evv.getArticle().getDayIndex());
-			} else {
-				nullDayIndexArticleIdSet.add(evv.getArticle().getId());
-			}
-		}
-		System.out.println("\tarticles with null dayIndex:  " + nullDayIndexArticleIdSet.size());
-		
-		List<Integer> articleDayIndexList = new ArrayList<>(articleDaySet);
-		Collections.sort(articleDayIndexList);
-		return articleDayIndexList;
-	}
-
-	public static List<EigenvectorValue> lookupEigenvectorValues(ScoringModel scoringModel) {
-		final String scoringModelParam = "scoringModelParam";
-		Query query = SessionManager.createQuery("from EigenvectorValue where eigenvalue.scoringModel = :" + scoringModelParam 
-				+ " order by article.dayIndex asc, eigenvalue.id");
-		query.setParameter(scoringModelParam, scoringModel);
-		
-		return Utilities.convertGenericList(query.list());
-	}
-
-	public static ScoringModel lookupScoringModel(int companyId) {
-		final String scoringModelIdParam = "scoringModelId";	
-		Query query = SessionManager.createQuery("from ScoringModel where id = :" + scoringModelIdParam);
-		query.setParameter(scoringModelIdParam, companyId);
-		
-		return (ScoringModel)query.uniqueResult();
 	}
 }

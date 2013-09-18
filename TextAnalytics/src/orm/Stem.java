@@ -1,13 +1,17 @@
 package orm;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+
+import org.hibernate.Query;
+
+import controller.util.Utilities;
 
 @Entity
 public class Stem {
@@ -16,9 +20,8 @@ public class Stem {
 	@Id
 	private Integer id;
 	
-	@ManyToOne
-	@JoinColumn(name="SCORING_MODEL_ID")
-	private ScoringModel scoringModel;
+	@Column(name="ARTICLE_SOURCE_ID")
+	private int articleSourceId;
 	
 	private String text;
 	
@@ -37,12 +40,12 @@ public class Stem {
 		this.id = id;
 	}
 
-	public ScoringModel getScoringModel() {
-		return scoringModel;
+	public int getArticleSourceId() {
+		return articleSourceId;
 	}
 
-	public void setScoringModel(ScoringModel scoringModel) {
-		this.scoringModel = scoringModel;
+	public void setArticleSourceId(int articleSourceId) {
+		this.articleSourceId = articleSourceId;
 	}
 
 	public String getText() {
@@ -59,5 +62,12 @@ public class Stem {
 
 	public void setStop(boolean isStop) {
 		this.isStop = isStop;
+	}
+	
+	public static List<Stem> getStemsOrderedById(int articleSourceId) {
+		Query query = SessionManager.createQuery("from Stem where articleSourceId = :asId order by id");
+		query.setParameter("asId", articleSourceId);
+		
+		return Utilities.convertGenericList(query.list());
 	}
 }

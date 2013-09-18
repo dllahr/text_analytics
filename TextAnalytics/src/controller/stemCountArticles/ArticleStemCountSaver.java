@@ -3,36 +3,33 @@ package controller.stemCountArticles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Query;
 
 import controller.integration.readAndSplitRawFile.SplitArticle;
+import controller.util.BatchRetriever;
+import controller.util.GenericRetriever;
 import controller.util.Utilities;
 
 import orm.Article;
 import orm.ArticleStemCount;
-import orm.ScoringModel;
 import orm.SessionManager;
 import orm.Stem;
 
 
 public class ArticleStemCountSaver {
-
-	private static final int batchSize = 1000;
 	
-	private static final String scoringModelParam = "scoringModel";
+	private static final String articleSourceParam = "articleSourceId";
 	private static final String textParam = "text";
-	private static final String stemQueryString = "from Stem where scoringModel=:" 
-			+ scoringModelParam + " and text in (:" + textParam + ")";
+	private static final String stemQueryString = "from Stem where articleSourceId=:" 
+			+ articleSourceParam + " and text in (:" + textParam + ")";
 	
-	public static Article saveStemCountToDatabase(SplitArticle splitArticle, ScoringModel scoringModel) {
+	public static Article saveStemCountToDatabase(SplitArticle splitArticle, int articleSourceId) {
 
 		Article article = new Article();
-		article.setScoringModel(scoringModel);
+		article.setArticleSourceId(articleSourceId);
 		article.setFilename(splitArticle.file.getAbsolutePath());
 		article.setStartLineNum(splitArticle.startLineNumber);
 		article.setAdditionalIdentifier(splitArticle.linesBeforeBody.get(0));
@@ -43,7 +40,7 @@ public class ArticleStemCountSaver {
 		}		
 		SessionManager.persist(article);
 
-		Map<String, Stem> textStemMap = loadTextStemMap(scoringModel, splitArticle.stemCountMap.keySet());
+		Map<String, Stem> textStemMap = loadTextStemMap(articleSourceId, splitArticle.stemCountMap.keySet());
 		int newStemCount = 0;
 		
 		for (String stemText : splitArticle.stemCountMap.keySet()) {
@@ -53,7 +50,7 @@ public class ArticleStemCountSaver {
 				stem = textStemMap.get(stemText);
 			} else {
 				stem = new Stem();
-				stem.setScoringModel(scoringModel);
+				stem.setArticleSourceId(articleSourceId);
 				stem.setText(stemText);
 				SessionManager.persist(stem);
 				
@@ -75,26 +72,24 @@ public class ArticleStemCountSaver {
 	}
 	
 	
-	private static Map<String, Stem> loadTextStemMap(ScoringModel scoringModel, Collection<String> stemTextCollection) {
-		List<Stem> stemList = new ArrayList<>(stemTextCollection.size());
+	@SuppressWarnings("rawtypes")
+	private static Map<String, Stem> loadTextStemMap(int articleSourceId, Collection<String> stemTextCollection) {
+		
 
-		Query query = SessionManager.createQuery(stemQueryString);
-		query.setParameter(scoringModelParam, scoringModel);
+		final Query query = SessionManager.createQuery(stemQueryString);
+		query.setParameter(articleSourceParam, articleSourceId);
 
-		Iterator<String> stemTextIter = stemTextCollection.iterator();
-		while (stemTextIter.hasNext()) {
-			List<String> queryList = new LinkedList<>();
-			int count = 0;
-			
-			while (stemTextIter.hasNext() && count < batchSize) {
-				queryList.add(stemTextIter.next());
-				count++;
+		GenericRetriever<String> gr = new GenericRetriever<String>() {
+			@Override
+			public List retrieve(Collection<String> coll) {
+				query.setParameterList(textParam, coll);
+				return query.list();
 			}
-			
-			query.setParameterList(textParam, queryList);
-			List<Stem> queryResult = Utilities.convertGenericList(query.list());
-			stemList.addAll(queryResult);
-		}
+		};
+		BatchRetriever<String> br = new BatchRetriever<>(gr);
+		
+		List rawList = br.retrieveAll(new ArrayList<>(stemTextCollection));
+		List<Stem> stemList = Utilities.convertGenericList(rawList);
 		
 		Map<String, Stem> result = new HashMap<>();
 		
