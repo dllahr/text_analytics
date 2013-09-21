@@ -128,16 +128,24 @@ create sequence article_id_seq start with 1;
 alter table regression_model add company_id integer;
 alter table regression_model add foreign key (company_id) references company(id);
 
+create sequence regression_model_id_seq start with 1 increment by 1;
+  
 --------------------------------------------------------
 --  DDL for Table REGRESSION_MODEL_COEF
 --------------------------------------------------------
 
-  CREATE TABLE REGRESSION_MODEL_COEF 
-   (	ID NUMBER(*,0), 
+  CREATE TABLE REGRESSION_MODEL_COEF
+   (	ID NUMBER(*,0) primary key, 
 	REGRESSION_MODEL_ID NUMBER(*,0), 
 	EIGENVALUE_ID NUMBER(*,0), 
-	COEF NUMBER
-   );
+	COEF NUMBER,
+	
+	foreign key (regression_model_id) references regression_model(id),
+	foreign key (eigenvalue_id) references eigenvalue(id)
+   ); 
+
+create sequence regression_model_coef_id_seq start with 1 increment by 1;
+
 --------------------------------------------------------
 --  DDL for Table SCORING_MODEL
 --------------------------------------------------------

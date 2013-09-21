@@ -3,9 +3,12 @@ package orm;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.Query;
@@ -15,6 +18,8 @@ import controller.util.Utilities;
 @Entity
 @Table(name="REGRESSION_MODEL_COEF")
 public class RegressionModelCoef {
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "regressionModelCoefIdSeq")
+	@SequenceGenerator(name = "regressionModelCoefIdSeq", sequenceName = "regression_model_coef_id_seq", allocationSize = 1)
 	@Id
 	private Integer id;
 	

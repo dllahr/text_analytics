@@ -1,5 +1,7 @@
 package orm;
 
+import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+
+import org.hibernate.Query;
+
+import controller.util.Utilities;
 
 
 @Entity
@@ -65,5 +71,12 @@ public class Eigenvalue {
 
 	public void setValue(Double value) {
 		this.value = value;
+	}
+	
+	public static Collection<Eigenvalue> getEigenvalueByScoringModel(int scoringModelId) {
+		Query query = SessionManager.createQuery("from Eigenvalue where scoringModel.id = :scoringModelId");
+		query.setInteger("scoringModelId", scoringModelId);
+		
+		return Utilities.convertGenericList(query.list());
 	}
 }
