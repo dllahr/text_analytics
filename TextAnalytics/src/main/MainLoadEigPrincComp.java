@@ -145,7 +145,7 @@ public class MainLoadEigPrincComp {
 
 			while ((endLine = reader.readLine()) != null) {
 				if (! endLine.trim().equals("")) {
-					throw new RuntimeException("eigenvector load:  there were more rows in the eigenvector file than there were articles for the scoring model");
+					throw new RuntimeException("eigenvector load:  there were more rows in the eigenvector file than there were articles for the article source");
 				}
 			}
 		}

@@ -72,9 +72,13 @@ public class MainGeneratePrincipalComponentValues {
 			System.out.println("minimum date is lastest date of articles with principal component values in database");
 		}
 		System.out.println("Min date:  " + minDate + " " + Utilities.calculateDayIndex(minDate));
+		System.out.println("doPrint:  " + doPrint);
+		System.out.println("doSave:  " + doSave);
 
+		System.out.println("get article ID's that match dates / options specified");
 		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, maxDate, articleSourceId);
 		
+		System.out.println("calculate principal component values");
 		List<ArticlePrincipalComponentValues> list = 
 				(new ArticlePrincipalComponentValueCalculator()).calculate(scoringModelId, articleIdList);
 		
@@ -85,8 +89,11 @@ public class MainGeneratePrincipalComponentValues {
 		}
 		
 		if (doSave) {
+			System.out.println("save principal component values to database");
 			(new ArticlePcValueSaver()).save(list);
 		}
+		
+		System.out.println("finished");
 	}
 	
 	static Date getMostRecentDayIndexOfArticleWithPrincipalComponentValue(int scoringModelId) {

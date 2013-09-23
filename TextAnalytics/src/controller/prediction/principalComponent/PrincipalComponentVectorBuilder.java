@@ -27,6 +27,8 @@ class PrincipalComponentVectorBuilder {
 		result.add(vector);
 		
 		int stemIndex = 0;
+		
+		System.out.println("Starting eigenvalue id:  " + rowList.get(0)[0]);
 
 		for (Object[] row : rowList) {
 			Integer curEigId = ((BigDecimal)row[0]).intValue();

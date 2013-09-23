@@ -24,7 +24,7 @@ public class ArticleStemCountVectorBuilderTest {
 		Date minDate = (new SimpleDateFormat("yyyy-MM-dd")).parse("2013-05-09");
 		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, null, 1);
 		
-		List<ArticleStemCount> list = (new ArticleStemCountVectorBuilder()).retrieveArticleStemCount(articleIdList);
+		List<ArticleStemCount> list = (new ArticleStemCountVectorBuilder()).retrieveArticleStemCount(articleIdList, false);
 		assertTrue(list.size() > 0);
 	}
 	
@@ -33,7 +33,7 @@ public class ArticleStemCountVectorBuilderTest {
 		Date minDate = (new SimpleDateFormat("yyyy-MM-dd")).parse("2013-05-09");
 		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, null, 1);
 		
-		Map<Article, SparseVector> map = (new ArticleStemCountVectorBuilder()).buildArticleStemCountVectorMap(articleIdList, 1);
+		Map<Article, SparseVector> map = (new ArticleStemCountVectorBuilder()).buildArticleStemCountVectorMap(articleIdList, 1, false);
 		
 		Article article = map.keySet().iterator().next();
 		System.out.println(article.getId() + " " + article.getPublishDate() + " " + article.getFilename());

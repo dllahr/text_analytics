@@ -20,9 +20,9 @@ import controller.util.ValueOperator;
 
 public class ArticleStemCountVectorBuilder {
 
-	public List<ArticleStemCountVector> retrieve(List<Integer> articleIdList, int minStemId) {
+	public List<ArticleStemCountVector> retrieve(List<Integer> articleIdList, int minStemId, boolean noStopWords) {
 
-		Map<Article, SparseVector> map = buildArticleStemCountVectorMap(articleIdList, minStemId);
+		Map<Article, SparseVector> map = buildArticleStemCountVectorMap(articleIdList, minStemId, noStopWords);
 		
 		List<ArticleStemCountVector> result = new ArrayList<>(map.size());
 		
@@ -35,8 +35,10 @@ public class ArticleStemCountVectorBuilder {
 		return result;
 	}
 	
-	Map<Article, SparseVector> buildArticleStemCountVectorMap(List<Integer> articleIdList, final int minStemId) {
-		List<ArticleStemCount> articleStemCountList = retrieveArticleStemCount(articleIdList);
+	Map<Article, SparseVector> buildArticleStemCountVectorMap(List<Integer> articleIdList, final int minStemId, 
+			boolean noStopWords) {
+		
+		List<ArticleStemCount> articleStemCountList = retrieveArticleStemCount(articleIdList, noStopWords);
 		
 		ValueOperator<ArticleStemCount, Article, SparseVector> vo = new ValueOperator<ArticleStemCount, Article, SparseVector>() {
 			@Override
@@ -56,8 +58,12 @@ public class ArticleStemCountVectorBuilder {
 		return (new MapBuilder()).build(vo, articleStemCountList);
 	}
 	
-	List<ArticleStemCount> retrieveArticleStemCount(List<Integer> articleIdList) {
-		final Query query = SessionManager.createQuery("from ArticleStemCount where article.id in (:articleIdList)");
+	List<ArticleStemCount> retrieveArticleStemCount(List<Integer> articleIdList, boolean noStopWords) {
+		String queryString = "from ArticleStemCount where article.id in (:articleIdList)";
+		if (noStopWords) {
+			queryString += " and stem.isStop = false";
+		}
+		final Query query = SessionManager.createQuery(queryString);
 		
 		GenericRetriever<Integer> gr = new GenericRetriever<Integer>() {
 			@SuppressWarnings("rawtypes")

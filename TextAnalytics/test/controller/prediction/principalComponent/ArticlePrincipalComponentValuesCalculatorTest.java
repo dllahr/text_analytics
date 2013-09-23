@@ -12,6 +12,7 @@ import java.util.List;
 
 import math.linearAlgebra.Operations;
 import math.linearAlgebra.Vector;
+import math.linearAlgebra.VectorTest;
 
 import org.junit.Test;
 
@@ -19,6 +20,7 @@ import orm.Article;
 import orm.Eigenvalue;
 
 public class ArticlePrincipalComponentValuesCalculatorTest {
+	private static final double eps = 1e-5;
 
 	@Test
 	public void test() throws ParseException {
@@ -58,7 +60,7 @@ public class ArticlePrincipalComponentValuesCalculatorTest {
 		MeanStemCountVector meanVect = (new MeanStemCountVectorBuilder()).build(scoringModelId);
 		
 		List<ArticleStemCountVector> artStemCountVectList = (new ArticleStemCountVectorBuilder()).retrieve(articleIdList, 
-				meanVect.minStemId);
+				meanVect.minStemId, false);
 		
 		ArticleStemCountVector asc = artStemCountVectList.get(0);
 		List<Integer> stemIndexList = new ArrayList<>(asc.stemCountVector.getIndices());
@@ -81,5 +83,14 @@ public class ArticlePrincipalComponentValuesCalculatorTest {
 		
 		double result = diff.vectorMultiply(pcv.vector);
 		System.out.println(result);
+	}
+	
+	@Test
+	public void testCalculateNormalizedVector() {
+		for (Vector v : VectorTest.buildTestVectors()) {
+			Vector nv = ArticlePrincipalComponentValueCalculator.normalizeArticleStemCountVectorCounts(v);
+		
+			assertEquals(1.0, nv.sum(), eps);
+		}
 	}
 }
