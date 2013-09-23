@@ -49,7 +49,7 @@ public class MainGeneratePredictions {
 		RegressionModel rm = RegressionModel.findById(regressionModelId);
 		
 		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minArticleDate, maxArticleDate,
-				articleSourceId);
+				articleSourceId, false);
 		
 		System.out.print("find prediction model with ID's:  ");
 		for (int id : predictionModelIdList) {

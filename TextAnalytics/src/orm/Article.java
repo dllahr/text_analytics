@@ -110,13 +110,16 @@ public class Article {
 	 * @return
 	 */
 	public static List<Integer> getArticleIdsForMinDateAndArticleSource(Date minArticleDate, 
-			Date maxArticleDate, int articleSourceId) {
+			Date maxArticleDate, int articleSourceId, boolean excludeArticlePcValueArticles) {
 		
 		StringBuilder builder = new StringBuilder();
 		builder.append("select id from Article where articleSourceId = :articleSourceId and publishDate >= :minPublishDate");
 		
 		if (maxArticleDate != null) {
 			builder.append(" and publishDate <= :maxPublishDate");
+		}
+		if (excludeArticlePcValueArticles) {
+			builder.append(" and id not in (select article.id from ArticlePcValue)");
 		}
 	
 		Query query = SessionManager.createQuery(builder.toString());

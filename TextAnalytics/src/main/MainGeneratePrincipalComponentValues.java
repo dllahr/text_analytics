@@ -29,9 +29,6 @@ public class MainGeneratePrincipalComponentValues {
 	private static final String maxDateOption = "-max_d";
 	private static final String printOption = "-print";
 	private static final String noSaveOption = "-noSave";
-
-	private static final String mostRecentDateQueryString = "select max(publish_date) from article where " +
-			"scoring_model_id = :scoringModelId and id in (select article_id from article_pc_value)";
 	
 	public static void main(String[] args) throws ParseException {
 		System.out.println("Generate principal component values");
@@ -68,7 +65,7 @@ public class MainGeneratePrincipalComponentValues {
 		}
 		
 		if (null == minDate) {
-			minDate = getMostRecentDayIndexOfArticleWithPrincipalComponentValue(scoringModelId);
+			minDate = getMostRecentDayIndexOfArticleWithPrincipalComponentValue(articleSourceId);
 			System.out.println("minimum date is lastest date of articles with principal component values in database");
 		}
 		System.out.println("Min date:  " + minDate + " " + Utilities.calculateDayIndex(minDate));
@@ -76,7 +73,7 @@ public class MainGeneratePrincipalComponentValues {
 		System.out.println("doSave:  " + doSave);
 
 		System.out.println("get article ID's that match dates / options specified");
-		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, maxDate, articleSourceId);
+		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, maxDate, articleSourceId, true);
 		
 		System.out.println("calculate principal component values");
 		List<ArticlePrincipalComponentValues> list = 
@@ -96,9 +93,12 @@ public class MainGeneratePrincipalComponentValues {
 		System.out.println("finished");
 	}
 	
-	static Date getMostRecentDayIndexOfArticleWithPrincipalComponentValue(int scoringModelId) {
-		Query query = SessionManager.createSqlQuery(mostRecentDateQueryString);
-		query.setInteger("scoringModelId", scoringModelId);
+	static Date getMostRecentDayIndexOfArticleWithPrincipalComponentValue(int articleSourceId) {
+		String queryString = "select max(publish_date) from article where " +
+				"article_source_id = :articleSourceId and id in (select article_id from article_pc_value)";
+
+		Query query = SessionManager.createSqlQuery(queryString);
+		query.setInteger("articleSourceId", articleSourceId);
 		
 		return (Date)query.list().get(0);
 	}

@@ -29,7 +29,7 @@ public class ArticlePrincipalComponentValuesCalculatorTest {
 		final Date date = (new SimpleDateFormat("yyyy-MM-dd").parse("2013-05-10"));
 		
 		List<Integer> articleIdList = 
-				Article.getArticleIdsForMinDateAndArticleSource(date, date, articleSourceId);
+				Article.getArticleIdsForMinDateAndArticleSource(date, date, articleSourceId, false);
 		
 		ArticlePrincipalComponentValueCalculator calc = new ArticlePrincipalComponentValueCalculator();
 		
