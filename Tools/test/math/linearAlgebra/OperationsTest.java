@@ -48,6 +48,4 @@ public class OperationsTest {
 		}
 		assertEquals(val2[val2.length-1], sum.getEntry(val2.length-1), eps);
 	}
-	
-
 }

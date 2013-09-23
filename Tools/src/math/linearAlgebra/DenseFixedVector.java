@@ -59,6 +59,18 @@ public class DenseFixedVector implements Vector {
 		
 		return result;
 	}
+	
+	@Override
+	public Vector scalarMultiply(double scalar) {
+		DenseFixedVector result = new DenseFixedVector(entryArray.length);
+		
+		for (int i = 0; i < entryArray.length; i++) {
+			final double value = scalar * entryArray[i];
+			result.setEntry(i, value);
+		}
+		
+		return result;
+	}
 
 	@Override
 	public Set<Integer> getIndices() {
@@ -101,5 +113,16 @@ public class DenseFixedVector implements Vector {
 	@Override
 	public Vector createCopy() {
 		return new DenseFixedVector(entryArray);
+	}
+
+	@Override
+	public double sum() {
+		double sum = 0.0;
+		
+		for (double value : entryArray) {
+			sum += value;
+		}
+		
+		return sum;
 	}
 }

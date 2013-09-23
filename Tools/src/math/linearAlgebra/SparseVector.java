@@ -55,6 +55,19 @@ public class SparseVector implements Vector {
 
 		return result;
 	}
+	
+	@Override
+	public Vector scalarMultiply(double scalar) {
+		SparseVector result = new SparseVector();
+		
+		for (Integer index : data.keySet()) {
+			final double value = scalar * data.get(index);
+			
+			result.setEntry(index, value);
+		}
+		
+		return result;
+	}
 
 	@Override
 	public Set<Integer> getIndices() {
@@ -85,5 +98,16 @@ public class SparseVector implements Vector {
 		result.data.putAll(data);
 		
 		return result;
+	}
+	
+	@Override
+	public double sum() {
+		double sum = 0.0;
+		
+		for (Double value : data.values()) {
+			sum += value;
+		}
+		
+		return sum;
 	}
 }

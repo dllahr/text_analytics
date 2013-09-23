@@ -12,6 +12,8 @@ public interface Vector {
 
 	public double vectorMultiply(double doubleVector[]);
 
+	public Vector scalarMultiply(double scalar);
+	
 	public Set<Integer> getIndices();
 
 	public int getMaxIndex();
@@ -19,4 +21,6 @@ public interface Vector {
 	public Vector negate();
 	
 	public Vector createCopy();
+	
+	public double sum();
 }
