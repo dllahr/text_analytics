@@ -2,6 +2,7 @@ package orm;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -19,6 +20,12 @@ public class ScoringModel  {
 	private Integer id;
 	
 	private String notes;
+	
+	@Column(name="ARTICLES_NORMALIZED")
+	private boolean articlesNormalized;
+	
+	@Column(name="NO_STOP_WORDS")
+	private boolean noStopWords;
 
 	@ManyToMany
 	@JoinTable(name="COMPANY_SCORING_MODEL", joinColumns={@JoinColumn(name="SCORING_MODEL_ID")}, 
@@ -45,12 +52,32 @@ public class ScoringModel  {
 		this.notes = notes;
 	}
 
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+	
 	public Set<Company> getCompanySet() {
 		return companySet;
 	}
 
 	public void setCompanySet(Set<Company> companySet) {
 		this.companySet = companySet;
+	}
+	
+	public boolean getArticlesNormalized() {
+		return articlesNormalized;
+	}
+
+	public void setArticlesNormalized(boolean articlesNormalized) {
+		this.articlesNormalized = articlesNormalized;
+	}
+	
+	public boolean getNoStopWords() {
+		return noStopWords;
+	}
+
+	public void setNoStopWords(boolean noStopWords) {
+		this.noStopWords = noStopWords;
 	}
 	
 	public Company getCompany(int companyId) {
@@ -69,11 +96,22 @@ public class ScoringModel  {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(id).append(Constants.toStringDelimeter).append("companies: ");
-		for (Company company : companySet) {
-			builder.append(company.getId()).append(Constants.toStringDelimeter);
+		builder.append(id).append(Constants.toStringDelimeter);
+		
+		if (companySet.size() > 0) {
+			for (Company company : companySet) {
+				builder.append(company.getId()).append(",");
+			}
+			builder = new StringBuilder(builder.substring(0, builder.length()-1));
+		} else {
+			builder.append("no companies");
 		}
-		builder.append(notes);
+		
+		builder.append(Constants.toStringDelimeter);
+		
+		builder.append("\"").append(notes).append("\"").append(Constants.toStringDelimeter);
+		builder.append(articlesNormalized).append(Constants.toStringDelimeter);
+		builder.append(noStopWords);
 
 		return builder.toString();
 	}

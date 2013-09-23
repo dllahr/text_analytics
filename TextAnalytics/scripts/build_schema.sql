@@ -154,6 +154,12 @@ create sequence regression_model_coef_id_seq start with 1 increment by 1;
    (	ID NUMBER(*,0), 
 	NOTES VARCHAR2(4000 BYTE)
    );
+   
+alter table scoring_model add articles_normalized number(1,0);
+alter table scoring_model modify articles_normalized not null;
+alter table scoring_model add no_stop_words number(1,0);
+alter table scoring_model modify no_stop_words not null;
+
 --------------------------------------------------------
 --  DDL for Table STAGING_STOCK_DATA
 --------------------------------------------------------
