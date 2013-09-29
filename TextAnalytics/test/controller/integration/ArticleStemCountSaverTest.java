@@ -28,7 +28,6 @@ public class ArticleStemCountSaverTest {
 		Stem stem = new Stem();
 		stem.setId(1);
 		stem.setText("one");
-		stem.setArticleSourceId(articleSourceId);
 		SessionManager.persist(stem);
 		
 		SplitArticle splitArticle = new SplitArticle(new File("fake file"), 0);

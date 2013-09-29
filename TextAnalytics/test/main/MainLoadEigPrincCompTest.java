@@ -25,7 +25,7 @@ public class MainLoadEigPrincCompTest {
 	public void testLoadMeanStemCountVector() throws IOException {
 		ScoringModel sm = getScoringModel();
 		
-		List<Stem> stemList = Stem.getStemsOrderedById(2);
+		List<Stem> stemList = Stem.getStemsOrderedById();
 		
 		File meanStemVectFile = new File("E:/daves_stuff/projects/text_analytics/companies/ge/models/model_jb/cov_eig_prinComp/mean_stem_vect.csv");
 		assertTrue("do not run this test because it commits unless you really mean to", false);

@@ -115,4 +115,7 @@ public class SessionManager {
 		}
 	}
 	
+	public static void doWork(Work work) {
+		getSession().doWork(work);
+	}
 }

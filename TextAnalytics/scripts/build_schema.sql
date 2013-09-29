@@ -57,10 +57,17 @@ create sequence article_id_seq start with 1;
 --------------------------------------------------------
 
   CREATE TABLE ARTICLE_STEM_COUNT 
-   (	ARTICLE_ID NUMBER(*,0), 
+   (	
+   ARTICLE_ID NUMBER(*,0), 
 	STEM_ID NUMBER(*,0), 
-	COUNT NUMBER(*,0)
+	COUNT NUMBER(*,0),
+	
+	primary key (article_id, stem_id),
+	foreign key (article_id) references article(id),
+	foreign key (stem_id) references stem(id)
    );
+   
+   CREATE INDEX ARTICLE_STEM_COUNT_INDEX ON ARTICLE_STEM_COUNT (ARTICLE_ID);
 
    COMMENT ON TABLE ARTICLE_STEM_COUNT  IS 'represents the number of times each stem occurred in each article.  also known as word vector, sparse format';
 --------------------------------------------------------

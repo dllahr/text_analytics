@@ -19,10 +19,7 @@ public class Stem {
 	@SequenceGenerator(name = "stemIdSeq", sequenceName = "stem_id_seq", allocationSize = 1)
 	@Id
 	private Integer id;
-	
-	@Column(name="ARTICLE_SOURCE_ID")
-	private int articleSourceId;
-	
+
 	private String text;
 	
 	@Column(name="IS_STOP")
@@ -38,14 +35,6 @@ public class Stem {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public int getArticleSourceId() {
-		return articleSourceId;
-	}
-
-	public void setArticleSourceId(int articleSourceId) {
-		this.articleSourceId = articleSourceId;
 	}
 
 	public String getText() {
@@ -64,9 +53,8 @@ public class Stem {
 		this.isStop = isStop;
 	}
 	
-	public static List<Stem> getStemsOrderedById(int articleSourceId) {
-		Query query = SessionManager.createQuery("from Stem where articleSourceId = :asId order by id");
-		query.setParameter("asId", articleSourceId);
+	public static List<Stem> getStemsOrderedById() {
+		Query query = SessionManager.createQuery("from Stem order by id");
 		
 		return Utilities.convertGenericList(query.list());
 	}

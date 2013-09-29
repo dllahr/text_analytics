@@ -20,7 +20,7 @@ public class StemTest {
 
 	@Test
 	public void testGetStems() {
-		List<Stem> list = Stem.getStemsOrderedById(1);
+		List<Stem> list = Stem.getStemsOrderedById();
 		assertTrue(list.size() > 0);
 		
 		int prevId = list.get(0).getId() - 1;

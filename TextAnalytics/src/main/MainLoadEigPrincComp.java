@@ -53,7 +53,7 @@ public class MainLoadEigPrincComp {
 		loadEigenvectors(articleSourceId, eigvectFile, eigvalList);
 		
 		System.out.println("getting stems from database:");
-		List<Stem> stemList = Stem.getStemsOrderedById(articleSourceId);
+		List<Stem> stemList = Stem.getStemsOrderedById();
 
 		loadPrinComps(prinCompFile, eigvalList, stemList);
 		

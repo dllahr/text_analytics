@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class ArticleStemCount implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@ManyToOne
 	@JoinColumn(name="ARTICLE_ID")
@@ -27,9 +27,8 @@ public class ArticleStemCount implements Serializable {
 	private Integer count;
 	
 	public ArticleStemCount() {
-		
 	}
-
+	
 	public Article getArticle() {
 		return article;
 	}
@@ -52,5 +51,10 @@ public class ArticleStemCount implements Serializable {
 
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+
+	@Override
+	public String toString() {
+		return article.getId() + Constants.toStringDelimeter + stem.getId() + Constants.toStringDelimeter + count;
 	}
 }

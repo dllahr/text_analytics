@@ -20,11 +20,9 @@ import orm.Stem;
 
 
 public class ArticleStemCountSaver {
-	
-	private static final String articleSourceParam = "articleSourceId";
+
 	private static final String textParam = "text";
-	private static final String stemQueryString = "from Stem where articleSourceId=:" 
-			+ articleSourceParam + " and text in (:" + textParam + ")";
+	private static final String stemQueryString = "from Stem where text in (:" + textParam + ")";
 	
 	public static Article saveStemCountToDatabase(SplitArticle splitArticle, int articleSourceId) {
 
@@ -40,7 +38,7 @@ public class ArticleStemCountSaver {
 		}		
 		SessionManager.persist(article);
 
-		Map<String, Stem> textStemMap = loadTextStemMap(articleSourceId, splitArticle.stemCountMap.keySet());
+		Map<String, Stem> textStemMap = loadTextStemMap(splitArticle.stemCountMap.keySet());
 		int newStemCount = 0;
 		
 		for (String stemText : splitArticle.stemCountMap.keySet()) {
@@ -50,7 +48,6 @@ public class ArticleStemCountSaver {
 				stem = textStemMap.get(stemText);
 			} else {
 				stem = new Stem();
-				stem.setArticleSourceId(articleSourceId);
 				stem.setText(stemText);
 				SessionManager.persist(stem);
 				
@@ -73,11 +70,9 @@ public class ArticleStemCountSaver {
 	
 	
 	@SuppressWarnings("rawtypes")
-	private static Map<String, Stem> loadTextStemMap(int articleSourceId, Collection<String> stemTextCollection) {
-		
-
+	private static Map<String, Stem> loadTextStemMap(Collection<String> stemTextCollection) {
+	
 		final Query query = SessionManager.createQuery(stemQueryString);
-		query.setParameter(articleSourceParam, articleSourceId);
 
 		GenericRetriever<String> gr = new GenericRetriever<String>() {
 			@Override
