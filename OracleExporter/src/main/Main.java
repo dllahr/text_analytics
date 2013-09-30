@@ -20,6 +20,12 @@ public class Main {
 	 * @throws SQLException 
 	 */
 	public static void main(String[] args) throws SQLException {
+		if (args.length == 0) {
+			System.out.println("1st argument:  number of columns");
+			System.out.println("2nd argument:  sql query");
+			return;
+		}
+
 		final int numCols = Integer.valueOf(args[0]);
 		final String queryStr = args[1];
 		
