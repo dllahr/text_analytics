@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.hibernate.Query;
-
 import orm.Article;
 import orm.Eigenvalue;
 import orm.EigenvectorValue;
@@ -45,7 +43,7 @@ public class MainLoadEigPrincComp {
 			System.in.read();
 		}
 		
-		ScoringModel scoringModel = findScoringModel(scoringModelId);
+		ScoringModel scoringModel = ScoringModel.getScoringModel(scoringModelId);
 		
 		List<Eigenvalue> eigvalList = loadEigenvalues(eigvalFile, scoringModel);
 		System.out.println("Loaded eigenvalues:  " + eigvalList.size());
@@ -61,13 +59,7 @@ public class MainLoadEigPrincComp {
 
 		System.out.println("Done!");
 	}
-	
-	private static ScoringModel findScoringModel(int scoringModelId) {
-		Query query = SessionManager.createQuery("from ScoringModel where id = :id");
-		query.setInteger("id", scoringModelId);
-		
-		return (ScoringModel)query.list().get(0);
-	}
+
 	
 	private static List<Eigenvalue> loadEigenvalues(File eigvalFile, ScoringModel sm) throws IOException {
 		List<Eigenvalue> result = new LinkedList<>();
@@ -179,16 +171,29 @@ public class MainLoadEigPrincComp {
 				throw new RuntimeException("eigenvector load:  number of entries in current row of file is different than number of eigenvalues. lineNum: " + lineNum);
 			}
 			
-			int index = 0;
-			for (Eigenvalue e : eigvalList) {
-				final double value = Double.valueOf(split[index]);
-
-				SessionManager.persist(new PrincipalComponent(e, stem, value));
-
-				index++;
+			
+			//convert strings to doubles and check if every entry in row is a zero
+			double[] values = new double[split.length];
+			boolean allZeros = true;
+			for (int i = 0; i < split.length; i++) {
+				double val = Double.valueOf(split[i]);
+				
+				allZeros = allZeros && (val == 0.0);
+				
+				values[i] = val;
 			}
 			
-			
+			//if every entry in the row is a zero it means that stem entry did not occur in any articles used in the model
+			//therefore do not store the data for any of them
+			if (! allZeros) {
+				int index = 0;
+				for (Eigenvalue e : eigvalList) {
+					SessionManager.persist(new PrincipalComponent(e, stem, values[index]));
+
+					index++;
+				}
+			}
+
 			lineNum++;
 			
 			if (lineNum%1000 == 0) {
