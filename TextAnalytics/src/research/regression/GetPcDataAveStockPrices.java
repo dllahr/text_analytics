@@ -37,9 +37,9 @@ public class GetPcDataAveStockPrices {
 		System.out.println("start regression GetPcData " + startDate);
 		
 		ScoringModel scoringModel = ScoringModel.getScoringModel(scoringModelId);
-		System.out.println("for scoringModel " + scoringModel.getId());
+		System.out.println("for scoringModel " + scoringModel);
 		
-		Company company = scoringModel.getCompany(companyId);
+		Company company = Company.findById(companyId);
 		if (null == company) {
 			System.err.println("could not find company with ID " + companyId + " associated with scoring model");
 			return;

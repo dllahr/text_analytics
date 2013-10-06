@@ -28,9 +28,9 @@ public class ScoringModel  {
 	private boolean noStopWords;
 
 	@ManyToMany
-	@JoinTable(name="COMPANY_SCORING_MODEL", joinColumns={@JoinColumn(name="SCORING_MODEL_ID")}, 
-	inverseJoinColumns={@JoinColumn(name="COMPANY_ID")})
-	private Set<Company> companySet;
+	@JoinTable(name="SCORING_MODEL_ARTICLE_SOURCE", joinColumns={@JoinColumn(name="SCORING_MODEL_ID")},
+	inverseJoinColumns={@JoinColumn(name="ARTICLE_SOURCE_ID")})
+	private Set<ArticleSource> articleSourceSet;
 		
 	public ScoringModel() {
 		
@@ -56,14 +56,6 @@ public class ScoringModel  {
 		this.notes = notes;
 	}
 	
-	public Set<Company> getCompanySet() {
-		return companySet;
-	}
-
-	public void setCompanySet(Set<Company> companySet) {
-		this.companySet = companySet;
-	}
-	
 	public boolean getArticlesNormalized() {
 		return articlesNormalized;
 	}
@@ -80,31 +72,27 @@ public class ScoringModel  {
 		this.noStopWords = noStopWords;
 	}
 	
-	public Company getCompany(int companyId) {
-		Company result = null;
-		
-		for (Company company : companySet) {
-			if (companyId == company.getId()) {
-				result = company;
-				break;
-			}
-		}
-		
-		return result;
+	public Set<ArticleSource> getArticleSourceSet() {
+		return articleSourceSet;
 	}
+
+	public void setArticleSourceSet(Set<ArticleSource> articleSourceSet) {
+		this.articleSourceSet = articleSourceSet;
+	}
+	
 	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(id).append(Constants.toStringDelimeter);
 		
-		if (companySet.size() > 0) {
-			for (Company company : companySet) {
-				builder.append(company.getId()).append(",");
+		if (articleSourceSet.size() > 0) {
+			for (ArticleSource as : articleSourceSet) {
+				builder.append(as.getId()).append(",");
 			}
 			builder = new StringBuilder(builder.substring(0, builder.length()-1));
 		} else {
-			builder.append("no companies");
+			builder.append("no article sources");
 		}
 		
 		builder.append(Constants.toStringDelimeter);

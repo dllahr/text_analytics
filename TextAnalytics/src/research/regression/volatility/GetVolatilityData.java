@@ -36,9 +36,9 @@ public class GetVolatilityData {
 		System.out.println("GetVolatilityData start");
 		
 		ScoringModel scoringModel = ScoringModel.getScoringModel(scoringModelId);
-		System.out.println("Company: " + scoringModel.getId());
+		System.out.println("ScoringModel: " + scoringModel.getId());
 		
-		Company company = scoringModel.getCompany(companyId);
+		Company company = Company.findById(companyId);
 		if (null == company) {
 			System.err.println("could not find company with ID " + companyId + " associated with scoring model");
 			return;

@@ -7,34 +7,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Query;
 import org.junit.Test;
 
 import controller.stockPrices.SmoothedStockPrices;
 
-import orm.ScoringModel;
-import orm.SessionManager;
 import orm.StockData;
 
 public class SmoothedStockPricesTest {
 	
 	@Test
 	public void testIntegration() {
-		SessionManager.setUseForTest(false);
-		Query query = SessionManager.createQuery("from Company where stockSymbol='CAT'");
-		ScoringModel scoringModel = (ScoringModel)(query.list().get(0));
-		double[] weights = {0.5, 1.0, 0.5};
-		final int minDayIndex = 5877;
-		SmoothedStockPrices findSmoothedStockPrices = new SmoothedStockPrices(minDayIndex, 
-				scoringModel.getCompanySet().iterator().next(), weights);
 		
-		for (int i = 1; i <= 14; i++) {
-			final int dayIndex = i + minDayIndex;
-			final double value = findSmoothedStockPrices.getSmoothedPriceClosestAfterDayIndex(dayIndex);
-			System.out.println(dayIndex + " " + value);
-		}
-		
-		//compared to values calculated in spreadsheet test_smoothing.xlsx - they match
 	}
 
 	@Test

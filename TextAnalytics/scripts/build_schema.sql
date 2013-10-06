@@ -80,13 +80,16 @@ create sequence article_id_seq start with 1;
 	STOCK_SYMBOL VARCHAR2(20 BYTE)
    );
 --------------------------------------------------------
---  DDL for Table COMPANY_SCORING_MODEL
+--  DDL for Table scoring_model_article_source
 --------------------------------------------------------
 
-  CREATE TABLE COMPANY_SCORING_MODEL
-   (	COMPANY_ID NUMBER(*,0), 
-	SCORING_MODEL_ID NUMBER(*,0)
-   );
+  create table scoring_model_article_source (
+  scoring_model_id      integer,
+  article_source_id        integer,
+  primary key (scoring_model_id, article_source_id),
+  foreign key (scoring_model_id) references scoring_model(id),
+  foreign key (article_source_id) references article_source(id)
+);
 --------------------------------------------------------
 --  DDL for Table EIGENVALUE
 --------------------------------------------------------

@@ -47,6 +47,7 @@
 		<mapping class="orm.MeanStemCount" />
 		<mapping class="orm.PredictionModel" />
 		<mapping class="orm.PredictionModelStockSmoothingCoef" />
+		<mapping class="orm.ArticleSource" />
 		
     </session-factory>
 </hibernate-configuration>
