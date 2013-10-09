@@ -1,6 +1,6 @@
 package orm;
 
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -73,7 +73,7 @@ public class Eigenvalue {
 		this.value = value;
 	}
 	
-	public static Collection<Eigenvalue> getEigenvalueByScoringModel(int scoringModelId) {
+	public static List<Eigenvalue> getEigenvalueByScoringModel(int scoringModelId) {
 		Query query = SessionManager.createQuery("from Eigenvalue where scoringModel.id = :scoringModelId");
 		query.setInteger("scoringModelId", scoringModelId);
 		
