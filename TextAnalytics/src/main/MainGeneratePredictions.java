@@ -58,7 +58,7 @@ public class MainGeneratePredictions {
 		System.out.println();
 		List<PredictionModel> pmList = PredictionModel.findAllById(predictionModelIdList);
 		
-		System.out.println("retrieve principal component values aggregated by article publish day.  Min/Max article dates: " + args[2] + " " + (args.length >= 4 ? args[3] : ""));
+		System.out.println("retrieve principal component values aggregated by article publish day.  Min/Max article dates: " + args[2] + " " + (args.length >= 5 ? args[4] : ""));
 		List<DayPrincipalComponentValueVector> dayPcValVectList = 
 				(new DayPrincipalComponentValueVectorBuilder()).build(articleIdList, 
 						RegressionModelCoef.retrieveEigenvalueIdsForRegressionModel(regressionModelId));
@@ -87,9 +87,13 @@ public class MainGeneratePredictions {
 		System.out.println("generate predictions:");
 		List<Prediction> predictionList = (new PredictionBuilder()).build(pmList, rawPredictionList);
 		
-		System.out.println("lookup results of predictions:");
-		(new PredictionResultBuilder()).build(predictionList);
-		
+		if (predictionList.size() > 0) {
+			System.out.println("compare predictions to actual results:");
+			(new PredictionResultBuilder()).build(predictionList);
+		} else {
+			System.out.println("no predictions made, no comparison to attempted");
+		}
+
 		System.out.println("predictions and results where available:");
 		for (Prediction prediction : predictionList) {
 			StringBuilder builder = new StringBuilder();
@@ -102,6 +106,9 @@ public class MainGeneratePredictions {
 		System.out.println();
 
 
+		System.out.println("total count of raw predictions: " + rawPredictionList.size());
+		System.out.println("total count thresholded predictions: " + predictionList.size());
+		
 		System.out.println();
 		Map<PredictionModel, Integer[]> predictionModelResultBinMap = calculateResultBins(predictionList);
 		for (PredictionModel pm : pmList) {
