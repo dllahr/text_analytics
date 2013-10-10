@@ -49,6 +49,8 @@ public class MainLoadRegressionModel {
 				int eigId = Integer.valueOf(entry.substring(3));
 				
 				eig = idEigMap.get(eigId);
+				
+				coef = coef / eig.getValue();
 			}
 			
 			RegressionModelCoef rmc = new RegressionModelCoef();
