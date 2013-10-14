@@ -12,6 +12,8 @@ import javax.persistence.ManyToMany;
 
 import org.hibernate.Query;
 
+import controller.util.Utilities;
+
 @Entity
 public class Company {
 
@@ -81,5 +83,10 @@ public class Company {
 		} else {
 			return null;
 		}
+	}
+	
+	public static List<Company> findAll() {
+		Query query = SessionManager.createQuery("from Company");
+		return Utilities.convertGenericList(query.list());
 	}
 }
