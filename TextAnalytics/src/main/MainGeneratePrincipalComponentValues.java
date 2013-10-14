@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Query;
 
@@ -17,6 +18,8 @@ import orm.SessionManager;
 import controller.prediction.principalComponent.ArticlePcValueSaver;
 import controller.prediction.principalComponent.ArticlePrincipalComponentValueCalculator;
 import controller.prediction.principalComponent.ArticlePrincipalComponentValues;
+import controller.util.CommandLineParser;
+import controller.util.CommandLineParserUnrecognizedTokenException;
 import controller.util.Utilities;
 
 
@@ -28,7 +31,7 @@ public class MainGeneratePrincipalComponentValues {
 	private static final String noSaveOption = "-noSave";
 	private static final String includeExistingOption = "-includeExisting";
 	
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) throws ParseException, CommandLineParserUnrecognizedTokenException {
 		System.out.println("Generate principal component values");
 		
 		final int scoringModelId = Integer.valueOf(args[0]);
@@ -37,37 +40,23 @@ public class MainGeneratePrincipalComponentValues {
 		final int articleSourceId = Integer.valueOf(args[1]);
 		System.out.println("article source id:  " + articleSourceId);
 		
-		Date minDate = null;
-		Date maxDate = null;
-		boolean doPrint = false;
-		boolean doSave = true;
-		boolean includeExisting = false;
-		for (int i = 2; i < args.length; i++) {
-			if (args[i].equals(minDateOption)) {
-				i++;
-				minDate = Utilities.dateFormat.parse(args[i]);
-				System.out.println(minDateOption + " option present, parsing min date from arguments:  " + minDate);
-			} else if (args[i].equals(maxDateOption)) {
-				i++;
-				maxDate = Utilities.dateFormat.parse(args[i]);
-				System.out.println(maxDateOption + " option present, parsing max date from arguments: " + maxDate);
-			} else if (args[i].equals(printOption)) {
-				System.out.println(printOption + " present, will print out results");
-				doPrint = true;
-			} else if (args[i].equals(noSaveOption)) {
-				System.out.println(noSaveOption + " present, will not save results to database");
-				doSave = false;
-			} else if (args[i].equals(includeExistingOption)) {
-				System.out.println(includeExistingOption + " present, will include articles that already have principal component database entries");
-				includeExisting = true;
-			}
-		}
-		
-		if (null == minDate) {
+		Map<String, String> argsMap = CommandLineParser.parse(args, 2);
+
+		final Date maxDate = argsMap.containsKey(maxDateOption) ? Utilities.dateFormat.parse(argsMap.get(maxDateOption)) : null;
+		final boolean doPrint = argsMap.containsKey(printOption); 
+		final boolean doSave = ! argsMap.containsKey(noSaveOption);
+		boolean includeExisting = argsMap.containsKey(includeExistingOption);
+ 
+		final Date minDate;
+		if (argsMap.containsKey(minDateOption)) {
+			minDate = Utilities.dateFormat.parse(argsMap.get(minDateOption));
+		} else {
 			minDate = getMostRecentDayIndexOfArticleWithPrincipalComponentValue(articleSourceId);
 			System.out.println("minimum date is lastest date of articles with principal component values in database");
 		}
+		
 		System.out.println("Min date:  " + minDate + " " + Utilities.calculateDayIndex(minDate));
+		System.out.println("Max date:  " + maxDate);
 		System.out.println("doPrint:  " + doPrint);
 		System.out.println("doSave:  " + doSave);
 		System.out.println("includeExisting:  " + includeExisting);
