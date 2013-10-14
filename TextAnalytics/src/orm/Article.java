@@ -106,8 +106,9 @@ public class Article {
 	 * 
 	 * @param minArticleDate required
 	 * @param maxArticleDate optional / can be null
-	 * @param excludeDuplicates TODO
-	 * @param scoringModelId required
+	 * @param articleSourceId
+	 * @param excludeArticlePcValueArticles exclude articles that already have entries in article_pc_value
+	 * @param excludeDuplicates exclude articles marked as duplicates in article_duplicate
 	 * @return
 	 */
 	public static List<Integer> getArticleIdsForMinDateAndArticleSource(Date minArticleDate, 
