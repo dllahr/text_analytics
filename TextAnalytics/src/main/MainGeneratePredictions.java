@@ -1,8 +1,6 @@
 package main;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,7 +26,7 @@ import controller.util.Utilities;
 
 
 public class MainGeneratePredictions {
-	private static final String dateFormatString = "yyyy-MM-dd";
+	
 	
 	public static void main(String[] args) throws ParseException {
 		//parse command line options
@@ -36,12 +34,11 @@ public class MainGeneratePredictions {
 		
 		final List<Integer> predictionModelIdList = parsePredictionModelIdListParameter(args[1]);
 		
-		final DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
-		final Date minArticleDate = dateFormat.parse(args[2]);
+		final Date minArticleDate = Utilities.dateFormat.parse(args[2]);
 		
 		final int articleSourceId = Integer.valueOf(args[3]);
 		
-		final Date maxArticleDate = args.length >= 5 ? dateFormat.parse(args[4]) : null;
+		final Date maxArticleDate = args.length >= 5 ? Utilities.dateFormat.parse(args[4]) : null;
 		
 		
 		//commence da jigglin
@@ -49,7 +46,8 @@ public class MainGeneratePredictions {
 		RegressionModel rm = RegressionModel.findById(regressionModelId);
 		
 		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minArticleDate, maxArticleDate,
-				articleSourceId, false);
+				articleSourceId, false, true);
+		System.out.println("found article ID's:  " + articleIdList.size());
 		
 		System.out.print("find prediction model with ID's:  ");
 		for (int id : predictionModelIdList) {
@@ -98,8 +96,8 @@ public class MainGeneratePredictions {
 		for (Prediction prediction : predictionList) {
 			StringBuilder builder = new StringBuilder();
 			builder.append(prediction).append(" ");
-			builder.append(dateFormat.format(Utilities.calculateDate(prediction.initialDayIndex))).append(" ");
-			builder.append(dateFormat.format(Utilities.calculateDate(prediction.predictionDayIndex))).append(" ");
+			builder.append(Utilities.dateFormat.format(Utilities.calculateDate(prediction.initialDayIndex))).append(" ");
+			builder.append(Utilities.dateFormat.format(Utilities.calculateDate(prediction.predictionDayIndex))).append(" ");
 			
 			System.out.println(builder);
 		}

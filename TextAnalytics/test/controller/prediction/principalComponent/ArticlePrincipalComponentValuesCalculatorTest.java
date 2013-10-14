@@ -16,6 +16,9 @@ import math.linearAlgebra.VectorTest;
 
 import org.junit.Test;
 
+import controller.stemCountArticles.ArticleStemCountVector;
+import controller.stemCountArticles.ArticleStemCountVectorBuilder;
+
 import orm.Article;
 import orm.Eigenvalue;
 
@@ -29,7 +32,7 @@ public class ArticlePrincipalComponentValuesCalculatorTest {
 		final Date date = (new SimpleDateFormat("yyyy-MM-dd").parse("2013-05-10"));
 		
 		List<Integer> articleIdList = 
-				Article.getArticleIdsForMinDateAndArticleSource(date, date, articleSourceId, false);
+				Article.getArticleIdsForMinDateAndArticleSource(date, date, articleSourceId, false, false);
 		
 		ArticlePrincipalComponentValueCalculator calc = new ArticlePrincipalComponentValueCalculator();
 		

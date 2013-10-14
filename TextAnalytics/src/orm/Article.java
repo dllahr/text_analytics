@@ -106,11 +106,12 @@ public class Article {
 	 * 
 	 * @param minArticleDate required
 	 * @param maxArticleDate optional / can be null
+	 * @param excludeDuplicates TODO
 	 * @param scoringModelId required
 	 * @return
 	 */
 	public static List<Integer> getArticleIdsForMinDateAndArticleSource(Date minArticleDate, 
-			Date maxArticleDate, int articleSourceId, boolean excludeArticlePcValueArticles) {
+			Date maxArticleDate, int articleSourceId, boolean excludeArticlePcValueArticles, boolean excludeDuplicates) {
 		
 		StringBuilder builder = new StringBuilder();
 		builder.append("select id from Article where articleSourceId = :articleSourceId and publishDate >= :minPublishDate");
@@ -120,6 +121,9 @@ public class Article {
 		}
 		if (excludeArticlePcValueArticles) {
 			builder.append(" and id not in (select article.id from ArticlePcValue)");
+		}
+		if (excludeDuplicates) {
+			builder.append(" and id not in (select articleIdDuplicate from ArticleDuplicate)");
 		}
 	
 		Query query = SessionManager.createQuery(builder.toString());

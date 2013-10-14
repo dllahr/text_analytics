@@ -1,4 +1,4 @@
-package controller.prediction.principalComponent;
+package controller.stemCountArticles;
 
 import math.linearAlgebra.Vector;
 import orm.Article;

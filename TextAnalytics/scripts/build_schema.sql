@@ -44,6 +44,18 @@ CREATE UNIQUE INDEX ARTICLE_UK1 ON ARTICLE (FILENAME);
 create sequence article_id_seq start with 1;
 
 --------------------------------------------------------
+--  DDL for Table ARTICLE_duplicate
+--------------------------------------------------------
+create table article_duplicate (
+  article_id_orig          integer,
+  article_id_dup           integer,
+  primary key (article_id_orig, article_id_dup),
+  foreign key (article_id_orig) references article(id),
+  foreign key (article_id_dup) references article(id),
+  check (article_id_orig <> article_id_dup)
+);
+
+--------------------------------------------------------
 --  DDL for Table ARTICLE_PC_VALUE
 --------------------------------------------------------
 

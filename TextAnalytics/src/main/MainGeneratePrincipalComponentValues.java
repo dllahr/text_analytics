@@ -1,8 +1,6 @@
 package main;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +21,6 @@ import controller.util.Utilities;
 
 
 public class MainGeneratePrincipalComponentValues {
-	private static final String dateFormatString = "yyyy-MM-dd";
 	
 	private static final String minDateOption = "-min_d";
 	private static final String maxDateOption = "-max_d";
@@ -40,8 +37,6 @@ public class MainGeneratePrincipalComponentValues {
 		final int articleSourceId = Integer.valueOf(args[1]);
 		System.out.println("article source id:  " + articleSourceId);
 		
-		DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
-		
 		Date minDate = null;
 		Date maxDate = null;
 		boolean doPrint = false;
@@ -50,11 +45,11 @@ public class MainGeneratePrincipalComponentValues {
 		for (int i = 2; i < args.length; i++) {
 			if (args[i].equals(minDateOption)) {
 				i++;
-				minDate = dateFormat.parse(args[i]);
+				minDate = Utilities.dateFormat.parse(args[i]);
 				System.out.println(minDateOption + " option present, parsing min date from arguments:  " + minDate);
 			} else if (args[i].equals(maxDateOption)) {
 				i++;
-				maxDate = dateFormat.parse(args[i]);
+				maxDate = Utilities.dateFormat.parse(args[i]);
 				System.out.println(maxDateOption + " option present, parsing max date from arguments: " + maxDate);
 			} else if (args[i].equals(printOption)) {
 				System.out.println(printOption + " present, will print out results");
@@ -78,7 +73,7 @@ public class MainGeneratePrincipalComponentValues {
 		System.out.println("includeExisting:  " + includeExisting);
 
 		System.out.println("get article ID's that match dates / options specified");
-		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, maxDate, articleSourceId, !includeExisting);
+		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, maxDate, articleSourceId, !includeExisting, false);
 		System.out.println("article ID's found:  " + articleIdList.size());
 		
 		System.out.println("calculate principal component values");

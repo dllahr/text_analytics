@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class SparseMatrix {
+public class SparseMatrix implements Matrix {
 	private List<Map<Integer, Double>> data;
 	
 	private int maxRowInd;
@@ -105,5 +105,15 @@ public class SparseMatrix {
 	}
 	public int getNumCols() {
 		return data.size();
+	}
+
+	@Override
+	public void takeTranspose() {
+		throw new UnsupportedOperationException("SparseMatrix takeTranspose");
+	}
+
+	@Override
+	public Matrix rightMultiplyBy(Matrix rightMatrix) {
+		throw new UnsupportedOperationException("SparseMatrix rightMultiplyBy");
 	}
 }

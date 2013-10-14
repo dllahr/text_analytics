@@ -48,6 +48,7 @@
 		<mapping class="orm.PredictionModel" />
 		<mapping class="orm.PredictionModelStockSmoothingCoef" />
 		<mapping class="orm.ArticleSource" />
+		<mapping class="orm.ArticleDuplicate" />
 		
     </session-factory>
 </hibernate-configuration>

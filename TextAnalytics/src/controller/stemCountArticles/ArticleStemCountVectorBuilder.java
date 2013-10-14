@@ -1,4 +1,4 @@
-package controller.prediction.principalComponent;
+package controller.stemCountArticles;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import controller.stemCountArticles.ArticleStemCountVector;
+import controller.stemCountArticles.ArticleStemCountVectorBuilder;
+
 import math.linearAlgebra.Vector;
 
 import orm.ScoringModel;

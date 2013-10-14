@@ -3,7 +3,7 @@ package math.linearAlgebra;
 import java.util.LinkedList;
 import java.util.List;
 
-public class NonSparseMatrix {
+public class NonSparseMatrix implements Matrix {
 	private List<List<Double>> data;
 	
 	private int maxColInd;
@@ -65,5 +65,20 @@ public class NonSparseMatrix {
 	
 	public int getNumCols() {
 		return maxColInd + 1;
+	}
+
+	@Override
+	public void addColumn(Vector vect, int colInd) {
+		throw new UnsupportedOperationException("NonSparseMatrix addColumn");
+	}
+
+	@Override
+	public Matrix rightMultiplyBy(Matrix rightMatrix) {
+		throw new UnsupportedOperationException("NonSparseMatrix rightMultiplyBy");
+	}
+
+	@Override
+	public Matrix createCopy() {
+		throw new UnsupportedOperationException("NonSparseMatrix createCopy");
 	}
 }
