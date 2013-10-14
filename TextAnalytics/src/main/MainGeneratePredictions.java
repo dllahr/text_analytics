@@ -46,7 +46,7 @@ public class MainGeneratePredictions {
 		RegressionModel rm = RegressionModel.findById(regressionModelId);
 		
 		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minArticleDate, maxArticleDate,
-				articleSourceId, false, true);
+				articleSourceId, false, false);
 		System.out.println("found article ID's:  " + articleIdList.size());
 		
 		System.out.print("find prediction model with ID's:  ");
