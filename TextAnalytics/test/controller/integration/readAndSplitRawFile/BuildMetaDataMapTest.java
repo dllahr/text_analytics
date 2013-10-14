@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import controller.integration.readAndSplitRawFile.BuildMetaDataMap;
+import controller.articleIntegration.readAndSplitRawFile.BuildMetaDataMap;
 import controller.stemCountArticles.StemCounterTest;
 
 public class BuildMetaDataMapTest {

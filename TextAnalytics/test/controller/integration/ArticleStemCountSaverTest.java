@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import controller.integration.readAndSplitRawFile.SplitArticle;
+import controller.articleIntegration.readAndSplitRawFile.SplitArticle;
 import controller.stemCountArticles.ArticleStemCountSaver;
 import controller.util.Utilities;
 

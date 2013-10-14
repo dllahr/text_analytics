@@ -1,4 +1,4 @@
-package controller.integration;
+package controller.articleIntegration;
 
 import gate.creole.ExecutionException;
 import gate.util.GateException;
@@ -13,11 +13,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import controller.articleIntegration.readAndSplitRawFile.ArticleSectionSplitter;
+import controller.articleIntegration.readAndSplitRawFile.MultiplelArticleSplitter;
+import controller.articleIntegration.readAndSplitRawFile.RawArticle;
+import controller.articleIntegration.readAndSplitRawFile.SplitArticle;
 import controller.dateExtractionConversion.DateExtractor;
-import controller.integration.readAndSplitRawFile.ArticleSectionSplitter;
-import controller.integration.readAndSplitRawFile.MultiplelArticleSplitter;
-import controller.integration.readAndSplitRawFile.RawArticle;
-import controller.integration.readAndSplitRawFile.SplitArticle;
 import controller.stemCountArticles.StemCounter;
 
 public class CountStemsAndReadDate {

@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import controller.integration.readAndSplitRawFile.SplitArticle;
+import controller.articleIntegration.readAndSplitRawFile.SplitArticle;
 import controller.stemCountArticles.StemCounter;
 
 public class StemCounterTest {

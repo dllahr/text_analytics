@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import controller.integration.readAndSplitRawFile.MultiplelArticleSplitter;
-import controller.integration.readAndSplitRawFile.RawArticle;
+import controller.articleIntegration.readAndSplitRawFile.MultiplelArticleSplitter;
+import controller.articleIntegration.readAndSplitRawFile.RawArticle;
 
 public class MultipleArticleSplitterTest {
 

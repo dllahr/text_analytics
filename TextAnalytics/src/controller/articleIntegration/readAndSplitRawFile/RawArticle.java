@@ -1,4 +1,4 @@
-package controller.integration.readAndSplitRawFile;
+package controller.articleIntegration.readAndSplitRawFile;
 
 import java.io.File;
 import java.util.LinkedList;

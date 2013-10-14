@@ -10,9 +10,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import controller.integration.readAndSplitRawFile.ArticleSectionSplitter;
-import controller.integration.readAndSplitRawFile.RawArticle;
-import controller.integration.readAndSplitRawFile.SplitArticle;
+import controller.articleIntegration.readAndSplitRawFile.ArticleSectionSplitter;
+import controller.articleIntegration.readAndSplitRawFile.RawArticle;
+import controller.articleIntegration.readAndSplitRawFile.SplitArticle;
 
 public class ArticleSectionSplitterTest {
 

@@ -29,7 +29,7 @@ public class MainGeneratePrincipalComponentValues {
 	private static final String maxDateOption = "-max_d";
 	private static final String printOption = "-print";
 	private static final String noSaveOption = "-noSave";
-	private static final String excludeExistingOption = "-excludeExisting";
+	private static final String includeExistingOption = "-includeExisting";
 	
 	public static void main(String[] args) throws ParseException {
 		System.out.println("Generate principal component values");
@@ -46,7 +46,7 @@ public class MainGeneratePrincipalComponentValues {
 		Date maxDate = null;
 		boolean doPrint = false;
 		boolean doSave = true;
-		boolean excludeExisting = true;
+		boolean includeExisting = false;
 		for (int i = 2; i < args.length; i++) {
 			if (args[i].equals(minDateOption)) {
 				i++;
@@ -62,9 +62,9 @@ public class MainGeneratePrincipalComponentValues {
 			} else if (args[i].equals(noSaveOption)) {
 				System.out.println(noSaveOption + " present, will not save results to database");
 				doSave = false;
-			} else if (args[i].equals(excludeExistingOption)) {
-				System.out.println(excludeExistingOption + " present, will not exclude articles that already have database entries");
-				excludeExisting = false;
+			} else if (args[i].equals(includeExistingOption)) {
+				System.out.println(includeExistingOption + " present, will include articles that already have principal component database entries");
+				includeExisting = true;
 			}
 		}
 		
@@ -75,10 +75,10 @@ public class MainGeneratePrincipalComponentValues {
 		System.out.println("Min date:  " + minDate + " " + Utilities.calculateDayIndex(minDate));
 		System.out.println("doPrint:  " + doPrint);
 		System.out.println("doSave:  " + doSave);
-		System.out.println("excludeExisting:  " + excludeExisting);
+		System.out.println("includeExisting:  " + includeExisting);
 
 		System.out.println("get article ID's that match dates / options specified");
-		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, maxDate, articleSourceId, excludeExisting);
+		List<Integer> articleIdList = Article.getArticleIdsForMinDateAndArticleSource(minDate, maxDate, articleSourceId, !includeExisting);
 		System.out.println("article ID's found:  " + articleIdList.size());
 		
 		System.out.println("calculate principal component values");

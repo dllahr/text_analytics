@@ -11,12 +11,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import controller.articleIntegration.CountStemsAndReadDate;
+import controller.articleIntegration.readAndSplitRawFile.BuildMetaDataMap;
+import controller.articleIntegration.readAndSplitRawFile.SplitArticle;
 import controller.dateExtractionConversion.DateExtractor;
 import controller.dateExtractionConversion.DateOnMultipleLines;
 import controller.dateExtractionConversion.DateOnSingleLine;
-import controller.integration.CountStemsAndReadDate;
-import controller.integration.readAndSplitRawFile.BuildMetaDataMap;
-import controller.integration.readAndSplitRawFile.SplitArticle;
 import controller.stemCountArticles.ArticleStemCountSaver;
 
 import orm.SessionManager;

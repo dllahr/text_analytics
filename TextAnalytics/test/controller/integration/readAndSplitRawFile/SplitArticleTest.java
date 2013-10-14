@@ -6,6 +6,8 @@ import java.io.File;
 
 import org.junit.Test;
 
+import controller.articleIntegration.readAndSplitRawFile.SplitArticle;
+
 public class SplitArticleTest {
 
 	@Test

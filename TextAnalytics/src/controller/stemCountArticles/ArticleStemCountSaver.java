@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.hibernate.Query;
 
-import controller.integration.readAndSplitRawFile.SplitArticle;
+import controller.articleIntegration.readAndSplitRawFile.SplitArticle;
 import controller.util.BatchRetriever;
 import controller.util.GenericRetriever;
 import controller.util.Utilities;
