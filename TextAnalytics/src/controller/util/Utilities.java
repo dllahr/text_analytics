@@ -12,6 +12,8 @@ public class Utilities {
 	
 	public static DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
 	
+	public static final String fileCommentPrefix = "#";
+	
 	private static final long millisPerDay = 1000*60*60*24;
 	
 	@SuppressWarnings("unchecked")

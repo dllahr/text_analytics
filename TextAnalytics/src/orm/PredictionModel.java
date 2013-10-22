@@ -217,4 +217,10 @@ public class PredictionModel {
 		
 		return Utilities.convertGenericList(query.list());
 	}
+	
+	public static int findMaxId() {
+		Query query = SessionManager.createQuery("select max(id) from PredictionModel");
+		
+		return (int)(query.list().get(0));
+	}
 }

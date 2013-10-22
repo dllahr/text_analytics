@@ -47,12 +47,16 @@ public class MainGeneratePrincipalComponentValues {
 		final boolean doSave = ! argsMap.containsKey(noSaveOption);
 		boolean includeExisting = argsMap.containsKey(includeExistingOption);
  
-		final Date minDate;
+		Date minDate;
 		if (argsMap.containsKey(minDateOption)) {
 			minDate = Utilities.dateFormat.parse(argsMap.get(minDateOption));
 		} else {
 			minDate = getMostRecentDayIndexOfArticleWithPrincipalComponentValue(articleSourceId);
-			System.out.println("minimum date is lastest date of articles with principal component values in database");
+			System.out.println("minimum date is lastest date of articles with principal component values in database:  " + minDate);
+			if (null == minDate) {
+				minDate = new Date(0);
+				System.out.println("no articles with principal component values found in database, using this arbitary minimum date:  " + minDate);
+			}
 		}
 		
 		System.out.println("Min date:  " + minDate + " " + Utilities.calculateDayIndex(minDate));

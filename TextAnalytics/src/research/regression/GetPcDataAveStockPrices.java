@@ -25,6 +25,8 @@ import controller.stockPrices.SmoothedStockPrices;
  * @author dlahr
  */
 public class GetPcDataAveStockPrices {
+	private static final String eigPrefix = "eig";
+	
 	private static final int dayOffset = 40;
 	
 	private static final double[] weightsArray = {0.5, 1.0, 0.5};
@@ -79,7 +81,7 @@ public class GetPcDataAveStockPrices {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 		writer.write("dayIndex,");
 		for (Eigenvalue eig : eigList) {
-			writer.write("eig" + eig.getId() + ",");
+			writer.write(eigPrefix + eig.getId() + ",");
 		}
 		writer.write("frac_change");
 		writer.newLine();
@@ -106,6 +108,9 @@ public class GetPcDataAveStockPrices {
 		SessionManager.closeAll();
 		Date endDate = new Date();
 		final double durationMinutes = ((double)(endDate.getTime() - startDate.getTime())) / 60000.0;
+		
+		printGlmExpression(eigList);
+		
 		System.out.println("end regression GetPcData " + endDate + " duration[min]:  " + durationMinutes);
 	}
 	
@@ -134,5 +139,12 @@ public class GetPcDataAveStockPrices {
 		}
 		
 		return result;
+	}
+	
+	static void printGlmExpression(List<Eigenvalue> eigList) {
+		for (Eigenvalue eig : eigList) {
+			System.out.print(eigPrefix + eig.getId() + " + ");
+		}
+		System.out.println();
 	}
 }

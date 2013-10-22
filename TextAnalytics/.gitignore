@@ -7,3 +7,5 @@ extractAndLoadDate.jar
 mainLoadEigPrinComp.jar
 mainGeneratePrincipalComponentValues.jar
 mainGeneratePredictions.jar
+mainCommandLine.jar
+MainTest.java
