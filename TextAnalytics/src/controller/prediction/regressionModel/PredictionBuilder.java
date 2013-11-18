@@ -62,7 +62,8 @@ public class PredictionBuilder {
 				final double pricePercentile50 = pm.getPercentile50Value() * initialPrice;
 				final double pricePercentile75 = pm.getPercentile75Value() * initialPrice;
 
-				result.add(new Prediction(raw.initialDayIndex, raw.predictionDayIndex, pricePercentile25, pricePercentile50, pricePercentile75, pm));
+				result.add(new Prediction(raw.initialDayIndex, initialPrice,
+						raw.predictionDayIndex, pricePercentile25, pricePercentile50, pricePercentile75, pm));
 			} else {
 				System.out.println("PredictionBuilder buildPredictions unable to calculate prediction because stock data not in database.  day index:  " 
 						+ raw.initialDayIndex);

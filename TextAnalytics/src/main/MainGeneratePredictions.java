@@ -75,6 +75,7 @@ public class MainGeneratePredictions {
 		
 
 		System.out.println("raw predictions:");
+		System.out.println("start date, end date, fraction change");
 		for (DayIndexRawPredictionPair raw : rawPredictionList) {
 			System.out.println(raw);
 		}
@@ -82,7 +83,7 @@ public class MainGeneratePredictions {
 		System.out.println();
 
 
-		System.out.println("generate predictions:");
+		System.out.println("generate threshold predictions:");
 		List<Prediction> predictionList = (new PredictionBuilder()).build(pmList, rawPredictionList);
 		
 		if (predictionList.size() > 0) {

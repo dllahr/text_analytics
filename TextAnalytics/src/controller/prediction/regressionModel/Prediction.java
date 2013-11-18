@@ -9,6 +9,7 @@ public class Prediction {
 	private static final String priceDisplayPrecision = "%.5G";
 
 	public final int initialDayIndex;
+	public final double initialPrice;
 	
 	public final int predictionDayIndex;
 	
@@ -20,10 +21,13 @@ public class Prediction {
 	
 	public final PredictionModel predictionModel;
 	
-	public Prediction(int initialDayIndex, int predictionDayIndex, double pricePercentile25, double pricePercentile50,
+	public Prediction(int initialDayIndex, double initialPrice, int predictionDayIndex, 
+			double pricePercentile25, double pricePercentile50,
 			double pricePercentile75, PredictionModel predictionModel) {
 
 		this.initialDayIndex = initialDayIndex;
+		this.initialPrice = initialPrice;
+		
 		this.predictionDayIndex = predictionDayIndex;
 		
 		this.pricePercentile25 = pricePercentile25;
@@ -37,6 +41,7 @@ public class Prediction {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(initialDayIndex).append(Constants.toStringDelimeter);
+		builder.append(String.format(priceDisplayPrecision, initialPrice)).append(Constants.toStringDelimeter);
 		builder.append(predictionDayIndex).append(Constants.toStringDelimeter);
 		builder.append(String.format(priceDisplayPrecision, pricePercentile25)).append(Constants.toStringDelimeter);
 		builder.append(String.format(priceDisplayPrecision, pricePercentile50)).append(Constants.toStringDelimeter);
