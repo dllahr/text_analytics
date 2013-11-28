@@ -52,7 +52,7 @@ public class MainArticlesToPredictions {
 		case 6:  //CAT
 			result.add(new String[] {"5", articleDir});
 			result.add(new String[] {"6", "5"});
-			result.add(new String[] {"71", "16,17", "2011-09-05", "5"});
+			result.add(new String[] {"71", "16,17", "2013-09-05", "5"});
 		case 7: //MCD
 			result.add(new String[] {"6", articleDir});
 			result.add(new String[] {"7", "6"});
