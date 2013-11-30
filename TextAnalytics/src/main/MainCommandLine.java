@@ -13,9 +13,16 @@ import controller.util.CommandLineParserUnrecognizedTokenException;
 
 public class MainCommandLine {
 	
-	private static final Class<?>[] classArray = {MainAddOrReplaceStockData.class, MainCreatePredictionModelSmoothingCoefs.class, 
-		MainFindDuplicateArticles.class, MainGeneratePredictions.class, MainGeneratePrincipalComponentValues.class,
-		MainLoadArticles.class, MainLoadEigPrincComp.class, MainLoadRegressionModel.class, MainTest.class};
+	private static final Class<?>[] classArray = {
+			MainAddOrReplaceStockData.class, 
+		MainCreatePredictionModelSmoothingCoefs.class, 
+		MainFindDuplicateArticles.class, 
+		MainGeneratePredictions.class, 
+		MainGeneratePrincipalComponentValues.class,
+		MainLoadArticles.class, 
+		MainLoadEigPrincComp.class, 
+		MainLoadRegressionModel.class, 
+		MainTest.class};
 	
 
 	/**
