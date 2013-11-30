@@ -24,9 +24,12 @@ import gate.util.GateException;
 import gate.util.persistence.PersistenceManager;
 
 public class StemCounter {
+	private static final String gateHomeWindows = "C:\\no_backup\\bin\\gate";
+	private static final String gateHomeAws = "/usr/local/gate/gate-6.1-build3913-ALL/";
+	
 	private final int batchSize;
 	
-	private static final String gateHome = "C:\\no_backup\\bin\\gate";
+	private static final String gateHome = gateHomeAws;
 
 	private static final String stemmerFileUrl = "resources/stemmer";
 	
