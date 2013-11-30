@@ -16,7 +16,7 @@ import org.hibernate.jdbc.Work;
 
 public class SessionManager {
 
-	private static final File cfgFile = new File("resources/hibernate.cfg.xml");
+	private static final File cfgFile = new File("resources/hibernate_pg.cfg.xml");
 	
 	private static boolean useForTest = false;
 	

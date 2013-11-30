@@ -12,6 +12,7 @@
 	<classpathentry kind="lib" path="lib/hibernate/jta-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-9.3-1100.jdbc41.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="C:/no_backup/bin/gate/bin/gate.jar"/>
 	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/activation.jar"/>
