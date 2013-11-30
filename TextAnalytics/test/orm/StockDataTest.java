@@ -11,7 +11,7 @@ public class StockDataTest {
 
 	@Test
 	public void testStockData() {
-		SessionManager.setUseForTest(true);
+//		SessionManager.setUseForTest(true);
 		
 		Query query = SessionManager.createQuery("from StockData where company.id=1 order by dayTime asc");
 		query.setFirstResult(0);
