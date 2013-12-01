@@ -20,7 +20,7 @@ public class BasicConnectionTest {
 		//based on:
 		//http://jdbc.postgresql.org/documentation/80/connect.html
 		
-		final String url = "jdbc:postgresql://75.101.240.124/text_analytics";
+		final String url = "jdbc:postgresql://54.204.3.133/text_analytics";
 		Properties props = new Properties();
 		props.setProperty("user", "postgres");
 		props.setProperty("password", "VR2tommPC5AWAwHW");

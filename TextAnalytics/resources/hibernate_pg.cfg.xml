@@ -9,7 +9,7 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="connection.url">jdbc:postgresql://75.101.240.124/text_analytics</property>
+        <property name="connection.url">jdbc:postgresql://54.204.3.133/text_analytics</property>
 		<property name="connection.username">postgres</property>
 		<property name="connection.password">VR2tommPC5AWAwHW</property>
 		
