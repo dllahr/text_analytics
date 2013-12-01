@@ -29,4 +29,19 @@ public class StemTest {
 			prevId = stem.getId();
 		}
 	}
+	
+	
+	@Test
+	public void testPostgresqlCreate() {
+		Stem stem = new Stem();
+		stem.setText("testPostgresqlCreate");
+		stem.setStop(false);
+		SessionManager.persist(stem);
+		
+		assertNotNull(stem.getId());
+		
+		System.out.println(stem.getId());
+		
+		SessionManager.commit();
+	}
 }
