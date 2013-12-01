@@ -188,7 +188,7 @@
   CREATE TABLE STEM 
    (	ID integer, 
 	TEXT varchar(500), 
-	IS_STOP smallint
+	IS_STOP boolean
    ) ;
 
 
