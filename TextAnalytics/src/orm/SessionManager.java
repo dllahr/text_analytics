@@ -1,6 +1,7 @@
 package orm;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,10 +14,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.jdbc.Work;
 
+import controller.util.PropertiesLookup;
+
 
 public class SessionManager {
-
-	private static final File cfgFile = new File("resources/hibernate_pg.cfg.xml");
 	
 	private static boolean useForTest = false;
 	
@@ -97,6 +98,14 @@ public class SessionManager {
 	}
 	
 	protected static SessionFactory buildSessionFactory() {
+		File cfgFile = null;
+		try {
+			cfgFile = new File(PropertiesLookup.getHibernateConfigFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+		
 		Configuration config = new Configuration();
 		config.configure(cfgFile);
 		if (useForTest) {

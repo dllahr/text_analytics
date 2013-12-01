@@ -10,6 +10,7 @@ import java.util.Map;
 
 import controller.articleIntegration.readAndSplitRawFile.SplitArticle;
 import controller.util.Counter;
+import controller.util.PropertiesLookup;
 
 import gate.Annotation;
 import gate.Corpus;
@@ -24,12 +25,8 @@ import gate.util.GateException;
 import gate.util.persistence.PersistenceManager;
 
 public class StemCounter {
-	private static final String gateHomeWindows = "C:\\no_backup\\bin\\gate";
-	private static final String gateHomeAws = "/usr/local/gate/gate-6.1-build3913-ALL/";
 	
 	private final int batchSize;
-	
-	private static final String gateHome = gateHomeAws;
 
 	private static final String stemmerFileUrl = "resources/stemmer";
 	
@@ -40,9 +37,9 @@ public class StemCounter {
 	public StemCounter(int batchSize) throws GateException, IOException {
 		this.batchSize = batchSize;
 
-		System.out.println("gate installation directory: " + gateHome);
+		System.out.println("gate installation directory: " + PropertiesLookup.getGateHome());
 		if (gate.Gate.getGateHome() == null) {
-			gate.Gate.setGateHome(new File(gateHome));
+			gate.Gate.setGateHome(new File(PropertiesLookup.getGateHome()));
 		}
 		if (! gate.Gate.isInitialised()) {
 			gate.Gate.init();
