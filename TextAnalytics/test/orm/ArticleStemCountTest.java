@@ -18,4 +18,14 @@ public class ArticleStemCountTest {
 		assertTrue(result.size() > 0);
 	}
 
+	@Test
+	public void testCreate() {
+		ArticleStemCount asc = new ArticleStemCount();
+		asc.setArticle(Article.getArticlesOrderById(4).get(0));
+		asc.setStem(Stem.getStemsOrderedById().get(0));
+		asc.setCount(-5);
+		
+		SessionManager.persist(asc);
+		SessionManager.commit();
+	}
 }
