@@ -66,4 +66,18 @@ public class ArticleTest {
 			prevId = article.getId();
 		}
 	}
+	
+	@Test
+	public void testCreate() {
+		Article art = new Article();
+		art.setAdditionalIdentifier("fake additional id");
+		art.setArticleSourceId(4);
+		art.setDayIndex(-1);
+		art.setFilename("fake filename");
+		art.setPublishDate(new Date());
+		art.setStartLineNum(-2);
+		
+		SessionManager.persist(art);
+		SessionManager.commit();
+	}
 }

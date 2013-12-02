@@ -24,7 +24,22 @@ public class ArticleStemCountSaver {
 	private static final String textParam = "text";
 	private static final String stemQueryString = "from Stem where text in (:" + textParam + ")";
 	
-	public static Article saveStemCountToDatabase(SplitArticle splitArticle, int articleSourceId) {
+	private final Map<String, Stem> textStemMap;
+	private final boolean useIndividualMaps;
+	
+	public ArticleStemCountSaver(boolean useIndividualMaps) {
+		this.useIndividualMaps = useIndividualMaps;
+		
+		if (useIndividualMaps) {
+			textStemMap = null;
+		} else {
+			System.out.print("Loading map of all stems:  ");
+			textStemMap = loadAllTextStemMap();
+			System.out.println("done");
+		}
+	}
+	
+	public Article saveStemCountToDatabase(SplitArticle splitArticle, int articleSourceId) {
 
 		Article article = new Article();
 		article.setArticleSourceId(articleSourceId);
@@ -38,18 +53,25 @@ public class ArticleStemCountSaver {
 		}		
 		SessionManager.persist(article);
 
-		Map<String, Stem> textStemMap = loadTextStemMap(splitArticle.stemCountMap.keySet());
+		Map<String, Stem> currentTextStemMap = useIndividualMaps ? 
+				loadTextStemMap(splitArticle.stemCountMap.keySet()) : textStemMap;		
+		
 		int newStemCount = 0;
 		
 		for (String stemText : splitArticle.stemCountMap.keySet()) {
 			
 			final Stem stem;
-			if (textStemMap.containsKey(stemText)) {
-				stem = textStemMap.get(stemText);
+			if (currentTextStemMap.containsKey(stemText)) {
+				stem = currentTextStemMap.get(stemText);
 			} else {
 				stem = new Stem();
 				stem.setText(stemText);
 				SessionManager.persist(stem);
+				
+				if (!useIndividualMaps) {
+					SessionManager.merge(stem);
+					textStemMap.put(stemText, stem);
+				}
 				
 				newStemCount++;
 			}
@@ -86,12 +108,22 @@ public class ArticleStemCountSaver {
 		List rawList = br.retrieveAll(new ArrayList<>(stemTextCollection));
 		List<Stem> stemList = Utilities.convertGenericList(rawList);
 		
+		return buildTextStemMap(stemList);
+	}
+	
+	private static Map<String, Stem> buildTextStemMap(List<Stem> stemList) {
 		Map<String, Stem> result = new HashMap<>();
-		
+
 		for (Stem stem : stemList) {
 			result.put(stem.getText(), stem);
 		}
-		
+
 		return result;
+	}
+	
+	private static Map<String, Stem> loadAllTextStemMap() {
+		List<Stem> stemList = Utilities.convertGenericList(SessionManager.createQuery("from Stem").list());
+		
+		return buildTextStemMap(stemList);
 	}
 }

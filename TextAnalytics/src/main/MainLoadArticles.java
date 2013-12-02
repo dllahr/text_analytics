@@ -54,9 +54,11 @@ public class MainLoadArticles {
 		
 		List<SplitArticle> splitArticleList = countStemsAndReadDate.doAll(fileList);
 		
+		ArticleStemCountSaver articleStemCountSaver = new ArticleStemCountSaver(false);
+		
 		int count = 0;
 		for (SplitArticle splitArticle : splitArticleList) {
-			ArticleStemCountSaver.saveStemCountToDatabase(splitArticle, articleSourceId);
+			articleStemCountSaver.saveStemCountToDatabase(splitArticle, articleSourceId);
 			count++;
 			
 			if (count%commitBatchSize == 0) {

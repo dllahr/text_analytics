@@ -36,7 +36,8 @@ public class ArticleStemCountSaverTest {
 		splitArticle.stemCountMap.put(stem.getText(), 2);
 		splitArticle.stemCountMap.put("two", 3);
 		
-		ArticleStemCountSaver.saveStemCountToDatabase(splitArticle, articleSourceId);
+		ArticleStemCountSaver articleStemCountSaver = new ArticleStemCountSaver(true);
+		articleStemCountSaver.saveStemCountToDatabase(splitArticle, articleSourceId);
 		
 //		SessionManager.commit();
 		
