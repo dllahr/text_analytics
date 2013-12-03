@@ -2,7 +2,6 @@ package controller.prediction.principalComponent;
 
 import static org.junit.Assert.*;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -13,6 +12,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import orm.Eigenvalue;
+import orm.SessionManager;
 
 public class PrincipalComponentVectorBuilderTest {
 
@@ -38,9 +38,9 @@ public class PrincipalComponentVectorBuilderTest {
 				Object[] row = new Object[3];
 				rowList.add(row);
 				
-				row[0] = new BigDecimal(eigIds[i]);
-				row[1] = new BigDecimal(stemIds[stemInd]);
-				row[2] = new BigDecimal(value);
+				row[0] = eigIds[i];
+				row[1] = stemIds[stemInd];
+				row[2] = value;
 				
 				value += 1.1;
 				
@@ -82,24 +82,28 @@ public class PrincipalComponentVectorBuilderTest {
 	
 	@Test
 	public void testRetrieveRawValues() {
-		List<Object[]> list = PrincipalComponentVectorBuilder.retrieveRawValues(1);
+		@SuppressWarnings("unchecked")
+		List<Object[]> list = SessionManager.createSqlQuery(PrincipalComponentVectorBuilder.rawQueryString 
+				+ " and stem_id=1").setInteger("smId", 2).list();
+		
 		assertNotNull(list);
 		assertTrue(list.size() > 0);
 		
 		Object[] row = list.get(0);
-		assertEquals(2, row.length);
 		
-		assertTrue(row[0] instanceof BigDecimal);
-		assertTrue(row[1] instanceof BigDecimal);
+		System.out.println(row[0].getClass() + " " + row[1].getClass() + " " + row[2].getClass());
 		
+		assertTrue(row[0] instanceof Integer);
+		assertTrue(row[1] instanceof Integer);
+		assertTrue(row[2] instanceof Double);
 		
 		for (int i = 0; i < 10; i++) {
 			row = list.get(i);
-			System.out.println(row[0] + " " + row[1]);
+			System.out.println(row[0] + " " + row[1] + " " + row[2]);
 		}
 		for (int i = list.size()-10; i < list.size(); i++) {
 			row = list.get(i);
-			System.out.println(row[0] + " " + row[1]);
+			System.out.println(row[0] + " " + row[1] + " " + row[2]);
 		}
 	}
 

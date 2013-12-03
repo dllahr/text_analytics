@@ -1,6 +1,5 @@
 package controller.prediction.principalComponent;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,6 +12,9 @@ import orm.Eigenvalue;
 import orm.SessionManager;
 
 class PrincipalComponentVectorBuilder {
+	
+	static final String rawQueryString = "select eigenvalue_id, stem_id, value from principal_component " +
+			"where eigenvalue_id in (select id from eigenvalue where scoring_model_id = :smId)";
 
 	public List<PrincipalComponentVector> build(int scoringModelId, int numStems) {
 		System.out.println("retrieving principal components");
@@ -61,7 +63,7 @@ class PrincipalComponentVectorBuilder {
 
 		int progress = 0;
 		for (Object[] row : rowList) {
-			Integer eigId = ((BigDecimal)row[0]).intValueExact();
+			Integer eigId = (Integer)row[0];
 
 			PrincipalComponentVector pcVect = eigIdPcVectMap.get(eigId);
 			if (null == pcVect) {
@@ -69,8 +71,8 @@ class PrincipalComponentVectorBuilder {
 				eigIdPcVectMap.put(eigId, pcVect);
 			}
 			
-			Integer stemId = ((BigDecimal)row[1]).intValueExact();
-			Double value = ((BigDecimal)row[2]).doubleValue();
+			Integer stemId = (Integer)row[1];
+			Double value = (Double)row[2];
 			pcVect.vector.setEntry(stemId-1, value);
 			
 			progress++;
@@ -84,8 +86,7 @@ class PrincipalComponentVectorBuilder {
 	
 	@SuppressWarnings("unchecked")
 	static List<Object[]> retrieveRawValues(int scoringModelId) {
-		Query query = SessionManager.createSqlQuery("select eigenvalue_id, stem_id, value from principal_component " +
-				"where eigenvalue_id in (select id from eigenvalue where scoring_model_id = :smId)");
+		Query query = SessionManager.createSqlQuery(rawQueryString);
 		query.setInteger("smId", scoringModelId);
 		
 		return query.list();
