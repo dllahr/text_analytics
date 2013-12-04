@@ -4,9 +4,14 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import orm.SessionManager;
 
 import controller.stockPrices.update.WebReaderHeaderMismatchException;
 import controller.util.CommandLineParserUnrecognizedTokenException;
@@ -14,16 +19,18 @@ import controller.util.CommandLineParserUnrecognizedTokenException;
 public class MainCommandLine {
 	
 	private static final Class<?>[] classArray = {
-			MainAddOrReplaceStockData.class, 
-		MainCreatePredictionModelSmoothingCoefs.class, 
+		MainAddOrReplaceStockData.class,
+		MainCreatePredictionModelSmoothingCoefs.class,
+		MainExportArticleStemCount.class,
 		MainFindDuplicateArticles.class, 
 		MainGeneratePredictions.class, 
 		MainGeneratePrincipalComponentValues.class,
 		MainLoadArticles.class, 
 		MainLoadEigPrincComp.class, 
 		MainLoadRegressionModel.class, 
-		MainTest.class};
-	
+		MainTest.class
+	};
+
 
 	/**
 	 * @param args
@@ -58,6 +65,8 @@ public class MainCommandLine {
 		Method method = nameMethodMap.get(cmdName.toLowerCase());
 		if (method != null) {
 			method.invoke(null, (Object)newArgs);
+			
+			SessionManager.closeAll();
 		} else {
 			System.out.println("that command was not recognized:  " + cmdName);
 			printCommandNames(nameMethodMap.keySet());
@@ -75,7 +84,10 @@ public class MainCommandLine {
 	}	
 	
 	static void printCommandNames(Collection<String> commandNameColl) {
-		for (String commandName : commandNameColl) {
+		List<String> commandNameList = new ArrayList<>(commandNameColl);
+		Collections.sort(commandNameList);
+		
+		for (String commandName : commandNameList) {
 			System.out.println(commandName);
 		}
 	}

@@ -18,8 +18,8 @@ public class MainExportArticleStemCount {
 	private static final String[] queryArray = {"select artsc.article_id-",
 		", artsc.stem_id, artsc.count from article_stem_count artsc " +
 			"join stem s on s.id = artsc.stem_id " +
-			"where s.is_stop=0 and artsc.article_id in " +
-			"(select id from article where article_source_id = ", ")"};
+			"where s.is_stop=FALSE and artsc.article_id in " +
+			"(select id from article where article_source_id = ", ") "};
 	
 	private static final int numCols = 3;
 	
@@ -27,6 +27,13 @@ public class MainExportArticleStemCount {
 
 		final int articleSourceId = Integer.valueOf(args[0]);
 		final File outputFile = new File(args[1]);
+		
+		final String extraQueryString;
+		if (args.length > 2) {
+			extraQueryString = args[2];
+		} else {
+			extraQueryString = null;
+		}
 		
 		final int minArticleId = Article.getArticlesOrderById(articleSourceId).get(0).getId();
 		
@@ -37,7 +44,9 @@ public class MainExportArticleStemCount {
 		builder.append(articleSourceId);
 		builder.append(queryArray[2]);
 		
-		builder.append(" and rownum < 10");
+		if (extraQueryString != null) {
+			builder.append(extraQueryString);
+		}
 		
 		System.out.println(builder.toString());
 		
@@ -46,7 +55,6 @@ public class MainExportArticleStemCount {
 		PrintStream out = new PrintStream(outputFile);
 		
 		ResultSetPrinter.print(rs, numCols, out);
-		
 	}
 
 }
