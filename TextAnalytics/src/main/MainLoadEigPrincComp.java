@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import controller.util.FileReaderWhereLineIsEntityId;
+import controller.util.FileReaderWhereLineIsEntityId.Pair;
 
 import orm.Article;
 import orm.Eigenvalue;
@@ -99,15 +101,15 @@ public class MainLoadEigPrincComp {
 		
 		List<Article> articleList = Article.getArticlesOrderById(articleSourceId);
 		
-		BufferedReader reader = new BufferedReader(new FileReader(eigvectFile));
+		FileReaderWhereLineIsEntityId<Article> reader = new FileReaderWhereLineIsEntityId<>(articleList, 
+				 new BufferedReader(new FileReader(eigvectFile)));
 		
 		int lineNum = 0;
-		Iterator<Article> articleIterator = articleList.iterator();
-		String curLine;
-		while (articleIterator.hasNext() && (curLine = reader.readLine()) != null) {
-			Article article = articleIterator.next();
+		Pair<Article> pair;
+		while ((pair = reader.readNext()) != null) {
+			Article article = pair.entity;
 			
-			String[] split = curLine.split(delimeter);
+			String[] split = pair.line.split(delimeter);
 			if (split.length != eigvalList.size()) {
 				throw new RuntimeException("eigenvector load:  number of entries in current row of file is different than number of eigenvalues. lineNum: " + lineNum);
 			}
@@ -132,14 +134,8 @@ public class MainLoadEigPrincComp {
 			}
 		}
 		
-		if (! articleIterator.hasNext()) {
-			String endLine;
-
-			while ((endLine = reader.readLine()) != null) {
-				if (! endLine.trim().equals("")) {
-					throw new RuntimeException("eigenvector load:  there were more rows in the eigenvector file than there were articles for the article source");
-				}
-			}
+		if (reader.wereThereMoreLinesThanEntities()) {
+			throw new RuntimeException("eigenvector load:  there were more rows in the eigenvector file than there were articles for the article source");
 		}
 		
 		if ((lineNum*numEigVal)%batchSize != 0) {
@@ -156,17 +152,17 @@ public class MainLoadEigPrincComp {
 		System.out.println("loading principal components:");
 		final int numEigVal = eigvalList.size();
 		
-		BufferedReader reader = new BufferedReader(new FileReader(prinCompFile));
+		FileReaderWhereLineIsEntityId<Stem> reader = new FileReaderWhereLineIsEntityId<>(stemList, 
+				new BufferedReader(new FileReader(prinCompFile))); 
 
 		int lineNum = 0;
 		
-		String curLine;
-		Iterator<Stem> stemIterator = stemList.iterator();
+		Pair<Stem> pair;
 		
-		while (stemIterator.hasNext() && (curLine = reader.readLine()) != null) {
-			Stem stem = stemIterator.next();
-			
-			String[] split = curLine.split(delimeter);
+		while ((pair = reader.readNext()) != null) {
+			Stem stem = pair.entity;
+						
+			String[] split = pair.line.split(delimeter);
 			if (split.length != eigvalList.size()) {
 				throw new RuntimeException("eigenvector load:  number of entries in current row of file is different than number of eigenvalues. lineNum: " + lineNum);
 			}
@@ -206,14 +202,8 @@ public class MainLoadEigPrincComp {
 		}
 
 
-		if (! stemIterator.hasNext()) {
-			String endLine;
-
-			while ((endLine = reader.readLine()) != null) {
-				if (! endLine.trim().equals("")) {
-					throw new RuntimeException("principal component load:  there were more rows in the file than there were stems for the scoring model");
-				}
-			}
+		if (reader.wereThereMoreLinesThanEntities()) {
+			throw new RuntimeException("principal component load:  there were more rows in the file than there were stems for the scoring model");
 		}
 		
 		if ((lineNum*numEigVal)%batchSize != 0) {
@@ -227,26 +217,20 @@ public class MainLoadEigPrincComp {
 	static void loadMeanStemVect(File meanStemVectFile, ScoringModel scoringModel, List<Stem> stemList) throws IOException {
 		System.out.println("reading mean stem vector");
 
-		BufferedReader reader = new BufferedReader(new FileReader(meanStemVectFile));
+		FileReaderWhereLineIsEntityId<Stem> reader = new FileReaderWhereLineIsEntityId<>(stemList, 
+				new BufferedReader(new FileReader(meanStemVectFile)));
 
-		Iterator<Stem> stemIter = stemList.iterator();
-		String curLine;
-		while ((curLine = reader.readLine()) != null && stemIter.hasNext()) {
-			Stem stem = stemIter.next();
+		Pair<Stem> pair;
+		while ((pair = reader.readNext()) != null) {
+			Stem stem = pair.entity;
 
-			final double value = Double.valueOf(curLine);
+			final double value = Double.valueOf(pair.line);
 			
 			SessionManager.persist(new MeanStemCount(scoringModel, stem, value));
-			
 		}
 		
-		if (! stemIter.hasNext()) {
-			String endLine;
-			while ((endLine = reader.readLine()) != null) {
-				if (! endLine.trim().equals("")) {
-					throw new RuntimeException("mean stem vector load:  there were more rows in the file than there were stems for the scoring model");
-				}
-			}
+		if (reader.wereThereMoreLinesThanEntities()) {
+			throw new RuntimeException("mean stem vector load:  there were more rows in the file than there were stems for the scoring model");
 		}
 		reader.close();
 		

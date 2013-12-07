@@ -12,10 +12,11 @@ import javax.persistence.SequenceGenerator;
 
 import org.hibernate.Query;
 
+import controller.util.HasId;
 import controller.util.Utilities;
 
 @Entity
-public class Article {
+public class Article implements HasId {
 
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "articleIdSeq")
 	@SequenceGenerator(name = "articleIdSeq", sequenceName = "article_id_seq", allocationSize = 1)
