@@ -402,6 +402,8 @@ join article ar on ar.id = evv.article_id;
 
   ALTER TABLE EIGENVECTOR_VALUE ADD FOREIGN KEY (EIGENVALUE_ID)
 	  REFERENCES EIGENVALUE (ID);
+  alter table eigenvector_value add foreign key (article_id)
+          references article (id);
 --------------------------------------------------------
 --  Ref Constraints for Table MEAN_STEM_COUNT
 --------------------------------------------------------
