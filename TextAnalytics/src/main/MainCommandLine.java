@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import orm.SessionManager;
+import research.regression.GetPcDataAveStockPrices;
 
 import controller.stockPrices.update.WebReaderHeaderMismatchException;
 import controller.util.CommandLineParserUnrecognizedTokenException;
@@ -19,6 +20,7 @@ import controller.util.CommandLineParserUnrecognizedTokenException;
 public class MainCommandLine {
 	
 	private static final Class<?>[] classArray = {
+		GetPcDataAveStockPrices.class,
 		MainAddOrReplaceStockData.class,
 		MainCreatePredictionModelSmoothingCoefs.class,
 		MainExportArticleStemCount.class,
