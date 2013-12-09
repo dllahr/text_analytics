@@ -22,6 +22,7 @@ public class MainCommandLine {
 	private static final Class<?>[] classArray = {
 		GetPcDataAveStockPrices.class,
 		MainAddOrReplaceStockData.class,
+		MainArticlesToPredictions.class,
 		MainCreatePredictionModelSmoothingCoefs.class,
 		MainExportArticleStemCount.class,
 		MainFindDuplicateArticles.class, 
