@@ -32,9 +32,9 @@ public class MeanStemCountVectorBuilderTest {
 
 		MeanStemCountVectorBuilder builder = new MeanStemCountVectorBuilder();
 		
-		List<MeanStemCount> list = builder.retrieveMeanStemCounts(1);
+		List<MeanStemCount> list = builder.retrieveMeanStemCounts(3);
 		
-		double[] v = builder.buildMeanVector(list);
+		double[] v = builder.buildMeanVector(list, builder.getMinStemId(list));
 		
 		for (int i = 0; i < 10; i++) {
 			if (i < v.length) {

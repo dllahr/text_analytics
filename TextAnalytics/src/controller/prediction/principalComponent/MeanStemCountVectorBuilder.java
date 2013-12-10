@@ -15,41 +15,51 @@ class MeanStemCountVectorBuilder {
 	public MeanStemCountVector build(int scoringModelId) {
 		List<MeanStemCount> meanStemCountList = retrieveMeanStemCounts(scoringModelId);
 		
-		double[] vector = buildMeanVector(meanStemCountList);
-		
 		final int minStemId = getMinStemId(meanStemCountList);
+		
+		double[] vector = buildMeanVector(meanStemCountList, minStemId);
 		
 		return new MeanStemCountVector(vector, minStemId);
 	}
 	
-	double[] buildMeanVector(List<MeanStemCount> meanStemCountList) {
-		double[] result = new double[meanStemCountList.size()];
+	double[] buildMeanVector(List<MeanStemCount> meanStemCountList, int minStemId) {
 		
-		int index = 0;
+		final int size = getMaxStemId(meanStemCountList) + 1;
+		
+		double[] result = new double[size];
+
 		for (MeanStemCount msc : meanStemCountList) {
+			final int index = msc.getStem().getId() - minStemId;
+
 			result[index] = msc.getValue();
-			
-			index++;
 		}
 		
 		return result;
 	}
 	
 	List<MeanStemCount> retrieveMeanStemCounts(int scoringModelId) {
-		Query query = SessionManager.createQuery("from MeanStemCount where scoringModel.id = :smId order by stem.id");
+		Query query = SessionManager.createQuery("from MeanStemCount where scoringModel.id = :smId");
 		query.setInteger("smId", scoringModelId);
 		
 		return Utilities.convertGenericList(query.list());
 	}
 	
 	int getMinStemId(List<MeanStemCount> meanStemCountList) {
-		MeanStemCount minStemId = Collections.min(meanStemCountList, new Comparator<MeanStemCount>() {
-			@Override
-			public int compare(MeanStemCount o1, MeanStemCount o2) {
-				return o1.getStem().getId() - o2.getStem().getId();
-			}
-		});
+		MeanStemCount minStemId = Collections.min(meanStemCountList, new StemIdComparator());
 		
 		return minStemId.getStem().getId();
+	}
+	
+	int getMaxStemId(List<MeanStemCount> meanStemCountList) {
+		MeanStemCount maxStemId = Collections.max(meanStemCountList, new StemIdComparator());
+		
+		return maxStemId.getStem().getId();
+	}
+
+	class StemIdComparator implements Comparator<MeanStemCount> {
+		@Override
+		public int compare(MeanStemCount o1, MeanStemCount o2) {
+			return o1.getStem().getId() - o2.getStem().getId();
+		}
 	}
 }
