@@ -6,10 +6,14 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import controller.util.CommandLineParser;
 import controller.util.CommandLineParserUnrecognizedTokenException;
 
 public class MainArticlesToPredictions {
+	
+	private static final String skipLoadArticles = "-skipLoadArticles";
 
 	/**
 	 * @param args
@@ -23,10 +27,17 @@ public class MainArticlesToPredictions {
 		final int scoringModelId = Integer.valueOf(args[0]);
 		final String articleDir = args[1];
 		
+		Map<String, String> argsMap = CommandLineParser.parse(args, 2);
+		
 		List<String[]> argsList = getArgsList(scoringModelId, articleDir);
 		
-		System.out.println("Load articles");
-		MainLoadArticles.main(argsList.get(0));
+		if (! argsMap.containsKey(skipLoadArticles)) {
+			System.out.println("Load articles");
+			MainLoadArticles.main(argsList.get(0));
+		} else {
+			System.out.println(skipLoadArticles + " option present");
+		}
+
 		System.out.println("generate principal component values");
 		MainGeneratePrincipalComponentValues.main(argsList.get(1));
 		System.out.println("generate predictions");
