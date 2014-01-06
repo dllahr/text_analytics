@@ -14,7 +14,11 @@ import controller.util.CommandLineParserUnrecognizedTokenException;
 public class MainArticlesToPredictions {
 	
 	private static final String skipLoadArticles = "-skipLoadArticles";
+	
+	private static final String skipGenPrinCompVals = "-skipGenPrinCompVals";
 
+	private static final String skipGenPred = "-skipGenPred";
+	
 	/**
 	 * @param args
 	 * @throws GateException 
@@ -24,6 +28,15 @@ public class MainArticlesToPredictions {
 	 */
 	public static void main(String[] args) throws IOException, GateException, ParseException,
 	CommandLineParserUnrecognizedTokenException {
+		if (args.length < 2) {
+			System.out.println("usage:  <scoringModelId> <articleDir>");
+			System.out.println("options:  ");
+			for (String option : new String[]{skipLoadArticles, skipGenPrinCompVals, skipGenPred}) {
+				System.out.println(option);
+			}
+			return;
+		}
+		
 		final int scoringModelId = Integer.valueOf(args[0]);
 		final String articleDir = args[1];
 		
@@ -38,11 +51,19 @@ public class MainArticlesToPredictions {
 			System.out.println(skipLoadArticles + " option present");
 		}
 
-		System.out.println("generate principal component values");
-		MainGeneratePrincipalComponentValues.main(argsList.get(1));
-		System.out.println("generate predictions");
-		MainGeneratePredictions.main(argsList.get(2));
-
+		if (! argsMap.containsKey(skipGenPrinCompVals)) {
+			System.out.println("generate principal component values");
+			MainGeneratePrincipalComponentValues.main(argsList.get(1));
+		} else {
+			System.out.println(skipGenPrinCompVals + " option present");
+		}
+	
+		if (! argsMap.containsKey(skipGenPred)) {
+			System.out.println("generate predictions");
+			MainGeneratePredictions.main(argsList.get(2));
+		} else {
+			System.out.println(skipGenPred + " option present");
+		}
 	}
 	
 	static List<String[]> getArgsList(int scoringModelId, String articleDir) {
