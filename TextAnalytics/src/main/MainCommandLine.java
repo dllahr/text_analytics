@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import orm.SessionManager;
+import orm.update.Update0001;
 import research.regression.GetPcDataAveStockPrices;
-
 import controller.stockPrices.update.WebReaderHeaderMismatchException;
 import controller.util.CommandLineParserUnrecognizedTokenException;
 
@@ -31,7 +31,8 @@ public class MainCommandLine {
 		MainLoadArticles.class, 
 		MainLoadEigPrincComp.class, 
 		MainLoadRegressionModel.class, 
-		MainTest.class
+		MainTest.class,
+		Update0001.class
 	};
 
 
