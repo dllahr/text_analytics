@@ -21,6 +21,8 @@ public class SessionManager {
 	
 	private static boolean useForTest = false;
 	
+	private static boolean displaySql = false;
+	
 	private static SessionFactory sessionFactory = null;
 	
 	private static Session session = null;
@@ -35,6 +37,7 @@ public class SessionManager {
 			session.beginTransaction();
 		}
 
+		
 		return session;
 	}
 	
@@ -113,18 +116,23 @@ public class SessionManager {
 			config.setProperty("hibernate.connection.password", "u3pSVrMs79xG7mnJ");
 		}
 		
+		config.setProperty("hibernate.show_sql", String.valueOf(displaySql));
+		
 		return config.buildSessionFactory();
 	}
 	
 	public static void setUseForTest(boolean useForTest) {
-		if (SessionManager.useForTest != useForTest) {
-			SessionManager.useForTest = useForTest;
-			
-			closeAll();
-		}
+		SessionManager.useForTest = useForTest;
+	}
+	public static void setDisplaySql(boolean displaySql) {
+		SessionManager.displaySql = displaySql;
 	}
 	
 	public static void doWork(Work work) {
 		getSession().doWork(work);
+	}
+	
+	public static void displaySql() {
+		
 	}
 }
