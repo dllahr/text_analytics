@@ -20,6 +20,11 @@ import org.hibernate.Query;
 import controller.util.Utilities;
 
 
+/**
+ * This would be better named "RegressionModel thresholds and percentiles"
+ * @author dlahr
+ *
+ */
 @Entity
 @Table(name = "PREDICTION_MODEL")
 public class PredictionModel {
