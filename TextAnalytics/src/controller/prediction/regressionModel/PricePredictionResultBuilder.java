@@ -11,8 +11,12 @@ import controller.stockPrices.SmoothedStockPrices;
 
 import orm.PredictionModel;
 
-public class PredictionResultBuilder {
+public class PricePredictionResultBuilder implements PredictionResultBuilder {
 
+	/* (non-Javadoc)
+	 * @see controller.prediction.regressionModel.PredictionResultsBuilder#build(java.util.List)
+	 */
+	@Override
 	public void build(List<Prediction> predictionList) {
 		
 		Map<PredictionModel, SmoothedStockPrices> modelPricesMap = buildModelPricesMap(predictionList);
