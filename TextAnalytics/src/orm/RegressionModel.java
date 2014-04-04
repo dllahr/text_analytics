@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,6 +37,10 @@ public class RegressionModel {
 	
 	@Column(name="R_EXPRESSION")
 	private String rExpression;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "MODEL_TYPE")
+	private RegressionModelType modelType;
 	
 	public RegressionModel() {
 	}
@@ -78,13 +84,22 @@ public class RegressionModel {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
+	
+	public RegressionModelType getModelType() {
+		return modelType;
+	}
+
+	public void setModelType(RegressionModelType modelType) {
+		this.modelType = modelType;
+	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(id).append(Constants.toStringDelimeter).append(scoringModel.getId()).append(Constants.toStringDelimeter);
 		builder.append(company.getId()).append(Constants.toStringDelimeter).append(dayOffset).append(Constants.toStringDelimeter);
-		builder.append(rExpression.substring(0,10));
+		builder.append(rExpression.substring(0,10)).append(Constants.toStringDelimeter);
+		builder.append(modelType);;
 		
 		return builder.toString();
 	}

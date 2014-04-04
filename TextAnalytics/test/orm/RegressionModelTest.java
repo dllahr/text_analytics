@@ -20,6 +20,10 @@ public class RegressionModelTest {
 		assertNotNull(model.getId());
 		assertNotNull(model.getScoringModel());
 		assertNotNull(model.getCompany());
+		
+		for (RegressionModel rm : list) {
+			System.out.println(rm);
+		}
 	}
 
 }
