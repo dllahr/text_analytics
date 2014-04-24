@@ -1,5 +1,8 @@
 package orm;
 
+import java.sql.Array;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -10,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 
 @Entity
@@ -108,5 +112,17 @@ public class ScoringModel  {
 		Query query = SessionManager.createQuery("from ScoringModel where id = :id");
 		query.setInteger("id", scoringModelId);
 		return (ScoringModel)query.list().get(0);
+	}
+	
+	public static Integer[] getArticleIds(int scoringModelId) throws HibernateException, SQLException {
+		ResultSet rs = SessionManager.resultSetQuery("select article_id_array from scoring_model_article where scoring_model_id = " + scoringModelId);
+		
+		Integer[] result = null;
+		if (rs.next()) {
+			Array sqlArray = rs.getArray(1);
+			result = (Integer[])sqlArray.getArray();
+		}
+
+		return result;
 	}
 }
