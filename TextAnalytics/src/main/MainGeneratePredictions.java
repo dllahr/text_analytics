@@ -21,7 +21,7 @@ import controller.prediction.regressionModel.DayPrincipalComponentValueVector;
 import controller.prediction.regressionModel.DayPrincipalComponentValueVectorBuilder;
 import controller.prediction.regressionModel.Prediction;
 import controller.prediction.regressionModel.PredictionBuilder;
-import controller.prediction.regressionModel.PredictionResultBuilder;
+import controller.prediction.regressionModel.PricePredictionResultBuilder;
 import controller.util.Utilities;
 
 
@@ -88,7 +88,7 @@ public class MainGeneratePredictions {
 		
 		if (predictionList.size() > 0) {
 			System.out.println("compare predictions to actual results:");
-			(new PredictionResultBuilder()).build(predictionList);
+			(new PricePredictionResultBuilder()).build(predictionList);
 		} else {
 			System.out.println("no predictions made, no comparison to attempted");
 		}
@@ -162,11 +162,11 @@ public class MainGeneratePredictions {
 			}
 
 			if (prediction.result != null) {
-				if (prediction.result <= prediction.pricePercentile25) {
+				if (prediction.result <= prediction.percentile25) {
 					resultBins[0]++;
-				} else if (prediction.result <= prediction.pricePercentile50) {
+				} else if (prediction.result <= prediction.percentile50) {
 					resultBins[1]++;
-				} else if (prediction.result <= prediction.pricePercentile75) {
+				} else if (prediction.result <= prediction.percentile75) {
 					resultBins[2]++;
 				} else {
 					resultBins[3]++;

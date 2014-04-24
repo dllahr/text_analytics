@@ -97,22 +97,22 @@ public class PredictionBuilderTest {
 		Prediction pred = list.get(0);
 		assertEquals(1, pred.initialDayIndex);
 		assertEquals(3, pred.predictionDayIndex);
-		assertEquals(200.0*0.98, pred.pricePercentile25, eps);
-		assertEquals(200.0*1.01, pred.pricePercentile50, eps);
-		assertEquals(200.0*1.05, pred.pricePercentile75, eps);
+		assertEquals(200.0*0.98, pred.percentile25, eps);
+		assertEquals(200.0*1.01, pred.percentile50, eps);
+		assertEquals(200.0*1.05, pred.percentile75, eps);
 		
 		pred = list.get(1);
 		assertEquals(4, pred.initialDayIndex);
 		assertEquals(6, pred.predictionDayIndex);
-		assertEquals(300.0*0.98, pred.pricePercentile25, eps);
-		assertEquals(300.0*1.01, pred.pricePercentile50, eps);
-		assertEquals(300.0*1.05, pred.pricePercentile75, eps);
+		assertEquals(300.0*0.98, pred.percentile25, eps);
+		assertEquals(300.0*1.01, pred.percentile50, eps);
+		assertEquals(300.0*1.05, pred.percentile75, eps);
 		
 		pred = list.get(2);
 		assertEquals(10, pred.initialDayIndex);
 		assertEquals(12, pred.predictionDayIndex);
-		assertEquals(500.0*0.98, pred.pricePercentile25, eps);
-		assertEquals(500.0*1.01, pred.pricePercentile50, eps);
-		assertEquals(500.0*1.05, pred.pricePercentile75, eps);
+		assertEquals(500.0*0.98, pred.percentile25, eps);
+		assertEquals(500.0*1.01, pred.percentile50, eps);
+		assertEquals(500.0*1.05, pred.percentile75, eps);
 	}
 }
