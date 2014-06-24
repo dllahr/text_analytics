@@ -1,0 +1,2 @@
+alter table regression_model drop constraint regression_model_model_type_check;
+alter table regression_model add constraint regression_model_model_type_check check (model_type in ('Price', 'Volatility', 'Extrema'));
