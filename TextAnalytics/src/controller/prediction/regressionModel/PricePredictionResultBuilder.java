@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import controller.prediction.regressionModel.PredictionBuilder.SmoothedStockPriceParams;
+import controller.prediction.regressionModel.PricePredictionBuilder.SmoothedStockPriceParams;
 import controller.stockPrices.SmoothedStockPrices;
 
 import orm.PredictionModel;
@@ -44,7 +44,7 @@ public class PricePredictionResultBuilder implements PredictionResultBuilder {
 			PredictionModel pm = prediction.predictionModel;
 			
 			if (! result.containsKey(pm)) {
-				SmoothedStockPriceParams params = PredictionBuilder.determineParams(pm.buildRelDayIndexSortedList(),
+				SmoothedStockPriceParams params = PricePredictionBuilder.determineParams(pm.buildRelDayIndexSortedList(),
 						minDayIndexPrediction.predictionDayIndex);
 				
 				SmoothedStockPrices smoothedStockPrices = new SmoothedStockPrices(params.minDayIndex, 

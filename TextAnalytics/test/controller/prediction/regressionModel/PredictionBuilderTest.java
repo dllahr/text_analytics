@@ -32,20 +32,20 @@ public class PredictionBuilderTest {
 		PredictionModel pm = new PredictionModel();
 		pm.setLowerThreshold(0.85);
 
-		List<DayIndexRawPredictionPair> result = PredictionBuilder.filterRawPredictions(list, pm);
+		List<DayIndexRawPredictionPair> result = PricePredictionBuilder.filterRawPredictions(list, pm);
 		assertNotNull(result);
 		assertEquals(2, result.size());
 		assertTrue(result.contains(p9));
 		assertTrue(result.contains(p10));
 		
 		pm.setUpperThreshold(0.95);
-		result = PredictionBuilder.filterRawPredictions(list, pm);
+		result = PricePredictionBuilder.filterRawPredictions(list, pm);
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertEquals(p9, result.get(0));
 		
 		pm.setLowerThreshold(null);
-		result = PredictionBuilder.filterRawPredictions(list, pm);
+		result = PricePredictionBuilder.filterRawPredictions(list, pm);
 		assertNotNull(result);
 		assertEquals(2, result.size());
 		assertTrue(result.contains(p8));
@@ -60,7 +60,7 @@ public class PredictionBuilderTest {
 		coefList.add(new PredictionModelStockSmoothingCoef(null, 3, 4.4));
 		coefList.add(new PredictionModelStockSmoothingCoef(null, -1, 2.2));
 		
-		PredictionBuilder.SmoothedStockPriceParams params = PredictionBuilder.determineParams(coefList, 100);
+		PricePredictionBuilder.SmoothedStockPriceParams params = PricePredictionBuilder.determineParams(coefList, 100);
 		assertNotNull(params);
 		assertNotNull(params.weights);
 		assertEquals(7, params.weights.length);
@@ -90,7 +90,7 @@ public class PredictionBuilderTest {
 		priceMap.put(10, 500.0);
 		SmoothedStockPrices smoothedStockPrices = new MockSmoothedStockPrices(priceMap);
 		
-		List<Prediction> list = PredictionBuilder.buildPredictions(smoothedStockPrices, rawList, pm);
+		List<Prediction> list = PricePredictionBuilder.buildPredictions(smoothedStockPrices, rawList, pm);
 		assertNotNull(list);
 		assertEquals(3, list.size());
 		

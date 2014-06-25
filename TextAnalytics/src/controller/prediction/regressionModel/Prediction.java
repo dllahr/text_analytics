@@ -22,17 +22,16 @@ public class Prediction {
 	public final PredictionModel predictionModel;
 	
 	public Prediction(int initialDayIndex, double initialPrice, int predictionDayIndex, 
-			double pricePercentile25, double pricePercentile50,
-			double pricePercentile75, PredictionModel predictionModel) {
+			double percentile25, double percentile50, double percentile75, PredictionModel predictionModel) {
 
 		this.initialDayIndex = initialDayIndex;
 		this.initialPrice = initialPrice;
 		
 		this.predictionDayIndex = predictionDayIndex;
 		
-		this.percentile25 = pricePercentile25;
-		this.percentile50 = pricePercentile50;
-		this.percentile75 = pricePercentile75;
+		this.percentile25 = percentile25;
+		this.percentile50 = percentile50;
+		this.percentile75 = percentile75;
 		
 		this.predictionModel = predictionModel;
 	}
@@ -49,6 +48,19 @@ public class Prediction {
 		builder.append(predictionModel.getId()).append(Constants.toStringDelimeter);
 		builder.append(String.format(priceDisplayPrecision, result));
 
+		return builder.toString();
+	}
+	
+	public static String toStringHeader() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("initialDayIndex").append(Constants.toStringDelimeter);
+		builder.append("initialPrice").append(Constants.toStringDelimeter);
+		builder.append("predictionDayIndex").append(Constants.toStringDelimeter);
+		builder.append("percentile25").append(Constants.toStringDelimeter);
+		builder.append("percentile50").append(Constants.toStringDelimeter);
+		builder.append("percentile75").append(Constants.toStringDelimeter);
+		builder.append("predictionModelId").append(Constants.toStringDelimeter);
+		builder.append("result").append(Constants.toStringDelimeter);
 		return builder.toString();
 	}
 }

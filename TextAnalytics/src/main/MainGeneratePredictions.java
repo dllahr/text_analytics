@@ -10,17 +10,30 @@ import java.util.List;
 import java.util.Map;
 
 
+
+
+
+
+
+
+
+
 import orm.Article;
+import orm.Constants;
 import orm.PredictionModel;
 import orm.RegressionModel;
 import orm.RegressionModelCoef;
-
+import orm.RegressionModelType;
 import controller.prediction.regressionModel.DayIndexRawPredictionPair;
 import controller.prediction.regressionModel.DayIndexRawPredictionPairBuilder;
 import controller.prediction.regressionModel.DayPrincipalComponentValueVector;
 import controller.prediction.regressionModel.DayPrincipalComponentValueVectorBuilder;
+import controller.prediction.regressionModel.ExtremaPredictionBuilder;
+import controller.prediction.regressionModel.ExtremaPredictionResultBuilder;
 import controller.prediction.regressionModel.Prediction;
 import controller.prediction.regressionModel.PredictionBuilder;
+import controller.prediction.regressionModel.PredictionResultBuilder;
+import controller.prediction.regressionModel.PricePredictionBuilder;
 import controller.prediction.regressionModel.PricePredictionResultBuilder;
 import controller.util.Utilities;
 
@@ -84,16 +97,38 @@ public class MainGeneratePredictions {
 
 
 		System.out.println("generate threshold predictions:");
-		List<Prediction> predictionList = (new PredictionBuilder()).build(pmList, rawPredictionList);
+		PredictionBuilder predictionBuilder;
+		if (rm.getModelType() == RegressionModelType.Price) {
+			predictionBuilder = new PricePredictionBuilder();
+		} else if (rm.getModelType() == RegressionModelType.Extrema) {
+			predictionBuilder = new ExtremaPredictionBuilder();
+		} else {
+			throw new RuntimeException("MainGeneratePredictions main can only create predictionBuilder for "
+					+ "regressionModelType Price or Extrema, this is not supported:  " + rm.getModelType());
+		}
+		List<Prediction> predictionList = predictionBuilder.build(pmList, rawPredictionList);
 		
 		if (predictionList.size() > 0) {
 			System.out.println("compare predictions to actual results:");
-			(new PricePredictionResultBuilder()).build(predictionList);
+			
+			PredictionResultBuilder predictionResultBuilder;
+			if (rm.getModelType() == RegressionModelType.Price) {
+				predictionResultBuilder = new PricePredictionResultBuilder();
+			} else if (rm.getModelType() == RegressionModelType.Extrema) {
+				predictionResultBuilder = new ExtremaPredictionResultBuilder();
+			} else {
+				throw new RuntimeException("MainGeneratePredictions main can only create predictionResultBuilder for "
+						+ "regressionModelType Price or Extrema, this is not supported:  " + rm.getModelType());
+			}
+			
+			predictionResultBuilder.build(predictionList);
 		} else {
 			System.out.println("no predictions made, no comparison to attempted");
 		}
 
 		System.out.println("predictions and results where available:");
+		System.out.println(Prediction.toStringHeader() + Constants.toStringDelimeter + "initialDate" 
+			+ Constants.toStringDelimeter + "predictionDate");
 		for (Prediction prediction : predictionList) {
 			StringBuilder builder = new StringBuilder();
 			builder.append(prediction).append(" ");
