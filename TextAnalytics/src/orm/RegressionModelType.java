@@ -1,5 +1,5 @@
 package orm;
 
 public enum RegressionModelType {
-	Price, Volatility;
+	Price, Volatility, Extrema;
 }
