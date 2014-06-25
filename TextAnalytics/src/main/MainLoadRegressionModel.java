@@ -33,6 +33,8 @@ public class MainLoadRegressionModel {
 	private static final int[] relDay = {-1, 0, 1};
 	
 	/**
+	 * input file example:  see test/resources/example rm and pm load.txt
+	 * 
 	 * @param args
 	 * @throws IOException 
 	 */
@@ -42,6 +44,11 @@ public class MainLoadRegressionModel {
 		final int companyId = Integer.valueOf(args[2]);
 		
 		final File inputFile = new File(args[3]);
+		
+		System.out.println("dayOffset:  " + dayOffset);
+		System.out.println("scoringModelId:  " + scoringModelId);
+		System.out.println("companyId:  " + companyId);
+		System.out.println("inputFile:  " + inputFile.getName());
 		
 		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 		String curLine = reader.readLine();
