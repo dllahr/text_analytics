@@ -5,7 +5,7 @@ import java.util.List;
 
 public class BatchRetriever<T> {
 	
-	private static final int batchSize = 1000;
+	public int batchSize = 1000;
 
 	private final GenericRetriever<T> genericRetriever;
 	
