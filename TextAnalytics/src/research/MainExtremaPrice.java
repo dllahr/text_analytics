@@ -27,8 +27,8 @@ public class MainExtremaPrice {
 		
 		final int companyId = Integer.valueOf(args[0]);
 		final int scoringModelId = Integer.valueOf(args[1]);
-		final int minDay = Integer.valueOf(args[2]);
-		final int maxDay = Integer.valueOf(args[3]);
+		final int minDay = Integer.valueOf(args[2]);  //minimum day after article publish date for window to search for extreme stock price
+		final int maxDay = Integer.valueOf(args[3]);  //maximum day after article publish date for window to search for extreme stock price
 		
 		System.out.println("companyId:  " + companyId);
 		System.out.println("scoringModelId:  " + scoringModelId);
