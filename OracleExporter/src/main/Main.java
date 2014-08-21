@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import database.ResultSetPrinter;
+
 public class Main {
 	private static final String username = "personal";
 	private static final String password = "JzRNIno7U9jCf3LK";
