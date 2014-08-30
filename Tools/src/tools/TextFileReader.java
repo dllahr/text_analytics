@@ -17,6 +17,8 @@ public class TextFileReader {
 			builder.append((char)curVal);
 		}
 		
+		reader.close();
+		
 		return builder.toString();
 	}
 }

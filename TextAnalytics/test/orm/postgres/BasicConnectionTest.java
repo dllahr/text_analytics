@@ -13,6 +13,7 @@ import org.junit.Test;
 import orm.Company;
 import orm.SessionManager;
 
+@SuppressWarnings("unused")
 public class BasicConnectionTest {
 
 	@Test
