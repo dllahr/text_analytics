@@ -19,6 +19,8 @@ public class FakeBufferedReaderTest {
 		for (int i = 0; i < 10; i++) {
 			assertNull(reader.readLine());
 		}
+		
+		reader.close();
 	}
 
 }

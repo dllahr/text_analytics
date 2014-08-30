@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 import org.hibernate.HibernateException;
 
+import database.ResultSetPrinter;
 import orm.Article;
 import orm.SessionManager;
 

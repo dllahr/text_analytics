@@ -38,6 +38,8 @@ public class DateOnMultipleLinesTest {
 			result.add(curLine);
 		}
 		
+		reader.close();
+		
 		return result;
 	}
 

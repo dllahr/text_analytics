@@ -14,65 +14,7 @@
 	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="lib/postgresql-9.3-1100.jdbc41.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/bin/gate.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/activation.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/ant.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/ant-contrib-1.0b2.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/ant-junit.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/ant-launcher.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/ant-nodeps.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/bcmail-jdk15-1.45.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/bcprov-jdk15-1.45.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/Bib2HTML.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/commons-compress-1.0.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/commons-discovery-0.2.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/commons-fileupload-1.0.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/commons-io-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/commons-lang-2.4.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/concurrent.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/fontbox-1.1.0.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/gate-asm.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/gate-compiler-jdt.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/gateHmm.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/geronimo-ws-metadata_2.0_spec-1.1.1.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/GnuGetOpt.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/icu4j.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/jakarta-oro-2.0.5.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/javacc.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/jaxb-api-2.0.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/jaxen-1.1.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/jaxws-api-2.0.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/jdom.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/jempbox-1.1.0.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/junit.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/log4j-1.2.14.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/lubm.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/lucene-core-3.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/mail.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/nekohtml-1.9.14.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/orajdbc9i.zip"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/pdfbox-1.1.0.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/pg73jdbc3.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/poi-3.6.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/poi-ooxml-3.6.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/poi-ooxml-schemas-3.6.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/poi-scratchpad-3.6.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/servlet-2_3.zip"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/spring-aop-2.0.8.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/spring-beans-2.0.8.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/spring-core-2.0.8.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/stax-api-1.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/tika-core-0.7.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/tika-parsers-0.7.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/wstx-lgpl-3.2.3.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/xmlbeans-2.3.0.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/xmlunit-1.2.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/xpp3-1.1.3.3_min.jar"/>
-	<classpathentry kind="lib" path="C:/no_backup/bin/gate/lib/xstream-1.3.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Tools"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/OracleExporter"/>
+	<classpathentry kind="lib" path="/Applications/GATE-6.1/bin/gate.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

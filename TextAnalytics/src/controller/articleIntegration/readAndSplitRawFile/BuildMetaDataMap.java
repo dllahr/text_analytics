@@ -24,6 +24,7 @@ public class BuildMetaDataMap {
 				String[] split = curLine.split(delimeter);
 				
 				if (split.length != 2) {
+					reader.close();
 					throw new RuntimeException("BuildMetaDataMap build found line in input file (" 
 							+ inputFile.getAbsolutePath() + ") that does not have 2 entries:  " 
 							+ curLine);
